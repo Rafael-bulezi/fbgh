@@ -72,8 +72,8 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
   return (
     <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian pt-16">
       
-      {/* 1. CINEMATIC FLEET INTRODUCTION — EDITORIAL ANGLED SPLIT */}
-      <section className="relative min-h-[500px] sm:min-h-[540px] lg:min-h-[520px] flex items-center overflow-hidden border-b border-white/10 bg-[#0C0C0E]">
+      {/* 1. CINEMATIC FLEET INTRODUCTION — EDITORIAL ANGLED SPLIT (50-60vh) */}
+      <section className="relative h-[54vh] min-h-[460px] max-h-[620px] flex items-center overflow-hidden border-b border-white/10 bg-[#0C0C0E]">
         {/* Full-bleed photography on the right */}
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <img
@@ -96,11 +96,11 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
         />
 
         {/* Subtle Top Header Scrim to guarantee navbar readability */}
-        <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent z-[5] pointer-events-none" />
+        <div className="absolute top-0 inset-x-0 h-24 sm:h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent z-[5] pointer-events-none" />
 
         {/* Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24 sm:pt-28 pb-20 sm:pb-24 lg:py-24">
-          <div className="max-w-md sm:max-w-lg space-y-3 sm:space-y-4">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-16 sm:pt-20 lg:pt-14 pb-8 sm:pb-12 lg:pb-10 flex items-center">
+          <div className="max-w-md sm:max-w-lg space-y-2.5 sm:space-y-3.5">
             {/* Eyebrow */}
             <div className="flex items-center gap-2 sm:gap-2.5">
               <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A059]" />
