@@ -1,4 +1,4 @@
-﻿// FleetObservatory.tsx — Exhibition Rail Edition (Polished & Expanded)
+// FleetObservatory.tsx — Exhibition Rail Edition (Polished & Expanded)
 // Two independent navigation systems:
 //   1. Fleet rail  → which vehicle (drag / arrows / keyboard / side-frame click)
 //   2. Gallery     → which photo of that vehicle (Ext/Int toggle + bottom thumbnails)
@@ -57,6 +57,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   const curIdxRef   = useRef(0);
   const galModeRef  = useRef<'exterior'|'interior'>('exterior');
   const photoIdxRef = useRef(0);
+  const wheelTimer  = useRef<number | null>(null);
 
   // 7 side frame slots: 0=L2 1=L1 2=L0 3=R0 4=R1 5=R2 6=R3
   const frameRefs = useRef<(HTMLDivElement | null)[]>(Array(7).fill(null));
@@ -100,26 +101,48 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     if (!ap || !trk) return;
     const apW = ap.offsetWidth, apH = ap.offsetHeight;
     if (!apW || !apH) return;
-    while (trk.firstChild) trk.removeChild(trk.firstChild);
+
     const vehicles = filteredVehicles;
     const ci = curIdxRef.current;
     const gm = galModeRef.current;
     const pi = photoIdxRef.current;
-    vehicles.forEach((v, i) => {
-      const div = document.createElement('div');
-      div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;position:relative;overflow:hidden;`;
-      const img = document.createElement('img');
-      img.draggable = false;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
-      if (i === ci) {
+
+    // Full recreation only when item count changes
+    if (trk.children.length !== vehicles.length) {
+      while (trk.firstChild) trk.removeChild(trk.firstChild);
+      vehicles.forEach((v, i) => {
+        const div = document.createElement('div');
+        div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;position:relative;overflow:hidden;`;
+        const img = document.createElement('img');
+        img.draggable = false;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
+        const isCurrent = i === ci;
         const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
-        img.src = photos[pi] ?? photos[0] ?? v.image;
-      } else {
-        img.src = v.image;
+        const src = isCurrent ? (photos[pi] ?? photos[0] ?? v.image) : (photos[0] ?? v.image);
+        img.src = src;
+        img.dataset.src = src;
+        div.appendChild(img);
+        trk.appendChild(div);
+      });
+    } else {
+      // In-place update to prevent DOM destruction, layout shifts, or blank flashes
+      for (let i = 0; i < vehicles.length; i++) {
+        const div = trk.children[i] as HTMLElement;
+        if (!div) continue;
+        div.style.width = `${apW}px`;
+        const img = div.querySelector('img') as HTMLImageElement | null;
+        if (img) {
+          const v = vehicles[i];
+          const isCurrent = i === ci;
+          const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
+          const src = isCurrent ? (photos[pi] ?? photos[0] ?? v.image) : (photos[0] ?? v.image);
+          if (img.dataset.src !== src) {
+            img.src = src;
+            img.dataset.src = src;
+          }
+        }
       }
-      div.appendChild(img);
-      trk.appendChild(div);
-    });
+    }
   }, [filteredVehicles]);
 
   // ----- layout frames with depth, perspective scaling, and gallery spacing -----
@@ -135,29 +158,29 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const apL   = (sw - apW) / 2;
     const apR   = apL + apW;
 
-    // Sleek, proportional side frames with deliberate breathing clearance
-    const fw    = Math.min(136, Math.max(92, sw * 0.092));
+    // Harmonious side frame sizing & tight, precise 12px exhibition rhythm
+    const fw    = Math.min(128, Math.max(90, sw * 0.086));
     const fh    = fw * 0.68;
-    const edgeGap = Math.max(28, sw * 0.024); // clear gap from aperture so frames don't look welded
-    const sep   = 14;
+    const sep   = 12; // Elegant 12px gap from central aperture and between side frames
     const P     = fw + sep;
     const i     = Math.floor(pos + 1e-9);
     const f     = pos - i;
 
-    const lp = (k: number) => apL - edgeGap - fw - (k - 1) * P;
-    const rp = (k: number) => apR + edgeGap + k * P;
+    // Symmetrical positioning: frames sit exactly `sep` (12px) off aperture edges
+    const left  = (k: number) => apL - sep - fw - (k - 1) * P;
+    const right = (k: number) => apR + sep + k * P;
 
     const slots = [
-      { idx: i - 2, left: lp(2) + (1-f)*P*0.15, opacity: 0.25 + 0.35*(1-f), scale: 0.82 },
-      { idx: i - 1, left: lp(1) - f*P,           opacity: 0.65 + 0.25*(1-f), scale: 0.92 },
-      { idx: i,     left: lp(0) + (1-f)*P,        opacity: Math.max(0.12, f),  scale: 1.0  },
-      { idx: i + 1, left: rp(0) - f*P,            opacity: 0.82,               scale: 1.0  },
-      { idx: i + 2, left: rp(1) - f*P,            opacity: 0.52,               scale: 0.92 },
-      { idx: i + 3, left: rp(2) - f*P,            opacity: 0.26,               scale: 0.84 },
-      { idx: i + 4, left: rp(3) - f*P,            opacity: 0.10,               scale: 0.76 },
+      { idx: i - 2, left: left(2) - f * P, opacity: 0.35 * (1 - f), scale: 0.80 },
+      { idx: i - 1, left: left(1) - f * P, opacity: 0.70 - 0.35 * f, scale: 0.90 },
+      { idx: i,     left: apL - f * P,      opacity: Math.min(0.9, Math.max(0, f)), scale: 0.98 },
+      { idx: i + 1, left: right(0) - f * P, opacity: 0.85, scale: 0.98 },
+      { idx: i + 2, left: right(1) - f * P, opacity: 0.60, scale: 0.90 },
+      { idx: i + 3, left: right(2) - f * P, opacity: 0.32, scale: 0.82 },
+      { idx: i + 4, left: right(3) - f * P, opacity: 0.12, scale: 0.75 },
     ];
 
-    slots.forEach(({ idx, left, opacity, scale }, s) => {
+    slots.forEach(({ idx, left: lPos, opacity, scale }, s) => {
       const el = frameRefs.current[s];
       if (!el) return;
       const valid = idx >= 0 && idx < filteredVehicles.length;
@@ -167,7 +190,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       el.style.cursor  = valid ? 'pointer' : 'default';
       if (!valid) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; return; }
       el.style.pointerEvents = 'auto';
-      el.style.left    = `${left}px`;
+      el.style.left    = `${lPos.toFixed(2)}px`;
       el.style.opacity = String(Math.min(1, Math.max(0, opacity)).toFixed(3));
       el.style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
       el.style.transformOrigin = s < 3 ? 'right center' : 'left center';
@@ -176,10 +199,19 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       const imgEl = el.querySelector('img') as HTMLImageElement|null;
       if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
       const label = el.querySelector('.fl') as HTMLElement|null;
-      if (label) label.textContent = v.name;
+      if (label && label.textContent !== v.name) label.textContent = v.name;
     });
 
-    if (apW > 0) trk.style.transform = `translate3d(${(-pos*apW).toFixed(2)}px,0,0)`;
+    if (apW > 0) {
+      trk.style.transform = `translate3d(${(-pos * apW).toFixed(2)}px,0,0)`;
+      // Verify track frame widths precisely match apW
+      for (let j = 0; j < trk.children.length; j++) {
+        const div = trk.children[j] as HTMLElement;
+        if (div && div.style.width !== `${apW}px`) {
+          div.style.width = `${apW}px`;
+        }
+      }
+    }
   }, [filteredVehicles]);
 
   // ----- animation loop -----
@@ -188,8 +220,9 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     let last = -1;
     const tick = () => {
       if (!dragging.current) {
-        posRef.current += (targetRef.current - posRef.current) * 0.12;
-        if (Math.abs(targetRef.current - posRef.current) < 0.0005) posRef.current = targetRef.current;
+        // 20% slower lerp (0.096 instead of 0.12) for a stately, smooth glide
+        posRef.current += (targetRef.current - posRef.current) * 0.096;
+        if (Math.abs(targetRef.current - posRef.current) < 0.0004) posRef.current = targetRef.current;
       }
       const vis = Math.max(0, Math.min(vehicles.length - 1, Math.round(posRef.current)));
       if (vis !== last && !dragging.current) { last = vis; setCurrentIndex(vis); }
@@ -202,22 +235,33 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     return () => cancelAnimationFrame(rafRef.current);
   }, [filteredVehicles, layoutFrames, rebuildRibbon]);
 
-  // resize → invalidate ribbon
+  // resize → invalidate ribbon & reposition immediately
   useEffect(() => {
-    const ro = new ResizeObserver(() => { ribbonKey.current = ''; });
+    const ro = new ResizeObserver(() => {
+      ribbonKey.current = '';
+      layoutFrames();
+    });
     if (apertureRef.current) ro.observe(apertureRef.current);
+    if (stripRef.current) ro.observe(stripRef.current);
     return () => ro.disconnect();
+  }, [layoutFrames]);
+
+  // Cleanup wheel timer on unmount
+  useEffect(() => {
+    return () => {
+      if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
+    };
   }, []);
 
   // ----- navigation -----
   const selectVehicle = useCallback((idx: number) => {
     const c = Math.max(0, Math.min(filteredVehicles.length - 1, idx));
-    setCurrentIndex(c); targetRef.current = c; posRef.current = c;
+    setCurrentIndex(c); targetRef.current = c;
     setPhotoIndex(0); setDetailsOpen(false);
   }, [filteredVehicles.length]);
 
   const stepVehicle = useCallback((dir: number) => {
-    const next = Math.max(0, Math.min(filteredVehicles.length - 1, curIdxRef.current + dir));
+    const next = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(targetRef.current) + dir));
     setCurrentIndex(next); targetRef.current = next;
     setPhotoIndex(0); setDetailsOpen(false);
   }, [filteredVehicles.length]);
@@ -239,7 +283,8 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     vel.current = 0.65*vel.current + 0.35*((e.clientX - lastX.current)/dt);
     lastX.current = e.clientX; lastT.current = now;
     const dx = e.clientX - startX.current;
-    targetRef.current = Math.max(-0.3, Math.min(filteredVehicles.length - 0.7, dragBase.current - dx/150));
+    // 20% slower drag responsiveness
+    targetRef.current = Math.max(-0.25, Math.min(filteredVehicles.length - 0.75, dragBase.current - dx/185));
     posRef.current = targetRef.current;
   }, [filteredVehicles.length]);
 
@@ -247,14 +292,19 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     if (!dragging.current) return;
     dragging.current = false;
     (e.currentTarget as HTMLElement).style.cursor = 'grab';
-    const proj = targetRef.current - (vel.current*100)/150;
+    const proj = targetRef.current - (vel.current*90)/185;
     targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
   }, [filteredVehicles.length]);
 
   const onWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
     const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d*0.005));
+    // 20% slower wheel scrolling
+    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d * 0.0038));
+    if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
+    wheelTimer.current = window.setTimeout(() => {
+      targetRef.current = Math.round(targetRef.current);
+    }, 140);
   }, [filteredVehicles.length]);
 
   useEffect(() => {
