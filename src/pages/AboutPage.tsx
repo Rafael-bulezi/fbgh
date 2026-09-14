@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Shield, Users, Phone, Mail, ArrowRight, CheckCircle2, Lock, Award } from 'lucide-react';
 
 interface AboutPageProps {
@@ -7,6 +7,8 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate }) => {
+  const [showInfo, setShowInfo] = useState(false);
+
   return (
     <div className="w-full bg-obsidian text-warm-ivory pt-24 pb-20">
       {/* 1. HERO: HUMAN-CENTRIC LUXURY */}
@@ -30,23 +32,29 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             <span className="text-[#E0B268]">CURATORS OF ARRIVAL.</span>
           </h1>
 
-          <p className="text-xs sm:text-base text-warm-ivory max-w-2xl mx-auto font-normal leading-relaxed text-contrast-body">
+          <p className={`text-xs sm:text-base text-warm-ivory max-w-2xl mx-auto font-normal leading-relaxed text-contrast-body transition-all ${showInfo ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
             We are a high-touch private transportation agency founded on human warmth, uncompromising discretion, and the quiet precision that turns every journey into a sanctuary.
           </p>
+          <button
+            className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase"
+            onClick={() => setShowInfo(!showInfo)}
+          >
+            {showInfo ? '− LESS' : '+ MORE'}
+          </button>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xs sm:max-w-none mx-auto">
+          <div className="pt-4 flex flex-row items-center justify-center gap-2 sm:gap-3 w-full max-w-sm sm:max-w-none mx-auto">
             <button
               onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary w-full sm:w-auto"
+              className="pb-btn pb-btn-primary !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
             >
-              <span>EXPERIENCE THE PROTOCOL</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>EXPERIENCE PROTOCOL</span>
+              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </button>
             <button
               onClick={() => onNavigate('fleet')}
-              className="pb-btn pb-btn-outline w-full sm:w-auto"
+              className="pb-btn pb-btn-outline !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
             >
-              <span>EXPLORE THE FLEET</span>
+              <span>EXPLORE FLEET</span>
             </button>
           </div>
         </div>

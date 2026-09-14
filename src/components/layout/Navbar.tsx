@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Logo } from '../common/Logo';
-import { ArrowUpRight, ArrowRight, EyeOff, Eye } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, EyeOff, Eye, ChevronDown } from 'lucide-react';
 import { FLEET_DATA } from '../../data/fleetData';
 import { RequestRideTooltip } from '../common/RequestRideTooltip';
 
@@ -20,6 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isManuallyHidden, setIsManuallyHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [selectedMegaCat, setSelectedMegaCat] = useState<'suv' | 'sedan' | 'van' | 'electric'>('suv');
 
   const navLinksRef = useRef<HTMLDivElement>(null);
@@ -177,6 +178,78 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
 
+            {/* Dropdown Menu Trigger for Destinations & About Us */}
+            <div
+              className="relative py-1"
+              onMouseEnter={() => {
+                setMoreDropdownOpen(true);
+                setMegaOpen(false);
+              }}
+              onMouseLeave={() => setMoreDropdownOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setMoreDropdownOpen((prev) => !prev)}
+                className={`text-xs font-sans tracking-[0.22em] uppercase transition-colors duration-300 flex items-center gap-1.5 cursor-pointer ${
+                  currentPage === 'destinations' || currentPage === 'about'
+                    ? linkActiveClass
+                    : linkInactiveClass
+                }`}
+                aria-expanded={moreDropdownOpen}
+                aria-haspopup="true"
+              >
+                <span>MORE</span>
+                <ChevronDown
+                  className={`w-3 h-3 transition-transform duration-300 ${
+                    moreDropdownOpen ? 'rotate-180 text-champagne-gold' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Dropdown Menu Floating Box */}
+              <div
+                className={`absolute top-full right-0 mt-2 w-48 bg-[#0c0d0e]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 transition-all duration-300 ${
+                  moreDropdownOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}
+              >
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleNavClick('destinations');
+                      setMoreDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-sans tracking-[0.16em] uppercase flex items-center justify-between transition-colors cursor-pointer ${
+                      currentPage === 'destinations'
+                        ? 'bg-champagne-gold/15 text-champagne-gold font-semibold'
+                        : 'text-warm-ivory/80 hover:text-warm-ivory hover:bg-white/5'
+                    }`}
+                  >
+                    <span>DESTINATIONS</span>
+                    <ArrowRight className="w-3 h-3 text-champagne-gold" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleNavClick('about');
+                      setMoreDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-sans tracking-[0.16em] uppercase flex items-center justify-between transition-colors cursor-pointer ${
+                      currentPage === 'about'
+                        ? 'bg-champagne-gold/15 text-champagne-gold font-semibold'
+                        : 'text-warm-ivory/80 hover:text-warm-ivory hover:bg-white/5'
+                    }`}
+                  >
+                    <span>ABOUT US</span>
+                    <ArrowRight className="w-3 h-3 text-champagne-gold" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* The Traveling Champagne Rule */}
             <span
               className="absolute bottom-0 h-[1.5px] bg-champagne-gold transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none shadow-[0_0_8px_rgba(201,164,92,0.6)]"
@@ -189,31 +262,32 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right: CTA + Hide + Mobile Burger */}
-          <div className="flex items-center gap-2.5 sm:gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-4">
             <RequestRideTooltip>
               <button
                 onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary hidden sm:inline-flex"
+                className="pb-btn pb-btn-primary !px-2.5 sm:!px-6 !py-1.5 sm:!py-3 !text-[9px] sm:!text-xs flex items-center gap-1 cursor-pointer"
               >
-                <span>REQUEST A RIDE</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <span className="sm:hidden">REQUEST</span>
+                <span className="hidden sm:inline">REQUEST A RIDE</span>
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </RequestRideTooltip>
 
-            {/* Hide Navbar Icon Button — hidden on small phones to save space */}
+            {/* Hide Navbar Icon Button — Visible on Mobile as well */}
             <button
               type="button"
               onClick={() => setIsManuallyHidden(true)}
               title="Hide Navigation Bar"
               aria-label="Hide Navigation Bar"
-              className={`hidden sm:flex w-8 h-8 rounded-full border items-center justify-center transition-all duration-300 group flex-shrink-0 cursor-pointer ${
+              className={`flex w-7 h-7 sm:w-8 sm:h-8 rounded-full border items-center justify-center transition-all duration-300 group flex-shrink-0 cursor-pointer ${
                 isDarkTheme
                   ? 'border-white/20 text-warm-ivory/80 hover:text-champagne-gold hover:bg-white/10 hover:border-champagne-gold/60'
                   : 'border-black/15 text-ink-black/70 hover:text-champagne-gold hover:bg-black/5 hover:border-champagne-gold/60'
               }`}
             >
               <EyeOff
-                className={`w-3.5 h-3.5 group-hover:scale-110 transition-transform ${
+                className={`w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:scale-110 transition-transform ${
                   isDarkTheme
                     ? 'text-warm-ivory/80 group-hover:text-champagne-gold'
                     : 'text-ink-black/70 group-hover:text-champagne-gold'
@@ -224,7 +298,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Prominent High-Contrast Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border transition-all duration-300 focus:outline-none flex-shrink-0 cursor-pointer ${
+              className={`md:hidden flex flex-col justify-center items-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border transition-all duration-300 focus:outline-none flex-shrink-0 cursor-pointer ${
                 mobileMenuOpen
                   ? 'border-[#E0B268]/60 bg-white/10 text-warm-ivory'
                   : isDarkTheme
@@ -234,21 +308,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
             >
-              <div className="w-5 flex flex-col items-center justify-center gap-1">
+              <div className="w-4 sm:w-5 flex flex-col items-center justify-center gap-1">
                 <span
                   className={`h-[2px] rounded-full transition-all duration-300 transform ${
                     mobileMenuOpen || isDarkTheme ? 'bg-[#E0B268]' : 'bg-ink-black'
-                  } ${mobileMenuOpen ? 'w-5 translate-y-[6px] rotate-45' : 'w-5'}`}
+                  } ${mobileMenuOpen ? 'w-4 sm:w-5 translate-y-[5px] sm:translate-y-[6px] rotate-45' : 'w-4 sm:w-5'}`}
                 />
                 <span
                   className={`h-[2px] rounded-full transition-all duration-300 ${
                     mobileMenuOpen || isDarkTheme ? 'bg-warm-ivory' : 'bg-ink-black'
-                  } ${mobileMenuOpen ? 'opacity-0 scale-0' : 'w-3.5'}`}
+                  } ${mobileMenuOpen ? 'opacity-0 scale-0' : 'w-3 sm:w-3.5'}`}
                 />
                 <span
                   className={`h-[2px] rounded-full transition-all duration-300 transform ${
                     mobileMenuOpen || isDarkTheme ? 'bg-[#E0B268]' : 'bg-ink-black'
-                  } ${mobileMenuOpen ? 'w-5 -translate-y-[6px] -rotate-45' : 'w-4.5'}`}
+                  } ${mobileMenuOpen ? 'w-4 sm:w-5 -translate-y-[5px] sm:-translate-y-[6px] -rotate-45' : 'w-3.5 sm:w-4.5'}`}
                 />
               </div>
             </button>
@@ -367,9 +441,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={() => setIsManuallyHidden(false)}
           title="Show Navigation Bar"
           aria-label="Show Navigation Bar"
-          className="fixed top-5 right-5 sm:right-8 z-50 flex items-center gap-2 px-3.5 py-1.5 bg-obsidian/90 backdrop-blur-xl border border-champagne-gold/40 text-warm-ivory hover:text-champagne-gold rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.7)] text-[10px] font-mono tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 group"
+          className="fixed top-4 sm:top-5 right-4 sm:right-8 z-50 flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 bg-obsidian/90 backdrop-blur-xl border border-champagne-gold/40 text-warm-ivory hover:text-champagne-gold rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.7)] text-[9px] sm:text-[10px] font-mono tracking-[0.2em] uppercase transition-all duration-300 hover:scale-105 group cursor-pointer"
         >
-          <Eye className="w-3.5 h-3.5 text-champagne-gold group-hover:scale-110 transition-transform" />
+          <Eye className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-champagne-gold group-hover:scale-110 transition-transform" />
           <span>SHOW NAV</span>
         </button>
       )}

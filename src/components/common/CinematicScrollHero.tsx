@@ -12,6 +12,8 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+  const [showInfoA, setShowInfoA] = useState(false);
+  const [showInfoB, setShowInfoB] = useState(false);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -131,27 +133,36 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
               <span className="text-[#E0B268]">INTENTION.</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-5 sm:mb-8 text-contrast-body">
-              A bespoke private transportation fleet crafted for discerning executives, international travelers, and defining arrivals.
-            </p>
+            <div className="mb-3 sm:mb-8">
+              <p className={`text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal text-contrast-body ${showInfoA ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
+                A bespoke private transportation fleet crafted for discerning executives, international travelers, and defining arrivals.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowInfoA(!showInfoA)}
+                className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1 pointer-events-auto cursor-pointer"
+              >
+                {showInfoA ? '− LESS' : '+ MORE'}
+              </button>
+            </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pointer-events-auto w-full sm:w-auto">
+            <div className="flex flex-row items-center gap-2 sm:gap-4 pointer-events-auto">
               <button
                 type="button"
                 onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
+                className="pb-btn pb-btn-primary !px-2.5 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
               >
                 <span>REQUEST A RIDE</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
 
               <button
                 type="button"
                 onClick={onExploreFleet}
-                className="pb-btn pb-btn-outline justify-center w-full sm:w-auto"
+                className="pb-btn pb-btn-outline !px-2.5 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
               >
-                <span>EXPLORE THE FLEET</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>EXPLORE FLEET</span>
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           </div>
@@ -200,18 +211,27 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
               <span className="text-[#E0B268]">PRECISION.</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-5 sm:mb-8 text-contrast-body">
-              Where quiet luxury meets relentless reliability. Every stitch, every route, and every moment is calibrated to perfection.
-            </p>
+            <div className="mb-3 sm:mb-8 text-right">
+              <p className={`text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal text-contrast-body ${showInfoB ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
+                Where quiet luxury meets relentless reliability. Every stitch, every route, and every moment is calibrated to perfection.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowInfoB(!showInfoB)}
+                className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1 pointer-events-auto cursor-pointer"
+              >
+                {showInfoB ? '− LESS' : '+ MORE'}
+              </button>
+            </div>
 
-            <div className="pointer-events-auto w-full sm:w-auto flex justify-end">
+            <div className="pointer-events-auto flex justify-end">
               <button
                 type="button"
                 onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
+                className="pb-btn pb-btn-primary !px-3 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
               >
                 <span>RESERVE WITH INTENTION</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           </div>

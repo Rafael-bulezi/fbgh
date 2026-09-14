@@ -66,6 +66,7 @@ const STEPS = [
 
 export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, onNavigate }) => {
   const [activeCase, setActiveCase] = useState('business');
+  const [showInfo, setShowInfo] = useState(false);
   const currentCase = USE_CASES.find((u) => u.id === activeCase) || USE_CASES[0];
 
   return (
@@ -102,26 +103,32 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
             </h1>
 
             {/* Body */}
-            <p className="text-xs sm:text-base text-[#F4F1EA]/80 leading-relaxed max-w-md font-light">
+            <p className={`text-xs sm:text-base text-[#F4F1EA]/80 leading-relaxed max-w-md font-light transition-all ${showInfo ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
               From choosing your vehicle to getting back on the road, FBGH keeps the rental experience
               clear, comfortable and easy to navigate.
             </p>
+            <button
+              className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1"
+              onClick={() => setShowInfo(!showInfo)}
+            >
+              {showInfo ? '− LESS' : '+ MORE'}
+            </button>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-2 w-full sm:w-auto">
+            <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2">
               <button
                 onClick={() => onNavigate?.('fleet')}
-                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 border border-[#C5A059] text-[#C5A059] text-[10.5px] sm:text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-[#C5A059] hover:text-obsidian transition-all duration-300 group cursor-pointer w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-1.5 !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 border border-[#C5A059] text-[#C5A059] !text-[9px] sm:!text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-[#C5A059] hover:text-obsidian transition-all duration-300 group cursor-pointer whitespace-nowrap"
               >
-                <span>EXPLORE THE FLEET</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                <span>EXPLORE FLEET</span>
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </button>
               <button
                 onClick={() => onOpenBooking()}
-                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
+                className="pb-btn pb-btn-primary justify-center !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
               >
                 <span>RENT A CAR</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           </div>
