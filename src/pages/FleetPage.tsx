@@ -16,6 +16,7 @@ import { FLEET_DATA, type Vehicle } from '../data/fleetData';
 import { FleetObservatory } from '../components/fleet/FleetObservatory';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
+import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface FleetPageProps {
   onBookVehicle: (vehicle: Vehicle) => void;
@@ -59,6 +60,7 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
   const [rentalInquiryVehicle, setRentalInquiryVehicle] = useState<Vehicle | null>(null);
 
   const explorerRef = useRef<HTMLDivElement>(null);
+  const [decideImgRef, decideParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 20 });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -115,8 +117,17 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
           onOpenBooking={onOpenBooking}
         />
       </section>
+
+      {/* TRANSITION: OBSERVATORY TO TOP CHOICES */}
+      <CurvedDivider
+        variant="gentle-wave"
+        fromColor="#08080A"
+        toColor="#0E0C0A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* 3. TOP CHOICES - ENHANCED */}
-      <section className="bg-soft-black border-t border-white/5 py-20 px-6 sm:px-10 lg:px-16">
+      <section className="bg-[#0E0C0A] py-20 px-6 sm:px-10 lg:px-16">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="border-b border-white/10 pb-6">
             <div className="flex items-center gap-3 mb-3">
@@ -173,17 +184,31 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
         </div>
       </section>
 
+      {/* TRANSITION: TOP CHOICES TO CAN'T DECIDE */}
+      <CurvedDivider
+        variant="s-curve"
+        fromColor="#0E0C0A"
+        toColor="#08080A"
+        flip
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* 4. CAN'T DECIDE? - ENHANCED */}
-      <section className="bg-obsidian border-t border-white/5 py-16 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
+      <section className="bg-[#08080A] py-16 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-champagne-gold/5 via-transparent to-champagne-gold/5 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
           <div className="flex flex-col sm:flex-row items-center gap-6 max-w-2xl">
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 relative shadow-2xl">
               <img
+                ref={decideImgRef}
                 src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=400&auto=format&fit=crop"
                 alt="Faith Based Global Holdings Chauffeur Service"
-                className="w-full h-full object-cover luminous-media"
+                className="w-full h-full object-cover luminous-media will-change-transform"
+                style={{
+                  transform: `translate3d(0, ${decideParallaxY}px, 0) scale(1.08)`,
+                  transition: 'transform 0.1s ease-out',
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 to-transparent pointer-events-none" />
             </div>
@@ -212,8 +237,16 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
         </div>
       </section>
 
+      {/* TRANSITION: CAN'T DECIDE TO TRUST GUARANTEES */}
+      <CurvedDivider
+        variant="circular-arc"
+        fromColor="#08080A"
+        toColor="#0E0C0A"
+        height="clamp(35px, 4vw, 65px)"
+      />
+
       {/* 5. ENHANCED TRUST GUARANTEES */}
-      <section className="bg-soft-black border-t border-white/5 py-12 px-6 sm:px-10 lg:px-16">
+      <section className="bg-[#0E0C0A] py-12 px-6 sm:px-10 lg:px-16">
         <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { icon: Users, title: 'PROFESSIONAL DRIVERS', desc: 'Experienced & Courteous' },

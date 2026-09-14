@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Phone } from 'lucide-react';
 import { PinnedExperienceTransition } from '../components/common/PinnedExperienceTransition';
 import { CurvedHero } from '../components/common/CurvedHero';
+import { CurvedDivider } from '../components/common/CurvedDivider';
 import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface ExperiencePageProps {
@@ -98,6 +99,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         }}
       />
 
+      {/* TRANSITION: HERO TO FILM */}
+      <CurvedDivider
+        variant="swoop"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           02. CINEMATIC FILM — CHOOSE → TAKE → GO → MAKE IT YOURS
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -177,6 +186,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         </div>
       </section>
 
+      {/* TRANSITION: WHAT IT FEELS LIKE TO PROCESS */}
+      <CurvedDivider
+        variant="gentle-wave"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           04. FROM BOOKING TO ROAD — horizontal process
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -235,6 +252,15 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
 
         </div>
       </section>
+
+      {/* TRANSITION: PROCESS TO JOURNEYS */}
+      <CurvedDivider
+        variant="s-curve"
+        fromColor="#08080A"
+        toColor="#0C0C0E"
+        flip
+        height="clamp(35px, 5vw, 70px)"
+      />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           05. ONE FLEET. MANY JOURNEYS. — use-case word selector
@@ -333,6 +359,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         </div>
       </section>
 
+      {/* TRANSITION: JOURNEYS TO FLEET BRIDGE */}
+      <CurvedDivider
+        variant="circular-arc"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           06. FLEET BRIDGE — short, quiet
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
@@ -355,6 +389,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
           </button>
         </div>
       </section>
+
+      {/* TRANSITION: FLEET BRIDGE TO FINAL CTA */}
+      <CurvedDivider
+        variant="asymmetric"
+        fromColor="#08080A"
+        toColor="#08080A"
+        height="clamp(35px, 4vw, 65px)"
+      />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           07. FINAL CTA — full-width departure image

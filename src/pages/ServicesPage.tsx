@@ -4,6 +4,8 @@ import {
 } from "lucide-react";
 import { ServicePageServiceCategory } from "../components/services/ServicePageServiceCategory";
 import { CurvedHero } from "../components/common/CurvedHero";
+import { CurvedDivider } from "../components/common/CurvedDivider";
+import { useSubtleParallax } from "../hooks/useSubtleParallax";
 
 interface ServicesPageProps {
   onOpenBooking: (serviceId?: string) => void;
@@ -47,6 +49,7 @@ const JOURNEY_STEPS = [
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNavigate }) => {
   const categoryRef = useRef<HTMLDivElement>(null);
+  const [readyImgRef, readyParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
 
   const scrollToCategories = () => {
     const el = document.getElementById("service-categories");
@@ -79,6 +82,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         }}
       />
 
+      {/* ── TRANSITION: HERO TO CATEGORIES ── */}
+      <CurvedDivider
+        variant="circular-arc"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* ── 2. DEDICATED SERVICE CATEGORY SHOWCASE COMPONENT ────── */}
       <div ref={categoryRef}>
         <ServicePageServiceCategory
@@ -86,6 +97,15 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
           onNavigate={onNavigate}
         />
       </div>
+
+      {/* ── TRANSITION: CATEGORIES TO TIMELINE ── */}
+      <CurvedDivider
+        variant="s-curve"
+        fromColor="#08080A"
+        toColor="#0C0C0E"
+        flip
+        height="clamp(35px, 5vw, 70px)"
+      />
 
       {/* ── 3. FROM REQUEST TO ARRIVAL: REFINED TIMELINE (NO EMOJIS) ── */}
       <section className="bg-[#0C0C0E] border-b border-white/10 py-20 px-6 sm:px-12 lg:px-20">
@@ -131,6 +151,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         </div>
       </section>
 
+      {/* ── TRANSITION: TIMELINE TO READY WHEN YOU ARE ── */}
+      <CurvedDivider
+        variant="gentle-wave"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* ── 4. READY WHEN YOU ARE + FLEET PREVIEW ─────────────── */}
       <section className="bg-obsidian border-b border-white/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
@@ -138,9 +166,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
           {/* Left: READY WHEN YOU ARE. */}
           <div className="relative p-8 sm:p-14 flex flex-col justify-between overflow-hidden min-h-[440px]">
             <img
+              ref={readyImgRef}
               src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop"
               alt="Executive silhouette looking over city skyline at dusk"
-              className="absolute inset-0 w-full h-full object-cover luminous-media opacity-40"
+              className="absolute inset-0 w-full h-full object-cover luminous-media opacity-40 will-change-transform"
+              style={{
+                transform: `translate3d(0, ${readyParallaxY}px, 0) scale(1.06)`,
+                transition: 'transform 0.1s ease-out',
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/70 to-transparent" />
 

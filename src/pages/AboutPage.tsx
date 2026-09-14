@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield, Users, Phone, Mail, CheckCircle2, Lock, Award } from 'lucide-react';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
+import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface AboutPageProps {
   onOpenBooking: () => void;
@@ -9,6 +10,8 @@ interface AboutPageProps {
 }
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate }) => {
+  const [storyImgRef, storyParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
+  const [radarImgRef, radarParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
   return (
     <div className="w-full bg-obsidian text-warm-ivory pb-20">
       {/* 1. HERO: HUMAN-CENTRIC LUXURY */}
@@ -91,9 +94,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
           <div className="lg:col-span-5 relative">
             <div className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl border border-obsidian/10 group">
               <img
+                ref={storyImgRef}
                 src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200&auto=format&fit=crop"
                 alt="Executive Chauffeur Greeting Client with Care"
-                className="w-full h-full object-cover luminous-media transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover luminous-media transition-transform duration-700 group-hover:scale-105 will-change-transform"
+                style={{
+                  transform: `translate3d(0, ${storyParallaxY}px, 0) scale(1.06)`,
+                  transition: 'transform 0.1s ease-out',
+                }}
               />
               <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
               
@@ -192,14 +200,27 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
         </div>
       </section>
 
+      {/* TRANSITION: CHAUFFEUR CHARTER TO CONCIERGE RADAR */}
+      <CurvedDivider
+        variant="gentle-wave"
+        fromColor="#0C0C0E"
+        toColor="#111114"
+        height="clamp(35px, 5vw, 70px)"
+      />
+
       {/* 4. 24/7 CONCIERGE & FLIGHT RADAR TELEMETRY ROOM */}
-      <section className="w-full bg-[#111114] py-20 sm:py-28 px-6 sm:px-12 lg:px-20 border-y border-white/10 relative overflow-hidden">
+      <section className="w-full bg-[#111114] py-20 sm:py-28 px-6 sm:px-12 lg:px-20 border-b border-white/10 relative overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 relative aspect-[16/11] rounded-lg overflow-hidden border border-white/10 shadow-2xl">
             <img
+              ref={radarImgRef}
               src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1400&auto=format&fit=crop"
               alt="Concierge and Dispatch Team"
-              className="w-full h-full object-cover luminous-media"
+              className="w-full h-full object-cover luminous-media will-change-transform"
+              style={{
+                transform: `translate3d(0, ${radarParallaxY}px, 0) scale(1.06)`,
+                transition: 'transform 0.1s ease-out',
+              }}
             />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
             
@@ -259,6 +280,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
           </div>
         </div>
       </section>
+
+      {/* TRANSITION: RADAR TO CTA */}
+      <CurvedDivider
+        variant="circular-arc"
+        fromColor="#111114"
+        toColor="#0C0C0E"
+        height="clamp(35px, 5vw, 70px)"
+      />
 
       {/* 5. CALL TO ACTION */}
       <section className="max-w-5xl mx-auto px-6 sm:px-8 pt-20">
