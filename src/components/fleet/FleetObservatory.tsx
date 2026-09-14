@@ -1,5 +1,5 @@
-﻿// FleetObservatory.tsx — Exhibition Rail Edition
-// Two navigation systems, never merged:
+﻿// FleetObservatory.tsx — Exhibition Rail Edition (Polished & Expanded)
+// Two independent navigation systems:
 //   1. Fleet rail  → which vehicle (drag / arrows / keyboard / side-frame click)
 //   2. Gallery     → which photo of that vehicle (Ext/Int toggle + bottom thumbnails)
 import React, {
@@ -93,7 +93,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   useEffect(() => { setPhotoIndex(0); }, [safeIdx]);
   useEffect(() => { setPhotoIndex(0); }, [galleryMode]);
 
-  // ----- ribbon rebuild -----
+  // ----- ribbon rebuild (continuous aperture window) -----
   const rebuildRibbon = useCallback(() => {
     const ap  = apertureRef.current;
     const trk = trackRef.current;
@@ -107,10 +107,10 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const pi = photoIdxRef.current;
     vehicles.forEach((v, i) => {
       const div = document.createElement('div');
-      div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;`;
+      div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;position:relative;overflow:hidden;`;
       const img = document.createElement('img');
       img.draggable = false;
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
       if (i === ci) {
         const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
         img.src = photos[pi] ?? photos[0] ?? v.image;
@@ -122,7 +122,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     });
   }, [filteredVehicles]);
 
-  // ----- layout frames (called every rAF) -----
+  // ----- layout frames with depth, perspective scaling, and gallery spacing -----
   const layoutFrames = useCallback(() => {
     const strip = stripRef.current;
     const ap    = apertureRef.current;
@@ -134,27 +134,30 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const sw    = strip.clientWidth;
     const apL   = (sw - apW) / 2;
     const apR   = apL + apW;
-    const fw    = Math.min(116, Math.max(72, sw * 0.085));
-    const fh    = fw * 0.63;
-    const sep   = 12;
+
+    // Sleek, proportional side frames with deliberate breathing clearance
+    const fw    = Math.min(136, Math.max(92, sw * 0.092));
+    const fh    = fw * 0.68;
+    const edgeGap = Math.max(28, sw * 0.024); // clear gap from aperture so frames don't look welded
+    const sep   = 14;
     const P     = fw + sep;
     const i     = Math.floor(pos + 1e-9);
     const f     = pos - i;
 
-    const lp = (k: number) => apL - sep - fw - (k - 1) * P;
-    const rp = (k: number) => apR + sep + k * P;
+    const lp = (k: number) => apL - edgeGap - fw - (k - 1) * P;
+    const rp = (k: number) => apR + edgeGap + k * P;
 
     const slots = [
-      { idx: i - 2, left: lp(2) + (1-f)*P*0.15, opacity: 0.35 + 0.45*(1-f) },
-      { idx: i - 1, left: lp(1) - f*P,           opacity: 0.7  + 0.3*(1-f) },
-      { idx: i,     left: lp(0) + (1-f)*P,        opacity: Math.max(0.12, f) },
-      { idx: i + 1, left: rp(0) - f*P,            opacity: 1 },
-      { idx: i + 2, left: rp(1) - f*P,            opacity: 0.78 },
-      { idx: i + 3, left: rp(2) - f*P,            opacity: 0.78 },
-      { idx: i + 4, left: rp(3) - f*P,            opacity: 0.55 },
+      { idx: i - 2, left: lp(2) + (1-f)*P*0.15, opacity: 0.25 + 0.35*(1-f), scale: 0.82 },
+      { idx: i - 1, left: lp(1) - f*P,           opacity: 0.65 + 0.25*(1-f), scale: 0.92 },
+      { idx: i,     left: lp(0) + (1-f)*P,        opacity: Math.max(0.12, f),  scale: 1.0  },
+      { idx: i + 1, left: rp(0) - f*P,            opacity: 0.82,               scale: 1.0  },
+      { idx: i + 2, left: rp(1) - f*P,            opacity: 0.52,               scale: 0.92 },
+      { idx: i + 3, left: rp(2) - f*P,            opacity: 0.26,               scale: 0.84 },
+      { idx: i + 4, left: rp(3) - f*P,            opacity: 0.10,               scale: 0.76 },
     ];
 
-    slots.forEach(({ idx, left, opacity }, s) => {
+    slots.forEach(({ idx, left, opacity, scale }, s) => {
       const el = frameRefs.current[s];
       if (!el) return;
       const valid = idx >= 0 && idx < filteredVehicles.length;
@@ -166,6 +169,9 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       el.style.pointerEvents = 'auto';
       el.style.left    = `${left}px`;
       el.style.opacity = String(Math.min(1, Math.max(0, opacity)).toFixed(3));
+      el.style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
+      el.style.transformOrigin = s < 3 ? 'right center' : 'left center';
+
       const v = filteredVehicles[idx];
       const imgEl = el.querySelector('img') as HTMLImageElement|null;
       if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
@@ -216,7 +222,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     setPhotoIndex(0); setDetailsOpen(false);
   }, [filteredVehicles.length]);
 
-  // ----- drag -----
+  // ----- drag handlers -----
   const onDown = useCallback((e: React.PointerEvent) => {
     const t = e.target as HTMLElement;
     if (t.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
@@ -233,7 +239,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     vel.current = 0.65*vel.current + 0.35*((e.clientX - lastX.current)/dt);
     lastX.current = e.clientX; lastT.current = now;
     const dx = e.clientX - startX.current;
-    targetRef.current = Math.max(-0.3, Math.min(filteredVehicles.length - 0.7, dragBase.current - dx/130));
+    targetRef.current = Math.max(-0.3, Math.min(filteredVehicles.length - 0.7, dragBase.current - dx/150));
     posRef.current = targetRef.current;
   }, [filteredVehicles.length]);
 
@@ -241,14 +247,14 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     if (!dragging.current) return;
     dragging.current = false;
     (e.currentTarget as HTMLElement).style.cursor = 'grab';
-    const proj = targetRef.current - (vel.current*100)/130;
+    const proj = targetRef.current - (vel.current*100)/150;
     targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
   }, [filteredVehicles.length]);
 
   const onWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
     const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d*0.006));
+    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d*0.005));
   }, [filteredVehicles.length]);
 
   useEffect(() => {
@@ -276,27 +282,27 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
 
   return (
     <section
-      className="w-full bg-[#0d0b09] text-[#f3f4f6] relative overflow-hidden select-none"
-      style={{ minHeight: 'calc(100vh - 66px)' }}
+      className="w-full bg-[#0d0b09] text-[#f3f4f6] relative overflow-hidden select-none flex flex-col justify-between"
+      style={{ minHeight: '92vh' }}
     >
-      {/* Vignette */}
+      {/* Background vignette & ambient glow */}
       <div className="pointer-events-none absolute inset-0 z-10"
-        style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.55) 100%)'}} />
+        style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.6) 100%)'}} />
 
       {/* ── HEADER ─────────────────────────────────────────────────────────── */}
-      <header className="relative z-20 flex items-start justify-between px-5 sm:px-10 pt-5 pb-3">
-        <div className="flex flex-col gap-1.5">
+      <header className="relative z-20 flex items-start justify-between px-6 sm:px-12 pt-6 pb-3">
+        <div className="flex flex-col gap-1">
           <div className="flex items-baseline gap-2.5">
-            <span className="font-display font-bold text-[15px] tracking-[0.22em] uppercase">FBGH</span>
-            <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-[#5c6167]">Luxury Transportation</span>
+            <span className="font-display font-extrabold text-[16px] tracking-[0.22em] uppercase text-[#F4EDE4]">FBGH</span>
+            <span className="font-mono text-[7.5px] tracking-[0.24em] uppercase text-[#71767D]">Luxury Transportation</span>
           </div>
-          <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-[#5c6167]">Fleet Exhibition — Collection Gallery</span>
+          <span className="font-mono text-[7px] tracking-[0.24em] uppercase text-[#5c6167]">Fleet Exhibition — Collection Gallery</span>
         </div>
 
-        <nav className="flex items-center gap-5 sm:gap-7 pt-1">
+        <nav className="flex items-center gap-6 sm:gap-8 pt-1">
           {cats.map(c => (
             <button key={c.id} onClick={() => setSelectedCategory(c.id)}
-              className={`relative font-display font-semibold text-[10.5px] tracking-[0.2em] uppercase pb-0.5 transition-colors ${
+              className={`relative font-display font-semibold text-[11px] tracking-[0.22em] uppercase pb-0.5 transition-colors cursor-pointer ${
                 selectedCategory===c.id ? 'text-[#cfa869]' : 'text-[#8b9096] hover:text-[#f3f4f6]'}`}>
               {c.label}
               {selectedCategory===c.id && <span className="absolute left-0 right-0 bottom-0 h-px bg-[#cfa869]" />}
@@ -305,25 +311,25 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         </nav>
       </header>
 
-      {/* ── STAGE ──────────────────────────────────────────────────────────── */}
-      <main className="relative z-20" style={{height:'clamp(300px,54vh,620px)'}}>
+      {/* ── EXPANDED MAIN STAGE (TALL MAJESTIC APERTURE) ────────────────────── */}
+      <main className="relative z-20 w-full flex-1" style={{minHeight:'clamp(500px, 66vh, 740px)'}}>
 
         {/* Class tag */}
-        <div className="absolute top-1 right-5 sm:right-10 z-30 font-mono text-[7.5px] tracking-[0.24em] uppercase text-[#cfa869] opacity-75 pointer-events-none">
-          {vehicle.categoryLabel}
+        <div className="absolute top-2 right-6 sm:right-12 z-30 font-mono text-[8px] tracking-[0.26em] uppercase text-[#cfa869] opacity-80 pointer-events-none">
+          {vehicle.categoryLabel} / Executive Collection
         </div>
 
-        {/* ── INFO CARD ─────────────────────────────────────────────────── */}
-        <aside className="info-card absolute left-4 sm:left-8 z-40 flex flex-col gap-3"
+        {/* ── FLOATING GLASS INFO CARD ──────────────────────────────────── */}
+        <aside className="info-card absolute left-4 sm:left-10 z-40 flex flex-col gap-3.5"
           style={{
             top:'50%',transform:'translateY(-50%)',
-            width:'clamp(174px,16vw,214px)',
-            background:'rgba(14,12,10,0.82)',backdropFilter:'blur(18px)',
-            WebkitBackdropFilter:'blur(18px)',
-            border:'1px solid rgba(255,255,255,0.09)',borderRadius:'12px',
-            padding:'18px 16px',boxShadow:'0 30px 60px -20px rgba(0,0,0,0.92)',
+            width:'clamp(185px,17vw,225px)',
+            background:'rgba(14,12,10,0.84)',backdropFilter:'blur(20px)',
+            WebkitBackdropFilter:'blur(20px)',
+            border:'1px solid rgba(255,255,255,0.09)',borderRadius:'14px',
+            padding:'20px 18px',boxShadow:'0 30px 70px -20px rgba(0,0,0,0.95)',
           }}>
-          <h2 className="font-display font-bold text-[16px] leading-tight text-center text-[#f3f4f6] tracking-tight">
+          <h2 className="font-display font-extrabold text-[17px] sm:text-[18px] leading-tight text-center text-[#F4EDE4] tracking-tight">
             {vehicle.name}
           </h2>
 
@@ -336,14 +342,14 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
               {v:vehicle.drivetrain??'AWD',        l:'Drivetrain',  sm:true},
             ] as {v:string|number,l:string,sm?:boolean}[]).map(({v:val,l,sm}) => (
               <div key={l}>
-                <b className={`block font-display font-semibold text-[#f3f4f6] ${sm?'text-[9px] uppercase truncate':'text-[15px]'}`}>{val}</b>
-                <span className="font-mono text-[6.5px] tracking-[0.16em] uppercase text-[#5c6167]">{l}</span>
+                <b className={`block font-display font-bold text-[#F4EDE4] ${sm?'text-[9.5px] uppercase truncate':'text-[16px]'}`}>{val}</b>
+                <span className="font-mono text-[7px] tracking-[0.16em] uppercase text-[#71767D]">{l}</span>
               </div>
             ))}
           </div>
 
           <button onClick={() => setDetailsOpen(o=>!o)} aria-expanded={detailsOpen}
-            className="flex items-center justify-between w-full font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#cfa869] py-0.5 hover:brightness-110 transition-all">
+            className="flex items-center justify-between w-full font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#cfa869] py-0.5 hover:brightness-110 transition-all cursor-pointer">
             <span>⚙ Fine Grain Details</span>
             <span className="text-[12px] transition-transform duration-300 inline-block"
               style={{transform:detailsOpen?'rotate(45deg)':'none'}}>＋</span>
@@ -355,72 +361,81 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
               {vehicle.idealFor.slice(0,2).map(item => (
                 <li key={item} className="flex items-start justify-between gap-1.5 pb-1.5"
                   style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167] flex-shrink-0 mt-0.5">FOR</span>
-                  <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6] text-right leading-tight">{item}</b>
+                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D] flex-shrink-0 mt-0.5">FOR</span>
+                  <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4] text-right leading-tight">{item}</b>
                 </li>
               ))}
               <li className="flex items-start justify-between gap-1.5 pb-1.5"
                 style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-                <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167] flex-shrink-0 mt-0.5">AUDIO</span>
-                <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6] text-right leading-tight">{vehicle.specs.soundSystem}</b>
+                <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D] flex-shrink-0 mt-0.5">AUDIO</span>
+                <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4] text-right leading-tight">{vehicle.specs.soundSystem}</b>
               </li>
               {vehicle.specs.wifi && (
                 <li className="flex items-start justify-between gap-1.5">
-                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167]">WI-FI</span>
-                  <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6]">ONBOARD</b>
+                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D]">WI-FI</span>
+                  <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4]">ONBOARD</b>
                 </li>
               )}
             </ul>
           </div>
 
           <button onClick={() => onBookVehicle(vehicle)}
-            className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded font-display font-semibold text-[9px] tracking-[0.22em] uppercase transition-all hover:brightness-110 hover:-translate-y-px"
+            className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded font-display font-bold text-[9.5px] tracking-[0.24em] uppercase transition-all hover:brightness-110 hover:-translate-y-px cursor-pointer"
             style={{background:'linear-gradient(140deg,#dcb877,#c09a4f)',color:'#171310'}}>
-            Request Vehicle <ArrowUpRight className="w-2.5 h-2.5" />
+            Request Vehicle <ArrowUpRight className="w-3 h-3" />
           </button>
         </aside>
 
-        {/* ── DRAG STRIP ────────────────────────────────────────────────── */}
+        {/* ── DRAG STRIP (CONTINUOUS RAIL SURFACE) ────────────────────── */}
         <div ref={stripRef} className="absolute inset-0 cursor-grab"
           onPointerDown={onDown} onPointerMove={onMove}
           onPointerUp={onUp} onPointerCancel={onUp} onWheel={onWheel}>
 
-          {/* Side frames */}
+          {/* Polished Side Frames (with depth perspective, scale diminution, and dark gradient scrim) */}
           {KEYS.map((key,si) => (
             <div key={key}
               ref={el => { frameRefs.current[si] = el; }}
               onClick={() => handleFrameClick(si)}
               data-idx=""
-              className="absolute top-1/2 -translate-y-1/2 overflow-hidden bg-[#141110] z-[4] hover:brightness-110"
-              style={{borderRadius:'8px',boxShadow:'0 18px 40px -18px rgba(0,0,0,0.8)',willChange:'left,opacity',transition:'opacity 0.08s linear'}}>
+              className="absolute top-1/2 overflow-hidden bg-[#141110] z-[4] hover:brightness-110 transition-all duration-200"
+              style={{
+                borderRadius:'12px',
+                border:'1px solid rgba(255,255,255,0.1)',
+                boxShadow:'0 24px 50px -15px rgba(0,0,0,0.85)',
+                willChange:'left,opacity,transform',
+              }}>
               <img alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
-              <div className="fl absolute bottom-0 inset-x-0 px-1.5 py-0.5 font-mono text-[6px] tracking-wider uppercase truncate text-white/70"
-                style={{background:'rgba(10,9,8,0.82)'}} />
+              {/* Soft dark vignette gradient on background frames so central hero pops */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
+              <div className="fl absolute bottom-0 inset-x-0 px-2 py-1 font-display font-medium text-[7.5px] tracking-wider uppercase truncate text-white/85"
+                style={{background:'rgba(10,9,8,0.75)',backdropFilter:'blur(4px)'}} />
             </div>
           ))}
 
-          {/* Aperture */}
+          {/* Majestic Central Aperture (TALL, BOLD, DOMINANT) */}
           <div ref={apertureRef} className="ap-el absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[6]"
             style={{
-              width:'clamp(200px,34%,500px)',height:'92%',borderRadius:'14px',
+              width:'clamp(320px, 36vw, 540px)',
+              height:'96%',
+              borderRadius:'20px',
               background:'#0d0b09',
-              boxShadow:'0 40px 90px -30px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
+              boxShadow:'0 45px 100px -25px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
             }}>
-            {/* Ribbon */}
+            {/* Seamless Physical Track */}
             <div ref={trackRef} className="flex h-full" style={{willChange:'transform'}} data-built="" />
 
-            {/* Gradient */}
+            {/* Gradient Scrim for Legibility */}
             <div className="absolute inset-0 pointer-events-none z-[2]"
-              style={{background:'linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 44%)'}} />
+              style={{background:'linear-gradient(to top,rgba(0,0,0,0.78) 0%,rgba(0,0,0,0.15) 36%,transparent 55%)'}} />
 
-            {/* Caption */}
-            <div className="absolute left-4 bottom-3.5 z-[3] flex flex-col items-start gap-1.5 pointer-events-none">
-              <span className="font-display font-semibold text-[13px] tracking-tight text-white"
-                style={{textShadow:'0 2px 14px rgba(0,0,0,0.7)'}}>
+            {/* In-Aperture Bottom Caption */}
+            <div className="absolute left-5 bottom-4 z-[3] flex flex-col items-start gap-1.5 pointer-events-none">
+              <span className="font-display font-extrabold text-[15px] sm:text-[16px] tracking-tight text-white"
+                style={{textShadow:'0 2px 16px rgba(0,0,0,0.8)'}}>
                 {vehicle.name}
               </span>
-              <span className="font-mono text-[7px] tracking-[0.18em] uppercase text-white/90 px-2 py-0.5"
-                style={{borderRadius:'3px',background:'rgba(10,9,8,0.55)',border:'1px solid rgba(255,255,255,0.14)',backdropFilter:'blur(6px)'}}>
+              <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-white/95 px-2.5 py-1"
+                style={{borderRadius:'4px',background:'rgba(10,9,8,0.65)',border:'1px solid rgba(255,255,255,0.16)',backdropFilter:'blur(8px)'}}>
                 {galleryMode==='exterior'?'Exterior':'Interior'} · {pad2(safePhoto+1)}
               </span>
             </div>
@@ -428,54 +443,58 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         </div>
       </main>
 
-      {/* ── THUMBNAILS ─────────────────────────────────────────────────────── */}
-      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2.5 overflow-x-auto no-scrollbar"
-        style={{height:'52px',padding:'0 10px'}}>
-        {gallery.map((src,i) => (
-          <button key={i} onClick={() => setPhotoIndex(i)}
-            aria-label={`${galleryMode} photo ${i+1}`}
-            className="flex-shrink-0 overflow-hidden transition-all duration-200"
-            style={{
-              width:38,height:27,borderRadius:'6px',
-              backgroundImage:`url("${src}")`,backgroundSize:'cover',backgroundPosition:'center',
-              boxShadow:i===safePhoto
-                ?'0 0 0 1.5px #cfa869,0 6px 18px rgba(207,168,105,0.35)'
-                :'0 0 0 1px rgba(255,255,255,0.14),0 4px 12px rgba(0,0,0,0.55)',
-              opacity:i===safePhoto?1:0.45,
-              filter:i===safePhoto?'none':'saturate(0.65) brightness(0.75)',
-              transform:i===safePhoto?'scale(1.06)':undefined,
-            }} />
-        ))}
+      {/* ── THUMBNAILS (FLOATING CAPSULE STRIP WITH GENEROUS SPACING) ───────── */}
+      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2 mt-4 sm:mt-6 px-4"
+        style={{height:'44px'}}>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/[0.08]">
+          {gallery.map((src,i) => (
+            <button key={i} onClick={() => setPhotoIndex(i)}
+              aria-label={`${galleryMode} photo ${i+1}`}
+              className="flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer"
+              style={{
+                width:36,height:25,borderRadius:'5px',
+                backgroundImage:`url("${src}")`,backgroundSize:'cover',backgroundPosition:'center',
+                boxShadow:i===safePhoto
+                  ?'0 0 0 1.5px #cfa869,0 4px 14px rgba(207,168,105,0.45)'
+                  :'0 0 0 1px rgba(255,255,255,0.12)',
+                opacity:i===safePhoto?1:0.4,
+                filter:i===safePhoto?'none':'saturate(0.65) brightness(0.75)',
+                transform:i===safePhoto?'scale(1.08)':undefined,
+              }} />
+          ))}
+        </div>
       </div>
 
-      {/* ── FOOTER CONTROLS ────────────────────────────────────────────────── */}
-      <footer className="ctrl-bar relative z-20 grid items-center gap-4 px-5 sm:px-10 pb-6 pt-1"
+      {/* ── FOOTER CONTROLS (SHIFTED DOWN TO BOTTOM EDGE WITH GENEROUS AIR) ─── */}
+      <footer className="ctrl-bar relative z-20 grid items-center gap-4 px-6 sm:px-12 pt-4 pb-8 sm:pb-10 mt-1"
         style={{gridTemplateColumns:'1fr auto 1fr'}}>
 
-        {/* Counter */}
-        <span className="font-mono text-[9.5px] tracking-[0.18em] text-[#8b9096]">
+        {/* Fleet Counter */}
+        <span className="font-mono text-[10px] tracking-[0.2em] text-[#8b9096]">
           <b className="text-[#cfa869] font-medium">{pad2(safeIdx+1)}</b>
           {' '}
           <span className="text-[#5c6167]">/ {pad2(filteredVehicles.length)}</span>
         </span>
 
-        {/* Prev · toggle · Next */}
-        <div className="flex items-center gap-3">
+        {/* Center: Prev Arrow · Exterior/Interior Pill Toggle · Next Arrow */}
+        <div className="flex items-center gap-3.5">
           <button onClick={() => stepVehicle(-1)} aria-label="Previous"
-            className="w-7 h-7 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869]"
+            className="w-8 h-8 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869] hover:border-[#cfa869] cursor-pointer bg-white/[0.02]"
             style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❮</button>
 
-          <div className="relative flex"
-            style={{padding:'3px',borderRadius:'30px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.03)'}}>
-            <div className="absolute top-[3px] h-[calc(100%-6px)] transition-all duration-420"
-              style={{left:'3px',width:'76px',borderRadius:'30px',
-                transform:galleryMode==='interior'?'translateX(76px)':'translateX(0)',
+          <div className="relative flex p-[3px] rounded-full"
+            style={{border:'1px solid rgba(255,255,255,0.12)',background:'rgba(255,255,255,0.04)'}}>
+            <div className="absolute top-[3px] h-[calc(100%-6px)] transition-all duration-400 rounded-full"
+              style={{
+                left:'3px',width:'80px',
+                transform:galleryMode==='interior'?'translateX(80px)':'translateX(0)',
                 background:'linear-gradient(140deg,#e0bd80,#b98f45)',
-                boxShadow:'0 4px 14px rgba(207,168,105,0.35)'}} />
+                boxShadow:'0 4px 16px rgba(207,168,105,0.4)',
+              }} />
             {(['exterior','interior'] as const).map(m => (
               <button key={m} onClick={() => setGalleryMode(m)}
-                className="relative z-10 font-display font-semibold text-[10.5px] tracking-[0.16em] uppercase transition-colors"
-                style={{padding:'5px 0',width:'76px',borderRadius:'30px',
+                className="relative z-10 font-display font-bold text-[10.5px] tracking-[0.18em] uppercase transition-colors cursor-pointer text-center"
+                style={{padding:'6px 0',width:'80px',borderRadius:'30px',
                   color:galleryMode===m?'#171310':'#8b9096',whiteSpace:'nowrap'}}>
                 {m==='exterior'?'Exterior':'Interior'}
               </button>
@@ -483,18 +502,18 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
           </div>
 
           <button onClick={() => stepVehicle(1)} aria-label="Next"
-            className="w-7 h-7 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869]"
+            className="w-8 h-8 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869] hover:border-[#cfa869] cursor-pointer bg-white/[0.02]"
             style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❯</button>
         </div>
 
-        {/* Capacity filter */}
+        {/* Capacity Passenger Filter */}
         <div className="flex items-center justify-end gap-1.5">
-          <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
+          <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
           {caps.map(c => (
             <button key={c.id} onClick={() => setPassengerFilter(c.id)}
-              className="font-mono text-[9px] tracking-widest transition-all"
+              className="font-mono text-[9px] tracking-widest transition-all cursor-pointer"
               style={{
-                padding:'4px 10px',borderRadius:'4px',
+                padding:'4px 11px',borderRadius:'4px',
                 border:passengerFilter===c.id?'1px solid #cfa869':'1px solid rgba(255,255,255,0.1)',
                 background:passengerFilter===c.id?'rgba(207,168,105,0.18)':'rgba(255,255,255,0.04)',
                 color:passengerFilter===c.id?'#cfa869':'#8b9096',
