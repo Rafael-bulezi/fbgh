@@ -43,7 +43,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   primaryCta,
   secondaryCta,
   statChips,
-  minHeight = 'min-h-[560px] lg:min-h-screen lg:h-screen',
+  minHeight = 'min-h-[85vh] sm:min-h-[90vh] lg:min-h-screen lg:h-screen',
   enableParallax = true,
 }) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -73,16 +73,16 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
     }
   };
 
-  // Mobile SVG curve paths (430x760 coordinate box)
+  // Mobile SVG curve paths (430x760 coordinate box) - raised to reveal >60% of vehicle photography
   const getMobileCurvePath = () => {
     switch (curveVariant) {
       case 'sharp-diagonal':
-        return 'M0,0 L430,0 L430,420 L0,510 Z';
+        return 'M0,0 L430,0 L430,260 L0,340 Z';
       case 'circular-arc':
-        return 'M0,0 L430,0 L430,430 Q215,500 0,440 Z';
+        return 'M0,0 L430,0 L430,270 Q215,340 0,280 Z';
       case 'gentle-wave':
       default:
-        return 'M0,0 L430,0 L430,450 C320,495 180,435 0,480 Z';
+        return 'M0,0 L430,0 L430,280 C320,335 180,260 0,305 Z';
     }
   };
 
@@ -137,8 +137,8 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
       </div>
 
       {/* 5. Editorial Content Layer */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24 sm:pt-32 lg:pt-24 pb-16 sm:pb-24 lg:py-24 flex items-center">
-        <div className="max-w-md sm:max-w-lg lg:max-w-xl space-y-3.5 sm:space-y-5">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20 sm:pt-32 lg:pt-24 pb-8 sm:pb-24 lg:py-24 flex items-center">
+        <div className="max-w-md sm:max-w-lg lg:max-w-xl space-y-3 sm:space-y-5">
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2.5">
             <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
@@ -149,7 +149,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
 
           {/* Headline */}
           <h1
-            className={`font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] tracking-tight leading-[0.92] ${
+            className={`font-display font-black text-3xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] tracking-tight leading-[0.94] sm:leading-[0.92] ${
               isLight ? 'text-[#141416]' : 'text-[#F4EDE4]'
             }`}
           >
@@ -175,7 +175,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
 
           {/* Stat Chips (if provided) */}
           {statChips && statChips.length > 0 && (
-            <div className="flex flex-wrap items-center gap-3 sm:gap-5 pt-1 sm:pt-2 font-mono text-[9.5px] sm:text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
+            <div className="hidden sm:flex flex-wrap items-center gap-3 sm:gap-5 pt-1 sm:pt-2 font-mono text-[9.5px] sm:text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
               {statChips.map((chip, i) => (
                 <React.Fragment key={chip.label}>
                   <div className="flex items-center gap-2">
@@ -188,9 +188,9 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
             </div>
           )}
 
-          {/* Action CTAs */}
+          {/* Action CTAs — hidden on mobile to maximize visible photography */}
           {(primaryCta || secondaryCta) && (
-            <div className="flex flex-row items-center gap-2.5 sm:gap-4 pt-2">
+            <div className="hidden sm:flex flex-row items-center gap-2.5 sm:gap-4 pt-2">
               {primaryCta && (
                 <button
                   onClick={primaryCta.onClick}

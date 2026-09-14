@@ -164,18 +164,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           }`}
         >
 
-          {/* Left: Brand Monogram Crest (Hero Emblem, No Wordmark) */}
-          <div className="flex items-center">
+          {/* Left: Brand Monogram & Name */}
+          <div className="flex items-center gap-6">
             <button
               onClick={() => handleNavClick('home')}
-              className="group flex items-center focus:outline-none select-none text-left p-0.5"
+              className="group flex items-center gap-2.5 sm:gap-3 focus:outline-none select-none text-left p-0.5"
               aria-label="Faith Based Global Holdings"
             >
               <Logo
-                size={isSolid ? 'lg' : 'hero'}
+                size={isSolid ? 'md' : 'lg'}
                 variant={mobileMenuOpen || isDarkTheme ? 'dark' : 'light'}
-                showText={false}
-                className="transition-all duration-500 group-hover:scale-105 drop-shadow-[0_2px_12px_rgba(201,149,61,0.25)]"
+                showText={true}
+                className="transition-all duration-500 group-hover:scale-105"
               />
             </button>
           </div>
