@@ -24,6 +24,44 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [selectedMegaCat, setSelectedMegaCat] = useState<'suv' | 'sedan' | 'van' | 'electric'>('suv');
 
   const navLinksRef = useRef<HTMLDivElement>(null);
+  const megaLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const moreLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current);
+      if (moreLeaveTimer.current) clearTimeout(moreLeaveTimer.current);
+    };
+  }, []);
+
+  const handleMegaEnter = () => {
+    if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current);
+    if (moreLeaveTimer.current) clearTimeout(moreLeaveTimer.current);
+    setMoreDropdownOpen(false);
+    setMegaOpen(true);
+  };
+
+  const handleMegaLeave = () => {
+    if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current);
+    megaLeaveTimer.current = setTimeout(() => {
+      setMegaOpen(false);
+    }, 280);
+  };
+
+  const handleMoreEnter = () => {
+    if (moreLeaveTimer.current) clearTimeout(moreLeaveTimer.current);
+    if (megaLeaveTimer.current) clearTimeout(megaLeaveTimer.current);
+    setMegaOpen(false);
+    setMoreDropdownOpen(true);
+  };
+
+  const handleMoreLeave = () => {
+    if (moreLeaveTimer.current) clearTimeout(moreLeaveTimer.current);
+    moreLeaveTimer.current = setTimeout(() => {
+      setMoreDropdownOpen(false);
+    }, 280);
+  };
+
   const [ruleStyle, setRuleStyle] = useState<{ left: number; width: number; opacity: number }>({
     left: 0,
     width: 0,
@@ -110,7 +148,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header
-        onMouseLeave={() => setMegaOpen(false)}
+        onMouseLeave={() => {
+          handleMegaLeave();
+          handleMoreLeave();
+        }}
         className={`fixed left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isSolid ? 'top-4 sm:top-5 px-3 sm:px-6 lg:px-12' : 'top-0 px-4 sm:px-8 lg:px-12'
         } ${isHidden || isManuallyHidden ? '-translate-y-36 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
@@ -123,17 +164,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           }`}
         >
 
-          {/* Left: Brand Monogram & Name */}
-          <div className="flex items-center gap-6">
+          {/* Left: Brand Monogram Crest (Hero Emblem, No Wordmark) */}
+          <div className="flex items-center">
             <button
               onClick={() => handleNavClick('home')}
-              className="group flex items-center gap-3 focus:outline-none select-none text-left"
+              className="group flex items-center focus:outline-none select-none text-left p-0.5"
               aria-label="Faith Based Global Holdings"
             >
               <Logo
-                size="md"
+                size={isSolid ? 'lg' : 'hero'}
                 variant={mobileMenuOpen || isDarkTheme ? 'dark' : 'light'}
-                showText={true}
+                showText={false}
+                className="transition-all duration-500 group-hover:scale-105 drop-shadow-[0_2px_12px_rgba(201,149,61,0.25)]"
               />
             </button>
           </div>
@@ -157,8 +199,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="relative py-1"
                   onMouseEnter={(e) => {
                     updateRulePosition(e.currentTarget);
-                    if (link.isMega) setMegaOpen(true);
-                    else setMegaOpen(false);
+                    if (link.isMega) handleMegaEnter();
+                    else {
+                      handleMegaLeave();
+                      handleMoreLeave();
+                    }
                   }}
                 >
                   <button
@@ -182,11 +227,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dropdown Menu Trigger for Destinations & About Us */}
             <div
               className="relative py-1"
-              onMouseEnter={() => {
-                setMoreDropdownOpen(true);
-                setMegaOpen(false);
-              }}
-              onMouseLeave={() => setMoreDropdownOpen(false)}
+              onMouseEnter={handleMoreEnter}
+              onMouseLeave={handleMoreLeave}
             >
               <button
                 type="button"
@@ -209,7 +251,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Dropdown Menu Floating Box */}
               <div
-                className={`absolute top-full right-0 mt-2 w-48 bg-[#0c0d0e]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 transition-all duration-300 ${
+                onMouseEnter={handleMoreEnter}
+                onMouseLeave={handleMoreLeave}
+                className={`absolute top-full right-0 mt-2 w-48 bg-[#0c0d0e]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 transition-all duration-300 before:absolute before:-top-3 before:inset-x-0 before:h-3 ${
                   moreDropdownOpen
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-2 pointer-events-none'
@@ -331,8 +375,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* FLEET EDITORIAL MEGA-MENU */}
         <div
-          onMouseEnter={() => setMegaOpen(true)}
-          onMouseLeave={() => setMegaOpen(false)}
+          onMouseEnter={handleMegaEnter}
+          onMouseLeave={handleMegaLeave}
           className={`absolute top-full left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-4xl mt-3 bg-obsidian/95 backdrop-blur-2xl border border-white/10 rounded-xl p-6 sm:p-8 shadow-[0_24px_60px_rgba(0,0,0,0.85)] z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 ${
             megaOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-3 pointer-events-none'
           }`}

@@ -2,7 +2,7 @@ import React from 'react';
 
 interface LogoProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'hero';
   showText?: boolean;
   variant?: 'light' | 'dark';
 }
@@ -18,6 +18,7 @@ export const Logo: React.FC<LogoProps> = ({
     md: { iconSize: 34, titleSize: 'text-sm', subSize: 'text-[8.5px]' },
     lg: { iconSize: 44, titleSize: 'text-base', subSize: 'text-[10px]' },
     xl: { iconSize: 64, titleSize: 'text-xl', subSize: 'text-xs' },
+    hero: { iconSize: 56, titleSize: 'text-2xl', subSize: 'text-sm' },
   };
 
   const { iconSize, titleSize, subSize } = sizeMap[size];

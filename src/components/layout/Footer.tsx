@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Logo } from '../common/Logo';
-import { Phone, Mail, MapPin, ArrowRight, ArrowUp } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (page: string) => void;
@@ -14,15 +14,6 @@ const PILL_CATEGORIES = [
   { id: 'services', label: 'CHAUFFEUR SERVICES', route: 'services' },
   { id: 'experience', label: 'THE RENTAL EXPERIENCE', route: 'experience' },
 ];
-
-/* Concentric radar circle icon matching the reference design */
-const ConcentricRadarIcon: React.FC<{ className?: string }> = ({ className = "text-[#E0B268]" }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className={`shrink-0 ${className}`}>
-    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1" strokeDasharray="2.5 3" opacity="0.6" />
-    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
-    <circle cx="12" cy="12" r="2.5" fill="currentColor" />
-  </svg>
-);
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => {
   const [activePill, setActivePill] = useState<string>('all');
@@ -128,113 +119,54 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
           </div>
         </div>
 
-        {/* ── 03. THREE-COLUMN EDITORIAL SHOWCASE (Directly from reference) ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 pt-6 pb-12 items-center border-t border-white/[0.08]">
+        {/* ── 03. BRAND IDENTITY & DIRECT CONCIERGE ACCESS ──────────────── */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-10 pt-8 pb-12 border-t border-white/[0.08]">
           
-          {/* Left Column: Brand Identity & Narrative */}
-          <div className="lg:col-span-4 space-y-6 text-left">
-            <div className="space-y-3">
+          {/* Left: Brand Identity & Narrative */}
+          <div className="space-y-4 max-w-lg text-left">
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-full bg-[#1F1913] border border-[#E0A852]/40 flex items-center justify-center shadow-md">
+                <Logo size="sm" variant="dark" showText={false} />
+              </div>
               <h3 className="font-display text-2xl sm:text-3xl text-[#F4EDE4] font-bold tracking-tight">
                 FBGH
               </h3>
-              <p className="font-sans text-sm text-white/60 leading-relaxed font-light max-w-sm">
-                The original standard in private transportation and curated vehicle rental. 
-                Refined until effortless. Lifts friction, secures discretion, and quietly elevates your schedule like it was never there.
-              </p>
             </div>
-
-            {/* Direct Contact Links */}
-            <div className="space-y-2 pt-2 text-xs font-sans text-white/70">
-              <a
-                href="tel:+19295650100"
-                className="flex items-center gap-2.5 hover:text-[#E0A852] transition-colors"
-              >
-                <Phone className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
-                <span className="font-mono tracking-wider">+1 (929) 565-0100</span>
-              </a>
-              <a
-                href="mailto:concierge@fbglobalholdings.com"
-                className="flex items-center gap-2.5 hover:text-[#E0A852] transition-colors"
-              >
-                <Mail className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
-                <span className="font-sans">concierge@fbglobalholdings.com</span>
-              </a>
-              <div className="flex items-center gap-2.5 text-white/50">
-                <MapPin className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
-                <span>New York · Philadelphia · Washington D.C. · Global</span>
-              </div>
-            </div>
+            <p className="font-sans text-sm text-white/60 leading-relaxed font-light">
+              The original standard in private transportation and curated vehicle rental. 
+              Refined until effortless. Lifts friction, secures discretion, and quietly elevates your schedule like it was never there.
+            </p>
           </div>
 
-          {/* Center Column: Framed Showcase Card with Dashed Border (Like Image 2) */}
-          <div className="lg:col-span-4 flex justify-center">
-            <div className="w-full max-w-sm bg-[#13110E]/90 border border-dashed border-white/20 rounded-lg p-8 sm:p-10 flex flex-col items-center text-center space-y-6 shadow-2xl relative group hover:border-[#E0A852]/60 transition-all duration-500">
-              {/* Subtle amber ambient glow behind card */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#E0A852]/[0.08] to-transparent rounded-lg pointer-events-none" />
-
-              {/* Monogram Crest */}
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-[#1F1913] border border-[#E0A852]/50 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-                  <Logo size="md" variant="dark" showText={false} />
-                </div>
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-[#080706] animate-pulse" />
-              </div>
-
-              {/* Badge & Caption */}
-              <div className="space-y-1 relative z-10">
-                <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#E0A852] font-semibold block">
-                  ACTIVE 24/7 DISPATCH
-                </span>
-                <h4 className="font-display text-lg text-[#F4EDE4] font-bold tracking-tight">
-                  Curbside &amp; Tarmac Readiness
-                </h4>
-                <p className="text-xs text-white/50 font-light">
-                  Fleet staged 15 minutes ahead of schedule.
-                </p>
-              </div>
-
-              {/* Action Button */}
-              <div className="pt-2 w-full relative z-10">
-                <button
-                  type="button"
-                  onClick={onOpenBooking}
-                  className="pb-btn pb-btn-primary w-full justify-center"
-                >
-                  <span>REQUEST A VEHICLE</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
+          {/* Right: Direct Contact Details & Immediate Concierge Action */}
+          <div className="space-y-3.5 text-xs font-sans text-white/70 text-left md:text-right">
+            <a
+              href="tel:+19295650100"
+              className="flex md:justify-end items-center gap-2.5 hover:text-[#E0A852] transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
+              <span className="font-mono tracking-wider">+1 (929) 565-0100</span>
+            </a>
+            <a
+              href="mailto:concierge@fbglobalholdings.com"
+              className="flex md:justify-end items-center gap-2.5 hover:text-[#E0A852] transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
+              <span className="font-sans">concierge@fbglobalholdings.com</span>
+            </a>
+            <div className="flex md:justify-end items-center gap-2.5 text-white/50">
+              <MapPin className="w-3.5 h-3.5 text-[#E0A852] shrink-0" />
+              <span>New York · Philadelphia · Washington D.C. · Global</span>
             </div>
-          </div>
-
-          {/* Right Column: 3 Bullet Features with Concentric Radar Circles (Image 1) */}
-          <div className="lg:col-span-4 space-y-6 text-left">
-            {[
-              {
-                title: 'Guaranteed departure readiness',
-                desc: 'Every vehicle sanitized, detailed, and staged ahead of your arrival.',
-              },
-              {
-                title: 'Fixed corridor pricing',
-                desc: 'All turnpike tolls, fees, and wait buffers included with zero peak surcharges.',
-              },
-              {
-                title: 'Dedicated personal concierge',
-                desc: 'Direct human dispatch liaison available around the clock for all itineraries.',
-              },
-            ].map((feature, idx) => (
-              <div key={idx} className="flex items-start gap-4 group">
-                <ConcentricRadarIcon className="text-[#E0A852] group-hover:scale-110 transition-transform duration-300 mt-0.5" />
-                <div className="space-y-1">
-                  <h4 className="font-display text-sm sm:text-base text-[#F4EDE4] font-semibold tracking-tight group-hover:text-[#E0A852] transition-colors">
-                    {feature.title}
-                  </h4>
-                  <p className="text-xs text-white/55 font-light leading-relaxed">
-                    {feature.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <div className="pt-2 flex md:justify-end">
+              <button
+                type="button"
+                onClick={onOpenBooking}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#E0A852]/50 text-[#F4EDE4] hover:bg-[#E0A852] hover:text-[#0D0A08] font-display text-[10.5px] tracking-widest uppercase font-semibold transition-all duration-300 cursor-pointer shadow-sm hover:shadow-[0_0_20px_rgba(224,168,82,0.3)]"
+              >
+                <span>REQUEST A RIDE</span>
+              </button>
+            </div>
           </div>
 
         </div>

@@ -43,7 +43,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   primaryCta,
   secondaryCta,
   statChips,
-  minHeight = 'min-h-[520px] sm:min-h-[580px] lg:min-h-[640px]',
+  minHeight = 'min-h-[560px] lg:min-h-screen lg:h-screen',
   enableParallax = true,
 }) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -91,27 +91,27 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
       className={`relative w-full ${minHeight} flex items-start lg:items-center overflow-hidden select-none`}
       style={{ backgroundColor: bgColor }}
     >
-      {/* 1. Full-bleed background photography with subtle parallax */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+      {/* 1. Photography layer with subtle parallax: 60vw on desktop, right-anchored */}
+      <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[60vw] h-full overflow-hidden z-0">
         <img
           ref={imgRef}
           src={image}
           alt={imageAlt}
-          className={`w-full h-full object-cover ${imagePosition} will-change-transform scale-105 opacity-90`}
+          className={`w-full h-full object-cover ${imagePosition} will-change-transform scale-105 opacity-95`}
           style={{
             transform: `translate3d(0, ${parallaxY}px, 0) scale(1.04)`,
             transition: 'transform 0.1s ease-out',
           }}
         />
-        {/* Subtle ambient lighting scrim */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: isLight
-              ? 'linear-gradient(to right, rgba(250,248,245,0.4) 0%, transparent 60%)'
-              : 'linear-gradient(to right, rgba(12,12,14,0.7) 0%, transparent 70%)',
-          }}
-        />
+        {/* Subtle dark ambient lighting scrim only for dark theme (no white haze) */}
+        {!isLight && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to right, rgba(12,12,14,0.5) 0%, transparent 60%)',
+            }}
+          />
+        )}
       </div>
 
       {/* 2. Desktop Organic Curved / Diagonal Panel */}
@@ -135,16 +135,6 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
           <path d={getMobileCurvePath()} fill={bgColor} />
         </svg>
       </div>
-
-      {/* 4. Top Header Scrim for Navbar legibility */}
-      <div
-        className="absolute top-0 inset-x-0 h-24 sm:h-28 z-[5] pointer-events-none"
-        style={{
-          background: isLight
-            ? 'linear-gradient(to bottom, rgba(250,248,245,0.8) 0%, rgba(250,248,245,0.2) 60%, transparent 100%)'
-            : 'linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)',
-        }}
-      />
 
       {/* 5. Editorial Content Layer */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24 sm:pt-32 lg:pt-24 pb-16 sm:pb-24 lg:py-24 flex items-center">
