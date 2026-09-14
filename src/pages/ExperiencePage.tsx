@@ -88,7 +88,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         image="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1920&auto=format&fit=crop"
         imageAlt="Person loading luggage into rental SUV on open road"
         curveVariant="swoop"
-        theme="dark"
+        theme="light"
         primaryCta={{
           label: 'EXPLORE FLEET',
           onClick: () => onNavigate?.('fleet'),
@@ -102,9 +102,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
       {/* TRANSITION: HERO TO FILM */}
       <CurvedDivider
         variant="swoop"
-        fromColor="#0C0C0E"
+        fromColor="#FAF8F5"
         toColor="#08080A"
-        height="clamp(35px, 5vw, 70px)"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -190,59 +190,59 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
       <CurvedDivider
         variant="gentle-wave"
         fromColor="#0C0C0E"
-        toColor="#08080A"
-        height="clamp(35px, 5vw, 70px)"
+        toColor="#FAF8F5"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          04. FROM BOOKING TO ROAD — horizontal process
+          04. FROM BOOKING TO ROAD — CRISP WARM IVORY PROCESS
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="bg-[#08080A] border-b border-white/10 py-20 sm:py-28 px-8 sm:px-14 lg:px-20">
+      <section className="bg-[#FAF8F5] text-ink-black border-b border-[#E8E2D6] py-20 sm:py-28 px-8 sm:px-14 lg:px-20">
         <div className="max-w-7xl mx-auto space-y-14">
 
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E8E2D6] pb-6">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-3">
                 <span className="w-6 h-[1px] bg-[#C5A059]" />
-                <span className="text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase">
+                <span className="text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
                   THE PROCESS
                 </span>
               </div>
-              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#F4EDE4] tracking-tight">
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#141416] tracking-tight">
                 From booking to road.
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-white/50 max-w-xs font-light leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#55555C] max-w-xs font-light leading-relaxed">
               Four simple steps. Everything else is already taken care of.
             </p>
           </div>
 
           {/* Steps — horizontal desktop, vertical mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 lg:divide-x divide-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 lg:divide-x divide-[#E8E2D6]">
             {STEPS.map((step, idx) => (
               <div key={step.num} className="relative group lg:px-10 first:lg:pl-0 last:lg:pr-0 py-8 lg:py-0">
                 {/* Mobile connector line */}
                 {idx < STEPS.length - 1 && (
-                  <div className="absolute left-6 top-full w-[1px] h-8 bg-white/10 lg:hidden" />
+                  <div className="absolute left-6 top-full w-[1px] h-8 bg-[#E8E2D6] lg:hidden" />
                 )}
 
                 <div className="space-y-4">
                   {/* Number */}
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-2xl sm:text-3xl font-light text-[#E0B268] leading-none">
+                    <span className="font-mono text-2xl sm:text-3xl font-light text-[#C5A059] leading-none">
                       {step.num}
                     </span>
-                    <div className="flex-1 h-[1px] bg-white/10 group-hover:bg-[#E0B268]/40 transition-colors" />
+                    <div className="flex-1 h-[1px] bg-[#E8E2D6] group-hover:bg-[#C5A059]/50 transition-colors" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight group-hover:text-[#E0B268] transition-colors duration-300">
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-[#141416] tracking-tight group-hover:text-[#C5A059] transition-colors duration-300">
                     {step.title}
                   </h3>
 
                   {/* Desc */}
-                  <p className="text-xs text-white/55 font-light leading-relaxed">
+                  <p className="text-xs text-[#55555C] font-light leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
@@ -256,10 +256,10 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
       {/* TRANSITION: PROCESS TO JOURNEYS */}
       <CurvedDivider
         variant="s-curve"
-        fromColor="#08080A"
+        fromColor="#FAF8F5"
         toColor="#0C0C0E"
         flip
-        height="clamp(35px, 5vw, 70px)"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

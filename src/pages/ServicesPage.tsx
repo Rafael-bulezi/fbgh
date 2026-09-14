@@ -70,7 +70,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         image="https://res.cloudinary.com/dv9jpkgrs/image/upload/v1788494961/ChatGPT_Image_Sep_4_2026_04_42_01_AM_dbjdk1.png"
         imageAlt="Luxury chauffeur opening door for executive passenger"
         curveVariant="circular-arc"
-        theme="dark"
+        theme="light"
         primaryCta={{
           label: 'REQUEST A RIDE',
           onClick: () => onOpenBooking(),
@@ -85,9 +85,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
       {/* ── TRANSITION: HERO TO CATEGORIES ── */}
       <CurvedDivider
         variant="circular-arc"
-        fromColor="#0C0C0E"
+        fromColor="#FAF8F5"
         toColor="#08080A"
-        height="clamp(35px, 5vw, 70px)"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* ── 2. DEDICATED SERVICE CATEGORY SHOWCASE COMPONENT ────── */}
@@ -102,25 +102,25 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
       <CurvedDivider
         variant="s-curve"
         fromColor="#08080A"
-        toColor="#0C0C0E"
+        toColor="#FAF8F5"
         flip
-        height="clamp(35px, 5vw, 70px)"
+        height="clamp(40px, 5vw, 80px)"
       />
 
-      {/* ── 3. FROM REQUEST TO ARRIVAL: REFINED TIMELINE (NO EMOJIS) ── */}
-      <section className="bg-[#0C0C0E] border-b border-white/10 py-20 px-6 sm:px-12 lg:px-20">
+      {/* ── 3. FROM REQUEST TO ARRIVAL: REFINED TIMELINE (CRISP WARM IVORY) ── */}
+      <section className="bg-[#FAF8F5] text-ink-black py-20 px-6 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto space-y-12">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E8E2D6] pb-6">
             <div className="space-y-2">
-              <span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase font-medium">
+              <span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase font-bold">
                 THE DISPATCH PROCESS
               </span>
-              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#F4EDE4] tracking-tight">
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#141416] tracking-tight">
                 From Request To Arrival
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-white/60 max-w-md font-light">
+            <p className="text-xs sm:text-sm text-[#55555C] max-w-md font-light">
               We orchestrate every detail in advance so you enjoy an uninterrupted journey.
             </p>
           </div>
@@ -130,18 +130,18 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
             {JOURNEY_STEPS.map((step) => (
               <div key={step.num} className="space-y-3 relative group">
                 {/* Step Index Numeral & Top Rule */}
-                <div className="flex items-center justify-between pb-3 border-b border-white/10 group-hover:border-[#E0B268]/50 transition-colors">
-                  <span className="font-mono text-sm font-semibold text-[#E0B268]">
+                <div className="flex items-center justify-between pb-3 border-b border-[#E8E2D6] group-hover:border-[#C5A059] transition-colors">
+                  <span className="font-mono text-sm font-bold text-[#C5A059]">
                     {step.num}
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-[#E0B268] transition-colors" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]/40 group-hover:bg-[#C5A059] transition-colors" />
                 </div>
 
-                <h4 className="font-display font-bold text-lg text-[#F4EDE4] tracking-tight uppercase group-hover:text-[#E0B268] transition-colors">
+                <h4 className="font-display font-bold text-lg text-[#141416] tracking-tight uppercase group-hover:text-[#C5A059] transition-colors">
                   {step.title}
                 </h4>
 
-                <p className="text-xs text-white/60 leading-relaxed font-light">
+                <p className="text-xs text-[#55555C] leading-relaxed font-light">
                   {step.desc}
                 </p>
               </div>
@@ -154,9 +154,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
       {/* ── TRANSITION: TIMELINE TO READY WHEN YOU ARE ── */}
       <CurvedDivider
         variant="gentle-wave"
-        fromColor="#0C0C0E"
-        toColor="#08080A"
-        height="clamp(35px, 5vw, 70px)"
+        fromColor="#FAF8F5"
+        toColor="#0E0C0A"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* ── 4. READY WHEN YOU ARE + FLEET PREVIEW ─────────────── */}

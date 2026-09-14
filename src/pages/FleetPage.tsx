@@ -122,21 +122,21 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
       <CurvedDivider
         variant="gentle-wave"
         fromColor="#08080A"
-        toColor="#0E0C0A"
-        height="clamp(35px, 5vw, 70px)"
+        toColor="#FAF8F5"
+        height="clamp(40px, 5vw, 80px)"
       />
 
-      {/* 3. TOP CHOICES - ENHANCED */}
-      <section className="bg-[#0E0C0A] py-20 px-6 sm:px-10 lg:px-16">
+      {/* 3. TOP CHOICES - CRISP WARM IVORY */}
+      <section className="bg-[#FAF8F5] text-ink-black py-20 px-6 sm:px-10 lg:px-16">
         <div className="max-w-7xl mx-auto space-y-12">
-          <div className="border-b border-white/10 pb-6">
+          <div className="border-b border-[#E8E2D6] pb-6">
             <div className="flex items-center gap-3 mb-3">
-              <Star className="w-4 h-4 text-champagne-gold" />
-              <span className="text-[10px] font-mono tracking-[0.35em] text-champagne-gold uppercase">
+              <Star className="w-4 h-4 text-[#C5A059]" />
+              <span className="text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
                 TOP CHOICES FOR EVERY JOURNEY
               </span>
             </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#F4EDE4] tracking-tight">
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#141416] tracking-tight">
               The right vehicle for what matters.
             </h2>
           </div>
@@ -150,7 +150,7 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
                   onClick={() => {
                     setLightboxVehicle(matchedVehicle);
                   }}
-                  className="group luxury-glass-dark border border-white/10 hover:border-champagne-gold/50 p-6 rounded-xl transition-all duration-500 cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-2 shadow-xl hover:shadow-[0_20px_60px_rgba(201,164,92,0.2)]"
+                  className="group bg-white border border-[#E8E2D6] hover:border-[#C5A059]/70 p-6 rounded-xl transition-all duration-500 cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-2 shadow-sm hover:shadow-[0_20px_50px_rgba(201,164,92,0.18)]"
                 >
                   <div className="aspect-[16/10] w-full overflow-hidden rounded-lg relative">
                     <img
@@ -158,23 +158,23 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
                       alt={item.name}
                       className="w-full h-full object-cover luminous-media transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 via-obsidian/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   </div>
 
                   <div className="space-y-2 flex-1">
-                    <span className="text-[9px] font-mono tracking-[0.3em] text-champagne-gold uppercase font-semibold">
+                    <span className="text-[9px] font-mono tracking-[0.3em] text-[#C5A059] uppercase font-semibold">
                       {item.category}
                     </span>
-                    <h3 className="font-display font-bold text-xl text-[#F4EDE4] tracking-tight group-hover:text-[#E0B268] transition-colors">
+                    <h3 className="font-display font-bold text-xl text-[#141416] tracking-tight group-hover:text-[#C5A059] transition-colors">
                       {item.name}
                     </h3>
-                    <p className="text-xs text-muted-gray leading-relaxed font-light">
+                    <p className="text-xs text-[#55555C] leading-relaxed font-light">
                       {item.desc}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-white/5 flex items-center justify-between text-[10px] font-mono tracking-[0.25em] uppercase text-champagne-gold">
-                    <span>EXPLORE</span>
+                  <div className="pt-3 border-t border-[#E8E2D6] flex items-center justify-between text-[10px] font-mono tracking-[0.25em] uppercase text-[#C5A059] font-semibold">
+                    <span>EXPLORE DOSSIER</span>
                     <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                 </div>
@@ -187,10 +187,10 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
       {/* TRANSITION: TOP CHOICES TO CAN'T DECIDE */}
       <CurvedDivider
         variant="s-curve"
-        fromColor="#0E0C0A"
+        fromColor="#FAF8F5"
         toColor="#08080A"
         flip
-        height="clamp(35px, 5vw, 70px)"
+        height="clamp(40px, 5vw, 80px)"
       />
 
       {/* 4. CAN'T DECIDE? - ENHANCED */}
@@ -241,12 +241,12 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
       <CurvedDivider
         variant="circular-arc"
         fromColor="#08080A"
-        toColor="#0E0C0A"
+        toColor="#FAF8F5"
         height="clamp(35px, 4vw, 65px)"
       />
 
-      {/* 5. ENHANCED TRUST GUARANTEES */}
-      <section className="bg-[#0E0C0A] py-12 px-6 sm:px-10 lg:px-16">
+      {/* 5. ENHANCED TRUST GUARANTEES — CRISP WARM IVORY */}
+      <section className="bg-[#FAF8F5] text-ink-black py-16 px-6 sm:px-10 lg:px-16">
         <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { icon: Users, title: 'PROFESSIONAL DRIVERS', desc: 'Experienced & Courteous' },
@@ -255,14 +255,14 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
             { icon: Car, title: 'BOOK WITH CONFIDENCE', desc: 'Simple, secure & flexible' },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-champagne-gold/20 to-champagne-gold/10 flex items-center justify-center text-champagne-gold flex-shrink-0 border border-champagne-gold/30 group-hover:shadow-[0_0_20px_rgba(201,164,92,0.4)] transition-all">
+              <div className="w-10 h-10 rounded-full bg-[#C5A059]/15 flex items-center justify-center text-[#C5A059] flex-shrink-0 border border-[#C5A059]/30 group-hover:shadow-[0_0_20px_rgba(201,164,92,0.3)] transition-all">
                 <Icon className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <div className="text-[10px] font-mono tracking-wider uppercase text-warm-ivory font-semibold">
+                <div className="text-[10px] font-mono tracking-wider uppercase text-[#141416] font-semibold">
                   {title}
                 </div>
-                <div className="text-xs text-muted-gray leading-relaxed">
+                <div className="text-xs text-[#6A6A75] leading-relaxed font-light">
                   {desc}
                 </div>
               </div>
@@ -270,6 +270,14 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
           ))}
         </div>
       </section>
+
+      {/* TRANSITION TO FOOTER */}
+      <CurvedDivider
+        variant="gentle-wave"
+        fromColor="#FAF8F5"
+        toColor="#0E0C0A"
+        height="clamp(40px, 5vw, 80px)"
+      />
 
       {/* 6. ENHANCED LIGHTBOX */}
       {lightboxVehicle && (
