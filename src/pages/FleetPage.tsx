@@ -72,48 +72,65 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
   return (
     <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian pt-16">
       
-      {/* 1. CINEMATIC FLEET INTRODUCTION */}
-      <section className="relative pt-16 sm:pt-20 pb-10 sm:pb-16 px-4 sm:px-10 lg:px-16 overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-gradient-to-br from-obsidian via-soft-black to-obsidian pointer-events-none" />
-        
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-3/5 opacity-40 pointer-events-none overflow-hidden">
+      {/* 1. CINEMATIC FLEET INTRODUCTION — EDITORIAL ANGLED SPLIT */}
+      <section className="relative min-h-[500px] sm:min-h-[540px] lg:min-h-[520px] flex items-center overflow-hidden border-b border-white/10 bg-[#0C0C0E]">
+        {/* Full-bleed photography on the right */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
           <img
             src="/images/fleet-hero-banner.jpg"
-            alt="Faith Based Global Holdings Fleet Lineup"
-            className="w-full h-full object-cover object-center luminous-media"
+            alt="Faith Based Global Holdings Fleet Lineup at The Residence"
+            className="w-full h-full object-cover object-[70%_center] lg:object-[center_right] select-none"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/90 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10 space-y-4 sm:space-y-6">
-          <div className="space-y-2.5 sm:space-y-3">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-champagne-gold" />
-              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.4em] text-champagne-gold uppercase font-medium">
+        {/* Desktop Angled White Panel */}
+        <div
+          className="hidden lg:block absolute inset-0 bg-white z-[1]"
+          style={{ clipPath: 'polygon(0 0, 46% 0, 61.5% 100%, 0 100%)' }}
+        />
+
+        {/* Mobile / Tablet Angled White Panel */}
+        <div
+          className="lg:hidden absolute inset-0 bg-white z-[1]"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 64%, 0 78%)' }}
+        />
+
+        {/* Subtle Top Header Scrim to guarantee navbar readability */}
+        <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent z-[5] pointer-events-none" />
+
+        {/* Content Container */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24 sm:pt-28 pb-20 sm:pb-24 lg:py-24">
+          <div className="max-w-md sm:max-w-lg space-y-3 sm:space-y-4">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A059]" />
+              <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
                 THE PREMIER FLEET
               </span>
             </div>
 
-            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] tracking-tight leading-[0.98]">
+            {/* Headline */}
+            <h1 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[82px] text-[#141416] tracking-tight leading-[0.92]">
               MORE THAN<br />
-              <span className="text-[#E0B268]">30 VEHICLES.</span>
+              <span className="text-[#C5A059]">30 VEHICLES.</span>
             </h1>
 
-            <p className="text-xs sm:text-base text-warm-ivory/70 max-w-xl leading-relaxed font-light">
+            {/* Body */}
+            <p className="text-xs sm:text-sm md:text-[15px] text-[#4A4A4F] leading-relaxed font-normal pt-1 sm:pt-2 max-w-md">
               An exclusive collection of luxury sedans, SUVs, and executive vans—each meticulously maintained and ready for your journey.
             </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-8 pt-2 sm:pt-4 font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-muted-gray uppercase">
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-champagne-gold shadow-[0_0_12px_rgba(201,164,92,0.8)]" />
-              <span>30+ VEHICLES</span>
-            </div>
-            <span className="text-white/20">·</span>
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-champagne-gold shadow-[0_0_12px_rgba(201,164,92,0.8)]" />
-              <span>CHAUFFEURED & SELF-DRIVE</span>
+            {/* Bullets */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-5 pt-3 sm:pt-5 font-mono text-[9.5px] sm:text-[10px] tracking-[0.22em] text-[#55555A] uppercase font-semibold">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
+                <span>30+ VEHICLES</span>
+              </div>
+              <span className="text-[#B0B0B5]">·</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
+                <span>CHAUFFEURED & SELF-DRIVE</span>
+              </div>
             </div>
           </div>
         </div>
