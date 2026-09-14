@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import {
-  ArrowRight, ArrowDown, Shield, Star
+  ArrowRight, ArrowDown
 } from "lucide-react";
 import { ServicePageServiceCategory } from "../components/services/ServicePageServiceCategory";
 
@@ -103,37 +103,6 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
                 <span>REQUEST A RIDE</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
-            </div>
-          </div>
-
-          {/* Floating Trust Badge — Bottom Right */}
-          <div className="absolute right-8 sm:right-16 bottom-12 hidden md:block bg-obsidian/80 backdrop-blur-md border border-white/10 p-5 rounded-sm max-w-xs shadow-2xl text-left">
-            <div className="text-[9px] tracking-[0.25em] text-warm-ivory font-mono uppercase font-semibold leading-relaxed">
-              DISCREET. PROFESSIONAL. ALWAYS ON TIME.
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} className="w-3 h-3 fill-champagne-gold text-champagne-gold" />
-                ))}
-              </div>
-              <span className="text-xs font-mono text-warm-ivory font-semibold">5.0</span>
-            </div>
-            <div className="text-[10px] text-muted-gray mt-0.5">Client satisfaction rating</div>
-          </div>
-        </div>
-
-        {/* Bottom Left Crest Emblem */}
-        <div className="absolute bottom-6 left-8 sm:left-16 hidden lg:flex items-center gap-3 z-10 opacity-90">
-          <div className="w-7 h-7 rounded-full border border-champagne-gold/60 flex items-center justify-center">
-            <Shield className="w-3.5 h-3.5 text-champagne-gold" />
-          </div>
-          <div>
-            <div className="text-[8px] tracking-[0.25em] text-champagne-gold uppercase font-mono font-medium">
-              PREMIUM TRANSPORTATION
-            </div>
-            <div className="text-[8px] tracking-[0.2em] text-warm-ivory/70 uppercase">
-              NEW YORK · PHILADELPHIA · BEYOND
             </div>
           </div>
         </div>
