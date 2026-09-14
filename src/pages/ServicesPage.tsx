@@ -167,7 +167,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
 
           {/* Minimalist 5-Step Process Track */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 relative">
-            {JOURNEY_STEPS.map((step, idx) => (
+            {JOURNEY_STEPS.map((step) => (
               <div key={step.num} className="space-y-3 relative group">
                 {/* Step Index Numeral & Top Rule */}
                 <div className="flex items-center justify-between pb-3 border-b border-white/10 group-hover:border-[#C5A059]/50 transition-colors">

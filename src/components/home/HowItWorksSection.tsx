@@ -42,7 +42,7 @@ const STEPS = [
   },
 ];
 
-export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenBooking }) => {
+export const HowItWorksSection: React.FC<HowItWorksSectionProps> = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   // Auto-cycle through the 5 steps seamlessly
