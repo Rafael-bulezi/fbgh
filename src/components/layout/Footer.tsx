@@ -22,14 +22,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
 
   return (
     <footer 
-      className="w-full text-[#F4EDE4] pt-16 sm:pt-24 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-t border-white/[0.08]"
+      className="w-full text-[#F4EDE4] pt-20 sm:pt-28 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none"
       style={{
         background: 'radial-gradient(130% 90% at 50% 0%, #15110E 0%, #0D0A08 40%, #060504 100%)'
       }}
     >
+      {/* ── 00. CURVED DIVIDER TRANSITION AT TOP (NO STRAIGHT LINE) ── */}
+      <div className="absolute top-0 inset-x-0 overflow-hidden leading-none z-20 pointer-events-none -translate-y-[1px]">
+        <svg viewBox="0 0 1440 90" preserveAspectRatio="none" className="w-full h-12 sm:h-16 md:h-20 text-[#0E0C0A] fill-current">
+          <path d="M0,0 L1440,0 L1440,30 C1160,78 880,10 640,48 C400,86 180,15 0,54 Z" />
+        </svg>
+      </div>
+
       {/* Luminous Champagne Hairline Top Border */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E0A852]/60 to-transparent z-20" />
-      <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-[#E0A852]/[0.04] to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-10 bg-gradient-to-b from-[#E0A852]/[0.03] to-transparent pointer-events-none" />
 
       {/* Soft Multi-Layered Champagne Ambient Glow */}
       <div 
@@ -126,17 +133,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             <span>+1 (929) 565-0100</span>
           </a>
 
-          {/* Email & Corridors */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-white/70 font-sans">
+          {/* Email & Corridors — Bigger, Bolder & Clearly Viewable */}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-sm sm:text-base md:text-[17px] font-semibold text-[#F4EDE4] font-sans">
             <a
               href="mailto:concierge@fbglobalholdings.com"
-              className="inline-flex items-center gap-2 hover:text-[#E0A852] transition-colors"
+              className="inline-flex items-center gap-2.5 hover:text-[#E0A852] transition-colors"
             >
-              <Mail className="w-4 h-4 text-[#E0A852] shrink-0" />
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#E0A852] shrink-0" />
               <span>concierge@fbglobalholdings.com</span>
             </a>
-            <div className="inline-flex items-center gap-2 text-white/50">
-              <MapPin className="w-4 h-4 text-[#E0A852] shrink-0" />
+            <div className="inline-flex items-center gap-2.5 text-[#F4EDE4]/90">
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[#E0A852] shrink-0" />
               <span>New York · Philadelphia · Washington D.C. · Global</span>
             </div>
           </div>
@@ -152,8 +159,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </button>
           </div>
 
-          {/* Discreet Brand Note */}
-          <p className="font-sans text-xs sm:text-sm text-white/50 max-w-xl leading-relaxed pt-2">
+          {/* Prominent Brand Note — Bigger, Bolder & Clearly Viewable */}
+          <p className="font-sans text-sm sm:text-base md:text-lg text-[#F4EDE4]/85 max-w-2xl leading-relaxed pt-2 font-normal text-center">
             The original standard in private transportation and curated vehicle rental. 
             Refined until effortless. Lifts friction, secures discretion, and quietly elevates your schedule.
           </p>

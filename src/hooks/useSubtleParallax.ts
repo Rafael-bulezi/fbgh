@@ -8,8 +8,8 @@ interface SubtleParallaxOptions {
 
 export function useSubtleParallax<T extends HTMLElement>(
   options: SubtleParallaxOptions = {}
-): [RefObject<T | null>, number] {
-  const { speed = 0.06, maxOffset = 36, disabled = false } = options;
+): [RefObject<T | null>, number, number] {
+  const { speed = 0.12, maxOffset = 70, disabled = false } = options;
   const elementRef = useRef<T | null>(null);
   const [offsetY, setOffsetY] = useState(0);
 
@@ -23,7 +23,7 @@ export function useSubtleParallax<T extends HTMLElement>(
     let rafId: number;
     let targetOffset = 0;
     let currentOffset = 0;
-    const ease = 0.1;
+    const ease = 0.12;
 
     const handleScroll = () => {
       const el = elementRef.current;
@@ -64,5 +64,6 @@ export function useSubtleParallax<T extends HTMLElement>(
     };
   }, [speed, maxOffset, disabled]);
 
-  return [elementRef, offsetY];
+  const textOffsetY = Number((-offsetY * 0.35).toFixed(2));
+  return [elementRef, offsetY, textOffsetY];
 }

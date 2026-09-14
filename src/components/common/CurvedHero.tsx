@@ -47,9 +47,9 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   enableParallax = true,
 }) => {
   const firstSentence = description.split(/(?<=[.?!])\s+/)[0] || description;
-  const [imgRef, parallaxY] = useSubtleParallax<HTMLImageElement>({
-    speed: 0.05,
-    maxOffset: 28,
+  const [imgRef, parallaxY, textParallaxY] = useSubtleParallax<HTMLImageElement>({
+    speed: 0.12,
+    maxOffset: 70,
     disabled: !enableParallax,
   });
 
@@ -107,7 +107,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
           alt={imageAlt}
           className={`w-full h-full object-cover object-[center_10%] ${getDesktopPositionClass(imagePosition)} will-change-transform scale-105 opacity-95`}
           style={{
-            transform: `translate3d(0, ${parallaxY}px, 0) scale(1.04)`,
+            transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)`,
             transition: 'transform 0.1s ease-out',
           }}
         />
@@ -144,8 +144,14 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
         </svg>
       </div>
 
-      {/* 5. Editorial Content Layer */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20 sm:pt-32 lg:pt-24 pb-8 sm:pb-24 lg:py-24 flex items-center">
+      {/* 5. Editorial Content Layer with Differential Text Parallax */}
+      <div 
+        className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20 sm:pt-32 lg:pt-24 pb-8 sm:pb-24 lg:py-24 flex items-center will-change-transform"
+        style={{
+          transform: `translate3d(0, ${textParallaxY}px, 0)`,
+          transition: 'transform 0.1s ease-out',
+        }}
+      >
         <div className="max-w-md sm:max-w-lg lg:max-w-xl space-y-3 sm:space-y-5">
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2.5">

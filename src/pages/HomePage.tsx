@@ -14,7 +14,8 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking }) => {
-  const [skylineRef, skylineParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.06, maxOffset: 35 });
+  const [skylineRef, skylineParallaxY, skylineTextParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.12, maxOffset: 65 });
+  const [porscheRef, porscheParallaxY, porscheTextParallaxY] = useSubtleParallax<HTMLDivElement>({ speed: 0.14, maxOffset: 75 });
 
   return (
     <div className="w-full bg-[#FAF8F5] text-ink-black overflow-x-hidden selection:bg-[#C5A059] selection:text-obsidian">
@@ -101,7 +102,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
           <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B0A] via-[#0D0B0A]/40 to-[#0D0B0A]/70" />
         </div>
 
-        <div className="max-w-5xl mx-auto text-center space-y-8 relative z-10">
+        <div 
+          className="max-w-5xl mx-auto text-center space-y-8 relative z-10 will-change-transform"
+          style={{
+            transform: `translate3d(0, ${skylineTextParallaxY}px, 0)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <span className="text-[10px] font-mono tracking-[0.35em] uppercase text-[#C5A059] font-bold">
             COVERAGE
           </span>
@@ -179,17 +186,29 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
       />
 
       {/* ── 7. FINAL INVOCATION: ARRIVE WITH INTENTION ── */}
-      <section className="w-full relative min-h-[55vh] sm:min-h-[65vh] flex items-center justify-center bg-[#0E0C0A] overflow-hidden select-none py-20">
+      <section 
+        ref={porscheRef}
+        className="w-full relative min-h-[72vh] sm:min-h-[82vh] flex items-center justify-center bg-[#0E0C0A] overflow-hidden select-none py-28 sm:py-36"
+      >
         <img
           src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920&auto=format&fit=crop"
           alt="Luxury Vehicle at Night"
-          className="absolute inset-0 w-full h-full object-cover object-center luminous-media opacity-75"
+          className="absolute inset-0 w-full h-[125%] -top-[12%] object-cover object-center luminous-media opacity-80 will-change-transform"
+          style={{
+            transform: `translate3d(0, ${porscheParallaxY}px, 0) scale(1.08)`,
+            transition: 'transform 0.1s ease-out',
+          }}
         />
         {/* Dark cinematic scrim to make text pop while keeping full image richness */}
         <div className="absolute inset-0 bg-[#0E0C0A]/40" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0D0A08] to-transparent pointer-events-none" />
 
-        <div className="relative z-10 text-center space-y-6 p-6 max-w-2xl">
+        <div 
+          className="relative z-10 text-center space-y-6 p-6 max-w-2xl will-change-transform"
+          style={{
+            transform: `translate3d(0, ${porscheTextParallaxY}px, 0)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <h2 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-[#F4EDE4] tracking-tight uppercase leading-[0.95]">
             ARRIVE WITH<br />
             <span className="text-[#C5A059]">INTENTION.</span>
@@ -211,6 +230,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
               <span>(929) 565-0100</span>
             </a>
           </div>
+        </div>
+
+        {/* Curved divider transitioning to the footer — NOT straight! */}
+        <div className="absolute bottom-0 inset-x-0 z-20 pointer-events-none">
+          <CurvedDivider
+            variant="gentle-wave"
+            fromColor="transparent"
+            toColor="#15110E"
+            position="bottom"
+            height="clamp(50px, 7vw, 105px)"
+          />
         </div>
       </section>
     </div>
