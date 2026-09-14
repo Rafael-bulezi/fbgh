@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useSubtleParallax } from '../../hooks/useSubtleParallax';
 
@@ -46,7 +46,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   minHeight = 'min-h-[85vh] sm:min-h-[90vh] lg:min-h-screen lg:h-screen',
   enableParallax = true,
 }) => {
-  const [showInfo, setShowInfo] = useState(false);
+  const firstSentence = description.split(/(?<=[.?!])\s+/)[0] || description;
   const [imgRef, parallaxY] = useSubtleParallax<HTMLImageElement>({
     speed: 0.05,
     maxOffset: 28,
@@ -86,18 +86,26 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
     }
   };
 
+  const getDesktopPositionClass = (pos: string) => {
+    if (pos.includes('top')) return 'sm:object-top';
+    if (pos.includes('bottom')) return 'sm:object-bottom';
+    if (pos.includes('right')) return 'sm:object-right';
+    if (pos.includes('left')) return 'sm:object-left';
+    return 'sm:object-center';
+  };
+
   return (
     <section
       className={`relative w-full ${minHeight} flex items-start lg:items-center overflow-hidden select-none`}
       style={{ backgroundColor: bgColor }}
     >
-      {/* 1. Photography layer with subtle parallax: 60vw on desktop, right-anchored */}
+      {/* 1. Photography layer with subtle parallax: 60vw on desktop, right-anchored. Positioned towards top on mobile for faces */}
       <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[60vw] h-full overflow-hidden z-0">
         <img
           ref={imgRef}
           src={image}
           alt={imageAlt}
-          className={`w-full h-full object-cover ${imagePosition} will-change-transform scale-105 opacity-95`}
+          className={`w-full h-full object-cover object-[center_10%] ${getDesktopPositionClass(imagePosition)} will-change-transform scale-105 opacity-95`}
           style={{
             transform: `translate3d(0, ${parallaxY}px, 0) scale(1.04)`,
             transition: 'transform 0.1s ease-out',
@@ -158,20 +166,15 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
             <span className="text-[#C5A059]">{titleLine2}</span>
           </h1>
 
-          {/* Description with Mobile Collapsible Toggle */}
+          {/* Description — capped to 1 sentence on mobile */}
           <p
-            className={`text-xs sm:text-sm md:text-base leading-relaxed font-normal transition-all max-w-lg ${
+            className={`text-xs sm:text-sm md:text-base leading-relaxed font-normal max-w-lg ${
               isLight ? 'text-[#4A4A4F]' : 'text-warm-ivory/80'
-            } ${showInfo ? '' : 'line-clamp-2 sm:line-clamp-none'}`}
+            }`}
           >
-            {description}
+            <span className="sm:hidden">{firstSentence}</span>
+            <span className="hidden sm:inline">{description}</span>
           </p>
-          <button
-            className="sm:hidden font-mono text-[9px] tracking-widest text-[#C5A059] uppercase block mt-1 cursor-pointer"
-            onClick={() => setShowInfo(!showInfo)}
-          >
-            {showInfo ? '− LESS' : '+ MORE'}
-          </button>
 
           {/* Stat Chips (if provided) */}
           {statChips && statChips.length > 0 && (
