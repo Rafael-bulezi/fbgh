@@ -95,8 +95,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // All pages feature dark heroes at the top; isDarkTheme when at rest (not scrolled)
-  const isDarkTheme = !isSolid;
+  // Pages with daylight/warm-ivory heroes (like home & fleet) use light theme when at rest (not scrolled)
+  const isDarkPage = ['services', 'experience', 'about', 'destinations'].includes(currentPage);
+  const isDarkTheme = !isSolid && isDarkPage;
 
   // Navigation text colors — dynamic contrast based on page background & scroll state
   const linkActiveClass = isDarkTheme

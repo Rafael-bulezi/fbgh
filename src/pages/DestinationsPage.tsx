@@ -1,6 +1,8 @@
 import React from 'react';
 import { DESTINATIONS_DATA } from '../data/destinationsData';
 import { Compass, Phone } from 'lucide-react';
+import { CurvedHero } from '../components/common/CurvedHero';
+import { CurvedDivider } from '../components/common/CurvedDivider';
 
 interface DestinationsPageProps {
   onOpenBooking: () => void;
@@ -8,28 +10,30 @@ interface DestinationsPageProps {
 
 export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBooking }) => {
   return (
-    <div className="w-full bg-obsidian text-warm-ivory pt-24 pb-20">
-      <section className="relative min-h-[50vh] flex items-center justify-center px-6 sm:px-12 lg:px-20 overflow-hidden border-b border-white/10">
-        <img
-          src="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=1920&auto=format&fit=crop"
-          alt="Metropolitan Destination Map Panorama"
-          className="absolute inset-0 w-full h-full object-cover opacity-35"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-black/40 to-black/80" />
+    <div className="w-full bg-obsidian text-warm-ivory pb-20">
+      {/* 1. HERO: CURVED S-CURVE HERO */}
+      <CurvedHero
+        eyebrow="REGIONAL & GLOBAL COVERAGE"
+        titleLine1="DESTINATIONS &"
+        titleLine2="TRAVEL CORRIDORS."
+        description="Flawless navigation across New York, Philadelphia, major private aviation FBOs, and regional coastal estates."
+        image="https://images.unsplash.com/photo-1534430480872-3498386e7856?q=80&w=1920&auto=format&fit=crop"
+        imageAlt="Metropolitan Destination Map Panorama"
+        curveVariant="s-curve"
+        theme="dark"
+        primaryCta={{
+          label: 'RESERVE A CORRIDOR',
+          onClick: onOpenBooking,
+        }}
+      />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-3.5 sm:space-y-4">
-          <span className="text-[9.5px] sm:text-[10px] font-sans tracking-[0.3em] uppercase text-champagne-gold font-medium">
-            REGIONAL & GLOBAL COVERAGE
-          </span>
-          <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-[#F4EDE4] tracking-tight leading-[0.98]">
-            DESTINATIONS &<br />
-            <span className="text-[#E0B268]">TRAVEL CORRIDORS.</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-gray max-w-lg mx-auto font-light leading-relaxed">
-            Flawless navigation across New York, Philadelphia, major private aviation FBOs, and regional coastal estates.
-          </p>
-        </div>
-      </section>
+      {/* TRANSITION DIVIDER */}
+      <CurvedDivider
+        variant="s-curve"
+        fromColor="#0C0C0E"
+        toColor="#08080A"
+        height="clamp(35px, 4vw, 65px)"
+      />
 
       <section className="max-w-7xl mx-auto px-5 sm:px-12 lg:px-20 py-12 sm:py-20 space-y-12 sm:space-y-20">
         {DESTINATIONS_DATA.map((dest) => (

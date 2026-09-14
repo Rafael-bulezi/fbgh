@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, Phone } from 'lucide-react';
 import { PinnedExperienceTransition } from '../components/common/PinnedExperienceTransition';
+import { CurvedHero } from '../components/common/CurvedHero';
+import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface ExperiencePageProps {
   onOpenBooking: () => void;
@@ -66,74 +68,35 @@ const STEPS = [
 
 export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, onNavigate }) => {
   const [activeCase, setActiveCase] = useState('business');
-  const [showInfo, setShowInfo] = useState(false);
   const currentCase = USE_CASES.find((u) => u.id === activeCase) || USE_CASES[0];
+
+  const [readyImgRef, readyParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
+  const [departImgRef, departParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.06, maxOffset: 30 });
 
   return (
     <div className="w-full bg-[#08080A] text-[#F4F1EA] selection:bg-champagne-gold selection:text-obsidian">
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          01. HERO — ~45vh, left-aligned, rental imagery
+          01. HERO — CURVED HERO WITH SWOOP WAVE & PARALLAX
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <section className="relative min-h-[45vh] flex items-end overflow-hidden border-b border-white/10">
-        <img
-          src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1920&auto=format&fit=crop"
-          alt="Person loading luggage into rental SUV on open road"
-          className="absolute inset-0 w-full h-full object-cover luminous-media opacity-90"
-        />
-        {/* Cinematic scrims */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08080A]/90 via-[#08080A]/55 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#08080A]/80 via-transparent to-[#08080A]/25" />
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-14 lg:px-20 pb-12 sm:pb-16 pt-28 sm:pt-36">
-          <div className="max-w-xl space-y-4 sm:space-y-6">
-
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2.5 sm:gap-3">
-              <span className="w-6 h-[1px] bg-[#C5A059]" />
-              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-medium">
-                THE EXPERIENCE
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight">
-              MORE FREEDOM.<br />
-              <span className="text-[#E0B268]">MORE YOURS.</span>
-            </h1>
-
-            {/* Body */}
-            <p className={`text-xs sm:text-base text-[#F4F1EA]/80 leading-relaxed max-w-md font-light transition-all ${showInfo ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
-              From choosing your vehicle to getting back on the road, FBGH keeps the rental experience
-              clear, comfortable and easy to navigate.
-            </p>
-            <button
-              className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1"
-              onClick={() => setShowInfo(!showInfo)}
-            >
-              {showInfo ? '− LESS' : '+ MORE'}
-            </button>
-
-            {/* CTAs */}
-            <div className="flex flex-row items-center gap-2 sm:gap-4 pt-2">
-              <button
-                onClick={() => onNavigate?.('fleet')}
-                className="inline-flex items-center justify-center gap-1.5 !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 border border-[#C5A059] text-[#C5A059] !text-[9px] sm:!text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-[#C5A059] hover:text-obsidian transition-all duration-300 group cursor-pointer whitespace-nowrap"
-              >
-                <span>EXPLORE FLEET</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
-              <button
-                onClick={() => onOpenBooking()}
-                className="pb-btn pb-btn-primary justify-center !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
-              >
-                <span>RENT A CAR</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CurvedHero
+        eyebrow="THE EXPERIENCE"
+        titleLine1="MORE FREEDOM."
+        titleLine2="MORE YOURS."
+        description="From choosing your vehicle to getting back on the road, FBGH keeps the rental experience clear, comfortable and easy to navigate."
+        image="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1920&auto=format&fit=crop"
+        imageAlt="Person loading luggage into rental SUV on open road"
+        curveVariant="swoop"
+        theme="dark"
+        primaryCta={{
+          label: 'EXPLORE FLEET',
+          onClick: () => onNavigate?.('fleet'),
+        }}
+        secondaryCta={{
+          label: 'RESERVE A VEHICLE',
+          onClick: onOpenBooking,
+        }}
+      />
 
       {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
           02. CINEMATIC FILM — CHOOSE → TAKE → GO → MAKE IT YOURS
@@ -198,9 +161,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
           {/* Right: large cinematic image */}
           <div className="relative min-h-[420px] lg:min-h-0 overflow-hidden">
             <img
+              ref={readyImgRef}
               src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop"
               alt="Vehicle prepared and ready for rental"
-              className="absolute inset-0 w-full h-full object-cover luminous-media opacity-85"
+              className="absolute inset-0 w-full h-full object-cover luminous-media opacity-85 will-change-transform"
+              style={{
+                transform: `translate3d(0, ${readyParallaxY}px, 0) scale(1.05)`,
+                transition: 'transform 0.1s ease-out',
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0C0C0E] via-[#0C0C0E]/20 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-transparent" />
             {/* Bottom scrim for mobile */}
@@ -393,9 +361,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       <section className="relative min-h-[55vh] flex items-center justify-center overflow-hidden">
         <img
+          ref={departImgRef}
           src="https://images.unsplash.com/photo-1441148345475-03a2e82f9719?q=80&w=1920&auto=format&fit=crop"
           alt="Vehicle departing on an open road"
-          className="absolute inset-0 w-full h-full object-cover luminous-media opacity-80"
+          className="absolute inset-0 w-full h-full object-cover luminous-media opacity-80 will-change-transform"
+          style={{
+            transform: `translate3d(0, ${departParallaxY}px, 0) scale(1.06)`,
+            transition: 'transform 0.1s ease-out',
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#08080A]/90 via-[#08080A]/50 to-[#08080A]/30" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#08080A]/60 via-transparent to-transparent" />

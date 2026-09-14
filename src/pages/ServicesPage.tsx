@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   ArrowRight, ArrowDown
 } from "lucide-react";
 import { ServicePageServiceCategory } from "../components/services/ServicePageServiceCategory";
+import { CurvedHero } from "../components/common/CurvedHero";
 
 interface ServicesPageProps {
   onOpenBooking: (serviceId?: string) => void;
@@ -46,7 +47,6 @@ const JOURNEY_STEPS = [
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNavigate }) => {
   const categoryRef = useRef<HTMLDivElement>(null);
-  const [showInfo, setShowInfo] = useState(false);
 
   const scrollToCategories = () => {
     const el = document.getElementById("service-categories");
@@ -59,61 +59,25 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
     <div className="w-full bg-[#08080A] text-[#F4F1EA] selection:bg-champagne-gold selection:text-obsidian">
 
       {/* ── 1. HERO: CINEMATIC CHAUFFEUR HOSPITALITY ───────────── */}
-      <section className="relative min-h-[64vh] flex items-end overflow-hidden border-b border-white/10">
-        <img
-          src="https://res.cloudinary.com/dv9jpkgrs/image/upload/v1788494961/ChatGPT_Image_Sep_4_2026_04_42_01_AM_dbjdk1.png"
-          alt="Luxury chauffeur opening door for executive passenger"
-          className="absolute inset-0 w-full h-full object-cover object-center luminous-media opacity-95"
-        />
-        {/* Scrim: cinematic dark gradient preserving text legibility on left */}
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-obsidian/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-transparent to-obsidian/30" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-10 lg:px-16 pb-12 sm:pb-16 pt-28 sm:pt-36 w-full">
-          <div className="max-w-xl space-y-4 sm:space-y-6">
-            <div className="inline-flex items-center gap-2.5 sm:gap-3">
-              <span className="w-5 sm:w-6 h-[1px] bg-champagne-gold" />
-              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.35em] text-champagne-gold uppercase font-medium text-contrast-eyebrow">
-                SERVICES
-              </span>
-            </div>
-
-            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight text-contrast-title">
-              YOUR JOURNEY,<br />
-              <span className="text-[#E0B268]">OUR SERVICE.</span>
-            </h1>
-
-            <p className={`text-xs sm:text-sm md:text-base text-warm-ivory/85 leading-relaxed text-contrast-body max-w-lg transition-all ${showInfo ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
-              Airport transfers, executive travel, hourly chauffeur service, private events and journeys between cities.
-              Whatever the occasion, FBGH delivers effortless mobility and flawless discretion.
-            </p>
-            <button
-              className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1"
-              onClick={() => setShowInfo(!showInfo)}
-            >
-              {showInfo ? '− LESS' : '+ MORE'}
-            </button>
-
-            <div className="flex flex-row items-center gap-2 sm:gap-5 pt-2">
-              <button
-                onClick={scrollToCategories}
-                className="inline-flex items-center justify-center gap-1.5 !px-2.5 sm:!px-5 !py-2 sm:!py-3 border border-champagne-gold text-champagne-gold !text-[9px] sm:!text-[10.5px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-champagne-gold hover:text-obsidian transition-all duration-300 group cursor-pointer whitespace-nowrap"
-              >
-                <span>EXPLORE SERVICES</span>
-                <ArrowDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />
-              </button>
-
-              <button
-                onClick={() => onOpenBooking()}
-                className="pb-btn pb-btn-primary justify-center !px-2.5 sm:!px-6 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
-              >
-                <span>REQUEST A RIDE</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CurvedHero
+        eyebrow="SERVICES"
+        titleLine1="YOUR JOURNEY,"
+        titleLine2="OUR SERVICE."
+        description="Airport transfers, executive travel, hourly chauffeur service, private events and journeys between cities. Whatever the occasion, FBGH delivers effortless mobility and flawless discretion."
+        image="https://res.cloudinary.com/dv9jpkgrs/image/upload/v1788494961/ChatGPT_Image_Sep_4_2026_04_42_01_AM_dbjdk1.png"
+        imageAlt="Luxury chauffeur opening door for executive passenger"
+        curveVariant="circular-arc"
+        theme="dark"
+        primaryCta={{
+          label: 'REQUEST A RIDE',
+          onClick: () => onOpenBooking(),
+        }}
+        secondaryCta={{
+          label: 'EXPLORE SERVICES',
+          onClick: scrollToCategories,
+          icon: <ArrowDown className="w-3.5 h-3.5" />,
+        }}
+      />
 
       {/* ── 2. DEDICATED SERVICE CATEGORY SHOWCASE COMPONENT ────── */}
       <div ref={categoryRef}>

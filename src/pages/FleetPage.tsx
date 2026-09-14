@@ -8,13 +8,14 @@ import {
   Shield,
   Clock,
   Car,
-  Sparkles,
   Star,
   Mail,
   Phone
 } from 'lucide-react';
 import { FLEET_DATA, type Vehicle } from '../data/fleetData';
 import { FleetObservatory } from '../components/fleet/FleetObservatory';
+import { CurvedHero } from '../components/common/CurvedHero';
+import { CurvedDivider } from '../components/common/CurvedDivider';
 
 interface FleetPageProps {
   onBookVehicle: (vehicle: Vehicle) => void;
@@ -70,71 +71,42 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
   }, [lightboxVehicle]);
 
   return (
-    <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian pt-16">
+    <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian">
       
-      {/* 1. CINEMATIC FLEET INTRODUCTION — EDITORIAL ANGLED SPLIT (50-60vh) */}
-      <section className="relative h-[54vh] min-h-[460px] max-h-[620px] flex items-center overflow-hidden border-b border-white/10 bg-[#0C0C0E]">
-        {/* Full-bleed photography on the right */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          <img
-            src="/images/fleet-hero-banner.jpg"
-            alt="Faith Based Global Holdings Fleet Lineup at The Residence"
-            className="w-full h-full object-cover object-[70%_center] lg:object-[center_right] select-none"
-          />
-        </div>
+      {/* 1. CINEMATIC FLEET INTRODUCTION — CURVED HERO (50-60vh) */}
+      <CurvedHero
+        eyebrow="THE PREMIER FLEET"
+        titleLine1="MORE THAN"
+        titleLine2="30 VEHICLES."
+        description="An exclusive collection of luxury sedans, SUVs, and executive vans—each meticulously maintained and ready for your journey."
+        image="/images/fleet-hero-banner.jpg"
+        imageAlt="Faith Based Global Holdings Fleet Lineup at The Residence"
+        curveVariant="sharp-diagonal"
+        theme="light"
+        minHeight="h-[54vh] min-h-[460px] max-h-[620px]"
+        statChips={[
+          { label: '30+ VEHICLES' },
+          { label: 'CHAUFFEURED & SELF-DRIVE' },
+        ]}
+        primaryCta={{
+          label: 'EXPLORE OBSERVATORY',
+          onClick: () => {
+            explorerRef.current?.scrollIntoView({ behavior: 'smooth' });
+          },
+        }}
+        secondaryCta={{
+          label: 'RESERVE VEHICLE',
+          onClick: onOpenBooking,
+        }}
+      />
 
-        {/* Desktop Angled White Panel */}
-        <div
-          className="hidden lg:block absolute inset-0 bg-white z-[1]"
-          style={{ clipPath: 'polygon(0 0, 46% 0, 61.5% 100%, 0 100%)' }}
-        />
-
-        {/* Mobile / Tablet Angled White Panel */}
-        <div
-          className="lg:hidden absolute inset-0 bg-white z-[1]"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 64%, 0 78%)' }}
-        />
-
-        {/* Subtle Top Header Scrim to guarantee navbar readability */}
-        <div className="absolute top-0 inset-x-0 h-24 sm:h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent z-[5] pointer-events-none" />
-
-        {/* Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-16 sm:pt-20 lg:pt-14 pb-8 sm:pb-12 lg:pb-10 flex items-center">
-          <div className="max-w-md sm:max-w-lg space-y-2.5 sm:space-y-3.5">
-            {/* Eyebrow */}
-            <div className="flex items-center gap-2 sm:gap-2.5">
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C5A059]" />
-              <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
-                THE PREMIER FLEET
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="font-display font-black text-4xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[82px] text-[#141416] tracking-tight leading-[0.92]">
-              MORE THAN<br />
-              <span className="text-[#C5A059]">30 VEHICLES.</span>
-            </h1>
-
-            {/* Body */}
-            <p className="text-xs sm:text-sm md:text-[15px] text-[#4A4A4F] leading-relaxed font-normal pt-1 sm:pt-2 max-w-md">
-              An exclusive collection of luxury sedans, SUVs, and executive vans—each meticulously maintained and ready for your journey.
-            </p>
-
-            {/* Bullets */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-5 pt-3 sm:pt-5 font-mono text-[9.5px] sm:text-[10px] tracking-[0.22em] text-[#55555A] uppercase font-semibold">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
-                <span>30+ VEHICLES</span>
-              </div>
-              <span className="text-[#B0B0B5]">·</span>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
-                <span>CHAUFFEURED & SELF-DRIVE</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* TRANSITION TO DARK OBSERVATORY */}
+      <CurvedDivider
+        variant="sharp-diagonal"
+        fromColor="#FAF8F5"
+        toColor="#08080A"
+        height="clamp(35px, 4vw, 65px)"
+      />
 
       {/* 2. FLEET EXHIBITION OBSERVATORY */}
       <section ref={explorerRef} id="fleet-explorer" className="w-full relative">
