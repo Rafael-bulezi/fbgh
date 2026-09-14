@@ -36,6 +36,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   const [photoIndex, setPhotoIndex]             = useState(0);
   const [detailsOpen, setDetailsOpen]           = useState(false);
   const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false);
+  const [scrollDirection, setScrollDirection]   = useState<'horizontal' | 'vertical' | null>(null);
 
   // Animation state
   const posRef      = useRef(0);
@@ -46,6 +47,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   // Drag state
   const dragging    = useRef(false);
   const startX      = useRef(0);
+  const startY      = useRef(0);
   const dragBase    = useRef(0);
   const lastX       = useRef(0);
   const lastT       = useRef(0);
@@ -100,8 +102,8 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const ap  = apertureRef.current;
     const trk = trackRef.current;
     if (!ap || !trk) return;
-    const apW = ap.offsetWidth, apH = ap.offsetHeight;
-    if (!apW || !apH) return;
+    const apW = ap.offsetWidth;
+    if (!apW) return;
 
     const vehicles = filteredVehicles;
     const ci = curIdxRef.current;
@@ -126,7 +128,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         trk.appendChild(div);
       });
     } else {
-      // In-place update to prevent DOM destruction, layout shifts, or blank flashes
+      // In-place update to prevent DOM destruction
       for (let i = 0; i < vehicles.length; i++) {
         const div = trk.children[i] as HTMLElement;
         if (!div) continue;
@@ -159,10 +161,10 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const apL   = (sw - apW) / 2;
     const apR   = apL + apW;
 
-    // Harmonious side frame sizing & tight, precise 12px exhibition rhythm
+    // Updated side frame sizing - taller side frames (30% taller, 0.88 ratio)
     const fw    = Math.min(128, Math.max(90, sw * 0.086));
-    const fh    = fw * 0.68;
-    const sep   = 12; // Elegant 12px gap from central aperture and between side frames
+    const fh    = fw * 0.88; // 30% taller (was 0.68)
+    const sep   = 12; // Precise 12px gap from central aperture and between side frames
     const P     = fw + sep;
     const i     = Math.floor(pos + 1e-9);
     const f     = pos - i;
@@ -174,7 +176,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
     const slots = [
       { idx: i - 2, left: left(2) - f * P, opacity: 0.35 * (1 - f), scale: 0.80 },
       { idx: i - 1, left: left(1) - f * P, opacity: 0.70 - 0.35 * f, scale: 0.90 },
-      { idx: i,     left: apL - f * P,      opacity: Math.min(0.9, Math.max(0, f)), scale: 0.98 },
+      { idx: i,     left: apL - f * P,      opacity: 1, scale: 1.0 }, // Main frame - no interpolation
       { idx: i + 1, left: right(0) - f * P, opacity: 0.85, scale: 0.98 },
       { idx: i + 2, left: right(1) - f * P, opacity: 0.60, scale: 0.90 },
       { idx: i + 3, left: right(2) - f * P, opacity: 0.32, scale: 0.82 },
@@ -189,18 +191,19 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       el.style.width   = `${fw}px`;
       el.style.height  = `${fh}px`;
       el.style.cursor  = valid ? 'pointer' : 'default';
-      if (!valid) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; return; }
-      el.style.pointerEvents = 'auto';
-      el.style.left    = `${lPos.toFixed(2)}px`;
+      el.style.pointerEvents = valid ? 'auto' : 'none';
       el.style.opacity = String(Math.min(1, Math.max(0, opacity)).toFixed(3));
+      el.style.left    = `${lPos.toFixed(2)}px`;
       el.style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
       el.style.transformOrigin = s < 3 ? 'right center' : 'left center';
 
-      const v = filteredVehicles[idx];
-      const imgEl = el.querySelector('img') as HTMLImageElement|null;
-      if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
-      const label = el.querySelector('.fl') as HTMLElement|null;
-      if (label && label.textContent !== v.name) label.textContent = v.name;
+      if (valid) {
+        const v = filteredVehicles[idx];
+        const imgEl = el.querySelector('img') as HTMLImageElement|null;
+        if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
+        const label = el.querySelector('.fl') as HTMLElement|null;
+        if (label && label.textContent !== v.name) label.textContent = v.name;
+      }
     });
 
     if (apW > 0) {
@@ -271,42 +274,116 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   const onDown = useCallback((e: React.PointerEvent) => {
     const t = e.target as HTMLElement;
     if (t.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
+    
+    // Reset direction tracking
+    setScrollDirection(null);
+
     dragging.current = true;
     startX.current = lastX.current = e.clientX;
-    lastT.current = performance.now(); dragBase.current = targetRef.current; vel.current = 0;
+    startY.current = e.clientY;
+    lastT.current = performance.now();
+    dragBase.current = targetRef.current;
+    vel.current = 0;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
   }, []);
 
   const onMove = useCallback((e: React.PointerEvent) => {
     if (!dragging.current) return;
-    const now = performance.now(); const dt = Math.max(1, now - lastT.current);
-    vel.current = 0.65*vel.current + 0.35*((e.clientX - lastX.current)/dt);
-    lastX.current = e.clientX; lastT.current = now;
+
     const dx = e.clientX - startX.current;
+    const dy = e.clientY - startY.current;
+
+    // Track scroll direction: only allow horizontal gestures if user is not swiping vertically
+    if (Math.abs(dx) > Math.abs(dy) * 1.5) {
+      setScrollDirection('horizontal');
+    } else if (Math.abs(dy) > Math.abs(dx) * 1.5) {
+      setScrollDirection('vertical');
+    }
+
+    if (scrollDirection === 'vertical') return;
+
+    const now = performance.now();
+    const dt = Math.max(1, now - lastT.current);
+    vel.current = 0.65 * vel.current + 0.35 * ((e.clientX - lastX.current) / dt);
+    lastX.current = e.clientX;
+    lastT.current = now;
+
     // 20% slower drag responsiveness
-    targetRef.current = Math.max(-0.25, Math.min(filteredVehicles.length - 0.75, dragBase.current - dx/185));
+    targetRef.current = Math.max(-0.25, Math.min(filteredVehicles.length - 0.75, dragBase.current - dx / 185));
     posRef.current = targetRef.current;
-  }, [filteredVehicles.length]);
+  }, [filteredVehicles.length, scrollDirection]);
 
   const onUp = useCallback((e: React.PointerEvent) => {
     if (!dragging.current) return;
     dragging.current = false;
+    const wasVertical = scrollDirection === 'vertical';
+    setScrollDirection(null);
     (e.currentTarget as HTMLElement).style.cursor = 'grab';
-    const proj = targetRef.current - (vel.current*90)/185;
-    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
-  }, [filteredVehicles.length]);
+    if (!wasVertical) {
+      const proj = targetRef.current - (vel.current * 90) / 185;
+      targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
+    }
+  }, [filteredVehicles.length, scrollDirection]);
 
   const onWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
+    const t = e.target as HTMLElement;
+    if (t.closest('.info-card,.thumb-bar')) return;
+
+    // Prevent horizontal scrolling if we're in vertical scroll mode
+    if (scrollDirection === 'vertical') return;
+
+    // Only handle horizontal wheel events or shift+wheel
     const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+
+    e.preventDefault();
     // 20% slower wheel scrolling
     targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d * 0.0038));
     if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
     wheelTimer.current = window.setTimeout(() => {
       targetRef.current = Math.round(targetRef.current);
     }, 140);
-  }, [filteredVehicles.length]);
+  }, [filteredVehicles.length, scrollDirection]);
+
+  // Touch listener for direction resolution and preventing conflict with vertical page scroll
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.target && e.target instanceof Element && e.target.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
+      setScrollDirection(null);
+      if (e.touches[0]) {
+        startX.current = e.touches[0].pageX;
+        startY.current = e.touches[0].pageY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!scrollDirection && e.touches[0]) {
+        const touch = e.touches[0];
+        const dx = Math.abs(touch.pageX - startX.current);
+        const dy = Math.abs(touch.pageY - startY.current);
+
+        if (dx > dy * 1.5) {
+          setScrollDirection('horizontal');
+        } else if (dy > dx * 1.5) {
+          setScrollDirection('vertical');
+        }
+      }
+    };
+
+    const stripElement = stripRef.current;
+    if (stripElement) {
+      stripElement.addEventListener('touchstart', handleTouchStart, { passive: true });
+      stripElement.addEventListener('touchmove', handleTouchMove, { passive: true });
+    }
+
+    return () => {
+      if (stripElement) {
+        stripElement.removeEventListener('touchstart', handleTouchStart);
+        stripElement.removeEventListener('touchmove', handleTouchMove);
+      }
+    };
+  }, [scrollDirection]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
@@ -340,17 +417,9 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       <div className="pointer-events-none absolute inset-0 z-10"
         style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.6) 100%)'}} />
 
-      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
-      <header className="relative z-20 flex flex-col md:flex-row md:items-start justify-between px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 sm:pb-3 gap-3">
-        <div className="flex flex-col gap-0.5">
-          <div className="flex items-baseline gap-2.5">
-            <span className="font-display font-extrabold text-[15px] sm:text-[16px] tracking-[0.22em] uppercase text-[#F4EDE4]">FBGH</span>
-            <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.24em] uppercase text-[#71767D]">Luxury Transportation</span>
-          </div>
-          <span className="font-mono text-[6.5px] sm:text-[7px] tracking-[0.24em] uppercase text-[#5c6167] hidden sm:block">Fleet Exhibition — Collection Gallery</span>
-        </div>
-
-        {/* Category Navigation: Smooth horizontal pill scroll on mobile */}
+      {/* ── HEADER: CAR CATEGORY NAVIGATION ON THE LEFT, RIGHT EMPTY ─────── */}
+      <header className="relative z-20 flex items-center justify-between px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 sm:pb-3">
+        {/* Category Navigation on the left side */}
         <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar py-1">
           {cats.map(c => (
             <button key={c.id} onClick={() => setSelectedCategory(c.id)}
@@ -361,6 +430,8 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
             </button>
           ))}
         </nav>
+        {/* Empty right side */}
+        <div className="hidden sm:block" />
       </header>
 
       {/* ── EXPANDED MAIN STAGE (TALL MAJESTIC APERTURE) ────────────────────── */}
@@ -439,9 +510,16 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         </aside>
 
         {/* ── DRAG STRIP (CONTINUOUS RAIL SURFACE) ────────────────────── */}
-        <div ref={stripRef} className="absolute inset-0 cursor-grab"
-          onPointerDown={onDown} onPointerMove={onMove}
-          onPointerUp={onUp} onPointerCancel={onUp} onWheel={onWheel}>
+        <div
+          ref={stripRef}
+          className="absolute inset-0 cursor-grab touch-none"
+          style={{ touchAction: 'pan-x' }}
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerCancel={onUp}
+          onWheel={onWheel}
+        >
 
           {/* Polished Side Frames (with depth perspective, scale diminution, and dark gradient scrim) */}
           {KEYS.map((key,si) => (
@@ -467,8 +545,8 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
           {/* Majestic Central Aperture (TALL, BOLD, DOMINANT) */}
           <div ref={apertureRef} className="ap-el absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[6]"
             style={{
-              width:'clamp(280px, 36vw, 540px)',
-              height:'95%',
+              width:'clamp(240px, 34vw, 480px)',
+              height:'92%',
               borderRadius:'20px',
               background:'#0d0b09',
               boxShadow:'0 45px 100px -25px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
