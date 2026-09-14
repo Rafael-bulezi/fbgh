@@ -100,7 +100,7 @@ export const MatchAndRequestStep: React.FC = () => {
               <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
                 STEP 03 OF 03 · FLEET MATCH
               </span>
-              <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
+              <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight">
                 CHOOSE YOUR VEHICLE
               </h3>
             </div>
@@ -150,7 +150,7 @@ export const MatchAndRequestStep: React.FC = () => {
                     </div>
 
                     <div>
-                      <h4 className="font-serif text-base text-warm-ivory tracking-wide group-hover:text-champagne-gold transition-colors">
+                      <h4 className="font-display font-semibold text-base text-[#F4EDE4] tracking-tight group-hover:text-[#E0B268] transition-colors">
                         {vehicle.name}
                       </h4>
                       <p className="text-[11px] text-warm-ivory/50">
@@ -190,7 +190,7 @@ export const MatchAndRequestStep: React.FC = () => {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-serif text-sm text-warm-ivory font-semibold">
+                    <span className="font-display text-sm text-[#F4EDE4] font-bold">
                       {activePreviewVehicle.name}
                     </span>
                     <span className="text-[10px] font-mono text-champagne-gold uppercase px-2 py-0.5 rounded bg-champagne-gold/10">
@@ -280,7 +280,7 @@ export const MatchAndRequestStep: React.FC = () => {
               {activePreviewVehicle && (
                 <div className="pt-2 border-t border-white/10 flex items-center justify-between">
                   <span className="text-warm-ivory/50">Assigned Model</span>
-                  <span className="text-champagne-gold font-medium font-serif">
+                  <span className="text-[#E0B268] font-semibold font-display">
                     {activePreviewVehicle.name}
                   </span>
                 </div>

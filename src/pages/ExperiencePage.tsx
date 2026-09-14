@@ -96,9 +96,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
             </div>
 
             {/* Headline */}
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-[78px] text-[#F4F1EA] leading-[1.0] tracking-tight">
+            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[82px] text-[#F4EDE4] leading-[0.95] tracking-tight">
               MORE FREEDOM.<br />
-              <span className="italic font-normal text-[#C5A059]">MORE YOURS.</span>
+              <span className="text-[#E0B268]">MORE YOURS.</span>
             </h1>
 
             {/* Body */}
@@ -148,9 +148,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                   BUILT AROUND THE RENTAL
                 </span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-5xl text-[#F4F1EA] tracking-wide leading-[1.1]">
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[1.05]">
                 What renting with<br />
-                <span className="italic font-normal text-[#C5A059]">FBGH should feel like.</span>
+                <span className="text-[#E0B268]">FBGH should feel like.</span>
               </h2>
             </div>
 
@@ -171,11 +171,11 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
               ].map((pillar, idx) => (
                 <div key={pillar.title} className="py-8 group">
                   <div className="flex items-start gap-6">
-                    <span className="font-mono text-[10px] text-[#C5A059]/60 mt-1 shrink-0 w-6">
+                    <span className="font-mono text-[10px] text-[#E0B268]/70 mt-1 shrink-0 w-6">
                       0{idx + 1}
                     </span>
                     <div className="space-y-2">
-                      <h3 className="font-serif text-2xl sm:text-3xl text-[#F4F1EA] tracking-wide group-hover:text-[#C5A059] transition-colors duration-300">
+                      <h3 className="font-display text-xl sm:text-2xl font-bold text-[#F4EDE4] tracking-tight group-hover:text-[#E0B268] transition-colors duration-300">
                         {pillar.title}
                       </h3>
                       <p className="text-sm text-white/60 leading-relaxed font-light max-w-sm">
@@ -217,7 +217,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                   THE PROCESS
                 </span>
               </div>
-              <h2 className="font-serif text-3xl sm:text-5xl text-[#F4F1EA] tracking-wide">
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#F4EDE4] tracking-tight">
                 From booking to road.
               </h2>
             </div>
@@ -238,14 +238,14 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                 <div className="space-y-4">
                   {/* Number */}
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-2xl sm:text-3xl font-light text-[#C5A059] leading-none">
+                    <span className="font-mono text-2xl sm:text-3xl font-light text-[#E0B268] leading-none">
                       {step.num}
                     </span>
-                    <div className="flex-1 h-[1px] bg-white/10 group-hover:bg-[#C5A059]/30 transition-colors" />
+                    <div className="flex-1 h-[1px] bg-white/10 group-hover:bg-[#E0B268]/40 transition-colors" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif text-2xl sm:text-3xl text-[#F4F1EA] tracking-wide group-hover:text-[#C5A059] transition-colors duration-300">
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight group-hover:text-[#E0B268] transition-colors duration-300">
                     {step.title}
                   </h3>
 
@@ -275,9 +275,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                 FIND YOUR JOURNEY
               </span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl text-[#F4F1EA] tracking-wide">
+            <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#F4EDE4] tracking-tight">
               One fleet.<br />
-              <span className="italic font-normal text-[#C5A059]">Many journeys.</span>
+              <span className="text-[#E0B268]">Many journeys.</span>
             </h2>
           </div>
 
@@ -292,13 +292,13 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                     key={uc.id}
                     onClick={() => setActiveCase(uc.id)}
                     className={`w-full text-left group transition-all duration-300 py-4 border-b border-white/10 cursor-pointer flex items-center justify-between ${
-                      isActive ? 'border-[#C5A059]/40' : 'hover:border-white/25'
+                      isActive ? 'border-[#E0B268]/50' : 'hover:border-white/25'
                     }`}
                   >
                     <span
-                      className={`font-serif text-3xl sm:text-4xl lg:text-5xl tracking-wide transition-all duration-300 ${
+                      className={`font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight transition-all duration-300 ${
                         isActive
-                          ? 'text-[#C5A059]'
+                          ? 'text-[#E0B268]'
                           : 'text-white/35 group-hover:text-white/70'
                       }`}
                     >
@@ -306,7 +306,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                     </span>
                     <ArrowRight
                       className={`w-5 h-5 transition-all duration-300 ${
-                        isActive ? 'text-[#C5A059] translate-x-1' : 'text-white/20 opacity-0 group-hover:opacity-100'
+                        isActive ? 'text-[#E0B268] translate-x-1' : 'text-white/20 opacity-0 group-hover:opacity-100'
                       }`}
                     />
                   </button>
@@ -335,7 +335,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
               <div className="mt-6 space-y-3">
                 <h3
                   key={`headline-${currentCase.id}`}
-                  className="font-serif text-2xl sm:text-3xl text-[#F4F1EA] tracking-wide animate-fadeIn"
+                  className="font-display font-bold text-2xl sm:text-3xl text-[#F4EDE4] tracking-tight animate-fadeIn"
                 >
                   {currentCase.headline}
                 </h3>
@@ -347,7 +347,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
                 </p>
                 <button
                   onClick={() => onNavigate?.(currentCase.fleet)}
-                  className="inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] text-[#C5A059] uppercase hover:text-white transition-colors cursor-pointer group"
+                  className="inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.2em] text-[#E0B268] uppercase hover:text-white transition-colors cursor-pointer group"
                 >
                   <span>{currentCase.cta}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -364,7 +364,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
       <section className="bg-[#08080A] border-b border-white/10 py-16 px-8 sm:px-14 lg:px-20">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="space-y-2">
-            <h2 className="font-serif text-2xl sm:text-4xl text-[#F4F1EA] tracking-wide">
+            <h2 className="font-display font-bold text-2xl sm:text-4xl text-[#F4EDE4] tracking-tight">
               Found your vehicle?
             </h2>
             <p className="text-xs text-white/45 font-light">
@@ -373,7 +373,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
           </div>
           <button
             onClick={() => onNavigate?.('fleet')}
-            className="inline-flex items-center gap-2.5 text-[11px] font-mono tracking-[0.25em] text-[#C5A059] uppercase hover:text-white transition-colors cursor-pointer group shrink-0"
+            className="inline-flex items-center gap-2.5 text-[11px] font-mono tracking-[0.25em] text-[#E0B268] uppercase hover:text-white transition-colors cursor-pointer group shrink-0"
           >
             <span>VIEW THE FLEET</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -404,7 +404,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
           </div>
 
           {/* Headline */}
-          <h2 className="font-serif text-5xl sm:text-7xl lg:text-[86px] text-[#F4F1EA] leading-[1.0] tracking-tight">
+          <h2 className="font-display font-black text-5xl sm:text-7xl lg:text-[88px] text-[#F4EDE4] leading-[0.92] tracking-tight uppercase">
             READY TO MOVE?
           </h2>
 

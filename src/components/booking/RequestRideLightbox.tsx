@@ -54,7 +54,7 @@ export const RequestRideLightbox: React.FC = () => {
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-champagne-gold animate-ping" />
             <div>
-              <h2 className="font-serif text-base sm:text-lg tracking-wider text-warm-ivory uppercase">
+              <h2 className="font-display font-bold text-base sm:text-lg tracking-tight text-[#F4EDE4] uppercase">
                 REQUEST YOUR RIDE
               </h2>
               <p className="text-[10px] font-mono tracking-widest text-champagne-gold uppercase hidden sm:block">

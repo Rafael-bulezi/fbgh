@@ -20,7 +20,7 @@ export const ConfirmationStep: React.FC = () => {
         <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-champagne-gold">
           CONCIERGE DISPATCH ACTIVE
         </span>
-        <h3 className="font-serif text-3xl sm:text-4xl text-warm-ivory tracking-wide">
+        <h3 className="font-display font-black text-3xl sm:text-4xl text-[#F4EDE4] tracking-tight">
           REQUEST RECEIVED.
         </h3>
         <p className="text-xs sm:text-sm text-warm-ivory/60 font-light max-w-md mx-auto leading-relaxed">
@@ -48,7 +48,7 @@ export const ConfirmationStep: React.FC = () => {
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex items-center gap-3">
             <Car className="w-4 h-4 text-champagne-gold" />
-            <span className="font-serif text-sm text-warm-ivory font-medium">
+            <span className="font-display text-sm text-[#F4EDE4] font-bold">
               {vehicle.name}
             </span>
           </div>

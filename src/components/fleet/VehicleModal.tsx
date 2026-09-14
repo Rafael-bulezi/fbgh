@@ -49,10 +49,10 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
               <span className="text-xs tracking-[0.2em] text-champagne-gold uppercase font-mono">
                 {vehicle.class}
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-warm-ivory tracking-wide mt-1">
+              <h2 className="font-display font-black text-3xl sm:text-4xl text-[#F4EDE4] tracking-tight mt-1">
                 {vehicle.name}
               </h2>
-              <p className="text-sm text-muted-gray italic mt-1 font-serif">
+              <p className="text-sm text-muted-gray mt-1 font-sans">
                 {vehicle.tagline}
               </p>
             </div>
@@ -150,7 +150,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
               <span className="text-[10px] tracking-widest uppercase text-muted-gray">
                 ESTIMATED CHARTER RATE
               </span>
-              <p className="text-lg font-serif text-warm-ivory">
+              <p className="text-lg font-display text-[#F4EDE4]">
                 <span className="text-champagne-gold font-sans font-medium">${vehicle.hourlyRate}</span> / hour
                 <span className="text-xs text-muted-gray font-sans ml-2">or ${vehicle.mileageRate}/mi</span>
               </p>

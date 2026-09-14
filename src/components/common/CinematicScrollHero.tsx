@@ -126,9 +126,9 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
               <span>PRIVATE TRANSPORTATION • ELEVATED</span>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl text-warm-ivory leading-[0.95] tracking-tight font-light mb-4 text-contrast-title">
+            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.95] tracking-tight mb-4 text-contrast-title">
               ARRIVE WITH<br />
-              <span className="italic text-champagne-gold font-normal">INTENTION.</span>
+              <span className="text-[#E0B268]">INTENTION.</span>
             </h1>
 
             <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-8 text-contrast-body">
@@ -195,9 +195,9 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
               <span>CHAPTER 02 • THE STANDARD</span>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl text-warm-ivory leading-[0.95] tracking-tight font-light mb-4 text-contrast-title">
+            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.95] tracking-tight mb-4 text-contrast-title">
               OBSESSIVE<br />
-              <span className="italic text-champagne-gold font-normal">PRECISION.</span>
+              <span className="text-[#E0B268]">PRECISION.</span>
             </h1>
 
             <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-8 text-contrast-body">

@@ -149,8 +149,8 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = () => {
 
                 {/* Step Title */}
                 <span
-                  className={`font-serif text-sm sm:text-base lg:text-lg tracking-wide text-center truncate w-full transition-colors duration-200 ${
-                    isActive ? 'text-[#C5A059] font-medium' : 'text-white/90 group-hover:text-white'
+                  className={`font-display text-sm sm:text-base lg:text-lg tracking-tight font-bold text-center truncate w-full transition-colors duration-200 ${
+                    isActive ? 'text-[#E0B268]' : 'text-white/90 group-hover:text-white'
                   }`}
                 >
                   {step.title}

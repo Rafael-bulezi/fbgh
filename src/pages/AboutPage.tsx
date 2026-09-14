@@ -25,9 +25,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             <span className="w-8 h-[1px] bg-champagne-gold" />
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl text-warm-ivory tracking-wide leading-[1.05] text-contrast-title">
+          <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-[#F4EDE4] tracking-tight leading-[0.98] text-contrast-title">
             MORE THAN DRIVERS.<br />
-            <span className="italic font-normal text-champagne-gold">CURATORS OF ARRIVAL.</span>
+            <span className="text-[#E0B268]">CURATORS OF ARRIVAL.</span>
           </h1>
 
           <p className="text-xs sm:text-base text-warm-ivory max-w-2xl mx-auto font-normal leading-relaxed text-contrast-body">
@@ -65,9 +65,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
               <span>OUR ETHOS & PURPOSE</span>
             </div>
 
-            <h2 className="font-serif text-3xl sm:text-5xl text-obsidian tracking-tight leading-[1.1]">
+            <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-obsidian tracking-tight leading-[1.05]">
               A Service Agency Built Around{' '}
-              <em className="italic font-normal text-champagne-gold-dark">Human Warmth</em>,{' '}
+              <span className="text-champagne-gold-dark">Human Warmth</span>,{' '}
               Not Just Steel and Leather.
             </h2>
 

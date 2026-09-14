@@ -131,7 +131,7 @@ export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProp
           <div className="overflow-hidden mb-4">
             <h2
               key={`title-${scene.id}`}
-              className="font-serif text-5xl sm:text-7xl lg:text-[86px] text-[#F4F1EA] leading-[1.0] tracking-tight animate-fadeIn"
+              className="font-display font-extrabold text-5xl sm:text-7xl lg:text-[92px] text-[#F4EDE4] leading-[0.92] tracking-tight animate-fadeIn uppercase"
             >
               {scene.word}
             </h2>
@@ -141,7 +141,7 @@ export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProp
           <div className="overflow-hidden mb-3 max-w-xl">
             <p
               key={`line-${scene.id}`}
-              className="font-serif italic text-xl sm:text-2xl text-[#C5A059] animate-fadeIn"
+              className="font-sans text-xl sm:text-2xl text-[#E0B268] font-normal tracking-wide animate-fadeIn"
             >
               {scene.line}
             </p>

@@ -20,14 +20,19 @@
   --color-muted-gray:    #8E8E93;
   --color-subtle-gray:   #B0B0B0;
   --color-light-gray:    #E5E2DB;
-  --font-serif:   "Cormorant Garamond", Cormorant, Georgia, serif;
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-cinzel:  Cinzel, serif;
-  --font-sans:    "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  --font-serif:   "Outfit", "Plus Jakarta Sans", -apple-system, sans-serif;
+  --font-display: "Outfit", "Plus Jakarta Sans", -apple-system, sans-serif;
+  --font-cinzel:  "Outfit", -apple-system, sans-serif;
+  --font-sans:    "Plus Jakarta Sans", Inter, system-ui, -apple-system, sans-serif;
 }
 
-:root { color-scheme: light; background-color: #FFFFFF; color: #111114; }
-body  { background-color: #FFFFFF; color: #111114; }
+:root { color-scheme: light; background-color: #FFFFFF; color: #111114; font-family: var(--font-sans); }
+body  { background-color: #FFFFFF; color: #111114; font-family: var(--font-sans); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+}
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #F0F0F5; }
@@ -275,46 +280,33 @@ body  { background-color: #FFFFFF; color: #111114; }
   background: rgba(201, 164, 92, 0.6);
 }
 
-/* Button-Style Dual Text-Clipped Shimmer (Footer Monumental Headline) */
+/* Luxury Satin Sheen (Footer Monumental Headline) */
 .footer-text-shimmer {
   display: inline-block;
-  background-repeat: no-repeat;
-  background-image: 
-    /* Beam 1: Forward Sheen (angled at 105deg like .pb-btn-primary::before) */
-    linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.95) 49%, rgba(226, 184, 114, 0.95) 51%, transparent 60%, transparent 100%),
-    /* Beam 2: Reverse Sheen (counter-angled at 75deg) */
-    linear-gradient(75deg, transparent 0%, transparent 40%, rgba(226, 184, 114, 0.95) 49%, rgba(255, 255, 255, 0.95) 51%, transparent 60%, transparent 100%),
-    /* Base text luxury ivory fill */
-    linear-gradient(180deg, #FFFFFF 0%, #F4F1EA 50%, #E2DDD2 100%);
-  background-size: 300% 100%, 300% 100%, 100% 100%;
-  /* At rest: Beam 1 is off-screen left (100%), Beam 2 is off-screen right (0%) */
-  background-position: 100% 0, 0% 0, 0 0;
+  background-image: linear-gradient(
+    115deg,
+    #F4EDE4 0%,
+    #F4EDE4 30%,
+    #FFFFFF 45%,
+    #E8C68A 50%,
+    #FFFFFF 55%,
+    #F4EDE4 70%,
+    #E2D5C3 100%
+  );
+  background-size: 250% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  transition: filter 0.4s ease;
+  transition: background-position 1.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
   will-change: background-position, filter;
 }
 
 .footer-shimmer-trigger:hover .footer-text-shimmer,
 .footer-text-shimmer:hover {
-  animation: buttonStyleDualTextShimmer 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  filter: drop-shadow(0 0 20px rgba(201, 164, 92, 0.35));
-}
-
-@keyframes buttonStyleDualTextShimmer {
-  0% {
-    background-position: 100% 0, 0% 0, 0 0;
-  }
-  50% {
-    /* Both beams meet at 50% in the exact geometric center */
-    background-position: 50% 0, 50% 0, 0 0;
-  }
-  100% {
-    /* Beam 1 exits off-screen right (0%), Beam 2 exits off-screen left (100%) */
-    background-position: 0% 0, 100% 0, 0 0;
-  }
+  background-position: 100% 50%;
+  filter: drop-shadow(0 6px 30px rgba(224, 168, 82, 0.25));
 }
 
 

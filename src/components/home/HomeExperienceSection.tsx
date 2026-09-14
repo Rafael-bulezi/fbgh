@@ -109,9 +109,9 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
 
         {/* CENTERPIECE: PERFECTLY CENTERED HEADLINE LOCKUP */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 text-center select-none">
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-[3.75rem] tracking-[0.02em] text-[#111111] font-normal leading-[0.95]">
+          <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-[4rem] tracking-tight text-[#111111] leading-[0.95]">
             EVERYTHING<br />
-            <span className="text-[#B89658] font-normal">CONSIDERED.</span>
+            <span className="text-[#B89658]">CONSIDERED.</span>
           </h2>
 
           {/* Sub-reticle motto right below the circle boundary */}
@@ -159,7 +159,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
                   <span className="h-px flex-grow bg-[#D8CFC2]/70 max-w-[80px]" />
                 </div>
 
-                <h3 className="font-serif text-lg sm:text-2xl text-[#111111] font-normal tracking-wide group-hover:text-[#B89658] transition-colors">
+                <h3 className="font-display text-lg sm:text-2xl text-[#111111] font-bold tracking-tight group-hover:text-[#B89658] transition-colors">
                   Guaranteed Arrival
                 </h3>
 
@@ -212,7 +212,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
                   <span className="h-px flex-grow bg-[#D8CFC2]/70 max-w-[80px]" />
                 </div>
 
-                <h3 className="font-serif text-lg sm:text-2xl text-[#111111] font-normal tracking-wide group-hover:text-[#B89658] transition-colors">
+                <h3 className="font-display text-lg sm:text-2xl text-[#111111] font-bold tracking-tight group-hover:text-[#B89658] transition-colors">
                   Tailored Comfort
                 </h3>
 
@@ -267,7 +267,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
                   <span className="h-px flex-grow bg-[#D8CFC2]/70 max-w-[80px]" />
                 </div>
 
-                <h3 className="font-serif text-lg sm:text-2xl text-[#111111] font-normal tracking-wide group-hover:text-[#B89658] transition-colors">
+                <h3 className="font-display text-lg sm:text-2xl text-[#111111] font-bold tracking-tight group-hover:text-[#B89658] transition-colors">
                   Absolute Precision
                 </h3>
 
@@ -298,8 +298,8 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
                   <circle className="ripple-wave ripple-wave-2 stroke-[#E8C280]" cx="24" cy="34" r="16" strokeLinecap="round" />
                   <g className="location-pin">
                     <path
-                      d="M24 6 C17.37 6 12 11.37 12 18 C12 26 24 36 24 36 C24 36 36 26 36 18 C36 11.37 30.63 6 24 6 Z"
-                      strokeLinejoin="round"
+                       d="M24 6 C17.37 6 12 11.37 12 18 C12 26 24 36 24 36 C24 36 36 26 36 18 C36 11.37 30.63 6 24 6 Z"
+                       strokeLinejoin="round"
                     />
                     <circle cx="24" cy="17" r="4" className="fill-[#C5A059] stroke-[#C5A059]" />
                   </g>
@@ -314,7 +314,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
                   <span className="h-px flex-grow bg-[#D8CFC2]/70 max-w-[80px]" />
                 </div>
 
-                <h3 className="font-serif text-lg sm:text-2xl text-[#111111] font-normal tracking-wide group-hover:text-[#B89658] transition-colors">
+                <h3 className="font-display text-lg sm:text-2xl text-[#111111] font-bold tracking-tight group-hover:text-[#B89658] transition-colors">
                   Total Discretion
                 </h3>
 

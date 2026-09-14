@@ -77,9 +77,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
               </span>
             </div>
 
-            <h1 className="font-serif text-5xl sm:text-6xl lg:text-[76px] text-warm-ivory leading-[1.0] tracking-tight text-contrast-title">
+            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[80px] text-[#F4EDE4] leading-[0.95] tracking-tight text-contrast-title">
               YOUR JOURNEY,<br />
-              <span className="italic font-normal text-champagne-gold">OUR SERVICE.</span>
+              <span className="text-[#E0B268]">OUR SERVICE.</span>
             </h1>
 
             <p className="text-sm sm:text-base text-warm-ivory/85 leading-relaxed text-contrast-body max-w-lg">
@@ -156,7 +156,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
               <span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase font-medium">
                 THE DISPATCH PROCESS
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-[#F4F1EA] tracking-wide">
+              <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-[#F4EDE4] tracking-tight">
                 From Request To Arrival
               </h2>
             </div>
@@ -170,14 +170,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
             {JOURNEY_STEPS.map((step) => (
               <div key={step.num} className="space-y-3 relative group">
                 {/* Step Index Numeral & Top Rule */}
-                <div className="flex items-center justify-between pb-3 border-b border-white/10 group-hover:border-[#C5A059]/50 transition-colors">
-                  <span className="font-mono text-sm font-semibold text-[#C5A059]">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10 group-hover:border-[#E0B268]/50 transition-colors">
+                  <span className="font-mono text-sm font-semibold text-[#E0B268]">
                     {step.num}
                   </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-[#C5A059] transition-colors" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-[#E0B268] transition-colors" />
                 </div>
 
-                <h4 className="font-serif text-lg text-[#F4F1EA] tracking-wide uppercase group-hover:text-[#C5A059] transition-colors">
+                <h4 className="font-display font-bold text-lg text-[#F4EDE4] tracking-tight uppercase group-hover:text-[#E0B268] transition-colors">
                   {step.title}
                 </h4>
 
@@ -205,9 +205,9 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
             <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/70 to-transparent" />
 
             <div className="relative z-10 space-y-4 max-w-sm">
-              <h2 className="font-serif text-4xl sm:text-5xl text-warm-ivory leading-tight tracking-wide">
+              <h2 className="font-display font-black text-4xl sm:text-6xl text-[#F4EDE4] leading-[0.95] tracking-tight">
                 READY WHEN<br />
-                <span className="italic font-normal text-champagne-gold">YOU ARE.</span>
+                <span className="text-[#E0B268]">YOU ARE.</span>
               </h2>
               <p className="text-xs sm:text-sm text-muted-gray leading-relaxed">
                 Tell us where you're going. We'll take care of the rest.
@@ -231,7 +231,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
               <span className="text-[10px] font-mono tracking-[0.3em] text-champagne-gold uppercase">
                 THE FLEET
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl text-warm-ivory">
+              <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#F4EDE4] tracking-tight">
                 THE RIGHT FLEET FOR EVERY JOURNEY
               </h3>
               <p className="text-xs text-muted-gray leading-relaxed max-w-md">

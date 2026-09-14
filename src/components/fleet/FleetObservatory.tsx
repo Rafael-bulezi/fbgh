@@ -1,580 +1,510 @@
-// FleetObservatory.tsx - Refined Luxury Edition
-import React, { useState, useRef, useEffect } from 'react';
+﻿// FleetObservatory.tsx — Exhibition Rail Edition
+// Two navigation systems, never merged:
+//   1. Fleet rail  → which vehicle (drag / arrows / keyboard / side-frame click)
+//   2. Gallery     → which photo of that vehicle (Ext/Int toggle + bottom thumbnails)
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import { FLEET_DATA, type Vehicle } from '../../data/fleetData';
-import {
-  Users,
-  Briefcase,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpRight,
-  Shield,
-  Car,
-  Sparkles
-} from 'lucide-react';
-import { VehicleDossier } from './VehicleDossier';
-import { VehicleModal } from './VehicleModal';
+import { ArrowUpRight } from 'lucide-react';
 
 interface FleetObservatoryProps {
   onBookVehicle: (vehicle: Vehicle) => void;
   onOpenBooking: () => void;
 }
 
+function getExteriorPhotos(v: Vehicle): string[] {
+  return v.exteriorGallery && v.exteriorGallery.length > 0 ? v.exteriorGallery : [v.image];
+}
+function getInteriorPhotos(v: Vehicle): string[] {
+  return v.interiorGallery && v.interiorGallery.length > 0 ? v.interiorGallery : [v.interiorImage];
+}
+function pad2(n: number) { return String(n).padStart(2, '0'); }
+
 export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   onBookVehicle,
-  onOpenBooking,
+  onOpenBooking: _onOpenBooking,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [passengerFilter, setPassengerFilter] = useState<string>('all');
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
-  const [activeAngle, setActiveAngle] = useState<'front' | 'rear' | 'interior' | 'cockpit'>('front');
-  const [stripMode, setStripMode] = useState<'angles' | 'vehicles'>('angles');
-  const [selectedVehicleForDossier, setSelectedVehicleForDossier] = useState<Vehicle | null>(null);
-  const [selectedVehicleForModal, setSelectedVehicleForModal] = useState<Vehicle | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [passengerFilter, setPassengerFilter]   = useState('all');
+  const [currentIndex, setCurrentIndex]         = useState(0);
+  const [galleryMode, setGalleryMode]           = useState<'exterior'|'interior'>('exterior');
+  const [photoIndex, setPhotoIndex]             = useState(0);
+  const [detailsOpen, setDetailsOpen]           = useState(false);
 
-  const observatoryRef = useRef<HTMLDivElement>(null);
+  // Animation state
+  const posRef      = useRef(0);
+  const targetRef   = useRef(0);
+  const rafRef      = useRef(0);
+  const ribbonKey   = useRef('');
 
-  const filteredVehicles = FLEET_DATA.filter((vehicle) => {
-    if (selectedCategory !== 'all') {
-      if (selectedCategory === 'specialty') {
-        if (vehicle.category !== 'electric' && !vehicle.class.toLowerCase().includes('special')) {
-          return false;
-        }
-      } else if (vehicle.category !== selectedCategory) {
-        return false;
+  // Drag state
+  const dragging    = useRef(false);
+  const startX      = useRef(0);
+  const dragBase    = useRef(0);
+  const lastX       = useRef(0);
+  const lastT       = useRef(0);
+  const vel         = useRef(0);
+
+  // DOM refs
+  const stripRef    = useRef<HTMLDivElement>(null);
+  const apertureRef = useRef<HTMLDivElement>(null);
+  const trackRef    = useRef<HTMLDivElement>(null);
+  const curIdxRef   = useRef(0);
+  const galModeRef  = useRef<'exterior'|'interior'>('exterior');
+  const photoIdxRef = useRef(0);
+
+  // 7 side frame slots: 0=L2 1=L1 2=L0 3=R0 4=R1 5=R2 6=R3
+  const frameRefs = useRef<(HTMLDivElement | null)[]>(Array(7).fill(null));
+
+  // ----- derived -----
+  const filteredVehicles = useMemo(() => {
+    let list = FLEET_DATA;
+    if (selectedCategory === 'specialty')
+      list = list.filter(v => v.category === 'electric' || v.class.toLowerCase().includes('special'));
+    else if (selectedCategory !== 'all')
+      list = list.filter(v => v.category === selectedCategory);
+    if (passengerFilter === '1-3') list = list.filter(v => v.passengers <= 3);
+    if (passengerFilter === '4-6') list = list.filter(v => v.passengers >= 4 && v.passengers <= 6);
+    if (passengerFilter === '7+')  list = list.filter(v => v.passengers >= 7);
+    return list.length ? list : FLEET_DATA;
+  }, [selectedCategory, passengerFilter]);
+
+  const safeIdx     = Math.min(currentIndex, filteredVehicles.length - 1);
+  const vehicle     = filteredVehicles[safeIdx] ?? FLEET_DATA[0];
+  const gallery     = galleryMode === 'exterior' ? getExteriorPhotos(vehicle) : getInteriorPhotos(vehicle);
+  const safePhoto   = Math.min(photoIndex, gallery.length - 1);
+
+  // keep refs in sync
+  useEffect(() => { curIdxRef.current   = safeIdx;      }, [safeIdx]);
+  useEffect(() => { galModeRef.current  = galleryMode;  }, [galleryMode]);
+  useEffect(() => { photoIdxRef.current = safePhoto;    }, [safePhoto]);
+
+  // reset on filter change
+  useEffect(() => {
+    setCurrentIndex(0); posRef.current = 0; targetRef.current = 0;
+    setPhotoIndex(0); setGalleryMode('exterior');
+  }, [selectedCategory, passengerFilter]);
+
+  useEffect(() => { setPhotoIndex(0); }, [safeIdx]);
+  useEffect(() => { setPhotoIndex(0); }, [galleryMode]);
+
+  // ----- ribbon rebuild -----
+  const rebuildRibbon = useCallback(() => {
+    const ap  = apertureRef.current;
+    const trk = trackRef.current;
+    if (!ap || !trk) return;
+    const apW = ap.offsetWidth, apH = ap.offsetHeight;
+    if (!apW || !apH) return;
+    while (trk.firstChild) trk.removeChild(trk.firstChild);
+    const vehicles = filteredVehicles;
+    const ci = curIdxRef.current;
+    const gm = galModeRef.current;
+    const pi = photoIdxRef.current;
+    vehicles.forEach((v, i) => {
+      const div = document.createElement('div');
+      div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;`;
+      const img = document.createElement('img');
+      img.draggable = false;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      if (i === ci) {
+        const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
+        img.src = photos[pi] ?? photos[0] ?? v.image;
+      } else {
+        img.src = v.image;
       }
-    }
-    if (passengerFilter === '1-3' && vehicle.passengers > 3) return false;
-    if (passengerFilter === '4-6' && (vehicle.passengers < 4 || vehicle.passengers > 6)) return false;
-    if (passengerFilter === '7+' && vehicle.passengers < 7) return false;
-
-    return true;
-  });
-
-  const activeVehicleList = filteredVehicles.length > 0 ? filteredVehicles : FLEET_DATA;
-  const currentVehicle = activeVehicleList[currentIndex % activeVehicleList.length] || FLEET_DATA[0];
-
-  const getVehicleAngleImage = (vehicle: Vehicle, angle: 'front' | 'rear' | 'interior' | 'cockpit') => {
-    switch (angle) {
-      case 'interior':
-        return vehicle.interiorImage;
-      case 'rear':
-        return 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop';
-      case 'cockpit':
-        return 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop';
-      case 'front':
-      default:
-        return vehicle.image;
-    }
-  };
-
-  const vehicleAngles = [
-    { id: 'front', label: 'Front Exterior', img: currentVehicle.image },
-    { id: 'rear', label: 'Rear Profile', img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=400&auto=format&fit=crop' },
-    { id: 'interior', label: 'Executive Suite', img: currentVehicle.interiorImage },
-    { id: 'cockpit', label: 'Cockpit & Tech', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400&auto=format&fit=crop' },
-  ];
-
-  const triggerCameraCut = (callback: () => void) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      callback();
-      setActiveAngle('front');
-      setIsTransitioning(false);
-    }, 160);
-  };
-
-  const handleNext = () => {
-    triggerCameraCut(() => {
-      setCurrentIndex((prev) => (prev + 1) % activeVehicleList.length);
+      div.appendChild(img);
+      trk.appendChild(div);
     });
-  };
+  }, [filteredVehicles]);
 
-  const handlePrev = () => {
-    triggerCameraCut(() => {
-      setCurrentIndex((prev) => (prev - 1 + activeVehicleList.length) % activeVehicleList.length);
+  // ----- layout frames (called every rAF) -----
+  const layoutFrames = useCallback(() => {
+    const strip = stripRef.current;
+    const ap    = apertureRef.current;
+    const trk   = trackRef.current;
+    if (!strip || !ap || !trk) return;
+
+    const pos   = posRef.current;
+    const apW   = ap.offsetWidth;
+    const sw    = strip.clientWidth;
+    const apL   = (sw - apW) / 2;
+    const apR   = apL + apW;
+    const fw    = Math.min(116, Math.max(72, sw * 0.085));
+    const fh    = fw * 0.63;
+    const sep   = 12;
+    const P     = fw + sep;
+    const i     = Math.floor(pos + 1e-9);
+    const f     = pos - i;
+
+    const lp = (k: number) => apL - sep - fw - (k - 1) * P;
+    const rp = (k: number) => apR + sep + k * P;
+
+    const slots = [
+      { idx: i - 2, left: lp(2) + (1-f)*P*0.15, opacity: 0.35 + 0.45*(1-f) },
+      { idx: i - 1, left: lp(1) - f*P,           opacity: 0.7  + 0.3*(1-f) },
+      { idx: i,     left: lp(0) + (1-f)*P,        opacity: Math.max(0.12, f) },
+      { idx: i + 1, left: rp(0) - f*P,            opacity: 1 },
+      { idx: i + 2, left: rp(1) - f*P,            opacity: 0.78 },
+      { idx: i + 3, left: rp(2) - f*P,            opacity: 0.78 },
+      { idx: i + 4, left: rp(3) - f*P,            opacity: 0.55 },
+    ];
+
+    slots.forEach(({ idx, left, opacity }, s) => {
+      const el = frameRefs.current[s];
+      if (!el) return;
+      const valid = idx >= 0 && idx < filteredVehicles.length;
+      el.dataset.idx   = String(idx);
+      el.style.width   = `${fw}px`;
+      el.style.height  = `${fh}px`;
+      el.style.cursor  = valid ? 'pointer' : 'default';
+      if (!valid) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; return; }
+      el.style.pointerEvents = 'auto';
+      el.style.left    = `${left}px`;
+      el.style.opacity = String(Math.min(1, Math.max(0, opacity)).toFixed(3));
+      const v = filteredVehicles[idx];
+      const imgEl = el.querySelector('img') as HTMLImageElement|null;
+      if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
+      const label = el.querySelector('.fl') as HTMLElement|null;
+      if (label) label.textContent = v.name;
     });
-  };
 
-  const handleSelectVehicle = (index: number) => {
-    if (index === currentIndex) return;
-    triggerCameraCut(() => {
-      setCurrentIndex(index);
-    });
-  };
+    if (apW > 0) trk.style.transform = `translate3d(${(-pos*apW).toFixed(2)}px,0,0)`;
+  }, [filteredVehicles]);
 
-  const handleOpenDossier = (vehicle: Vehicle) => {
-    setSelectedVehicleForDossier(vehicle);
-    setTimeout(() => {
-      const dossierEl = document.getElementById('vehicle-dossier');
-      if (dossierEl) {
-        dossierEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // ----- animation loop -----
+  useEffect(() => {
+    const vehicles = filteredVehicles;
+    let last = -1;
+    const tick = () => {
+      if (!dragging.current) {
+        posRef.current += (targetRef.current - posRef.current) * 0.12;
+        if (Math.abs(targetRef.current - posRef.current) < 0.0005) posRef.current = targetRef.current;
       }
-    }, 60);
-  };
+      const vis = Math.max(0, Math.min(vehicles.length - 1, Math.round(posRef.current)));
+      if (vis !== last && !dragging.current) { last = vis; setCurrentIndex(vis); }
+      layoutFrames();
+      const nk = `${vehicles.length}|${galModeRef.current}|${vis}|${photoIdxRef.current}`;
+      if (ribbonKey.current !== nk) { ribbonKey.current = nk; rebuildRibbon(); }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [filteredVehicles, layoutFrames, rebuildRibbon]);
 
-  const handleCloseDossier = () => {
-    if (observatoryRef.current) {
-      observatoryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    setTimeout(() => {
-      setSelectedVehicleForDossier(null);
-    }, 400);
-  };
+  // resize → invalidate ribbon
+  useEffect(() => {
+    const ro = new ResizeObserver(() => { ribbonKey.current = ''; });
+    if (apertureRef.current) ro.observe(apertureRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  // ----- navigation -----
+  const selectVehicle = useCallback((idx: number) => {
+    const c = Math.max(0, Math.min(filteredVehicles.length - 1, idx));
+    setCurrentIndex(c); targetRef.current = c; posRef.current = c;
+    setPhotoIndex(0); setDetailsOpen(false);
+  }, [filteredVehicles.length]);
+
+  const stepVehicle = useCallback((dir: number) => {
+    const next = Math.max(0, Math.min(filteredVehicles.length - 1, curIdxRef.current + dir));
+    setCurrentIndex(next); targetRef.current = next;
+    setPhotoIndex(0); setDetailsOpen(false);
+  }, [filteredVehicles.length]);
+
+  // ----- drag -----
+  const onDown = useCallback((e: React.PointerEvent) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
+    dragging.current = true;
+    startX.current = lastX.current = e.clientX;
+    lastT.current = performance.now(); dragBase.current = targetRef.current; vel.current = 0;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
+  }, []);
+
+  const onMove = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    const now = performance.now(); const dt = Math.max(1, now - lastT.current);
+    vel.current = 0.65*vel.current + 0.35*((e.clientX - lastX.current)/dt);
+    lastX.current = e.clientX; lastT.current = now;
+    const dx = e.clientX - startX.current;
+    targetRef.current = Math.max(-0.3, Math.min(filteredVehicles.length - 0.7, dragBase.current - dx/130));
+    posRef.current = targetRef.current;
+  }, [filteredVehicles.length]);
+
+  const onUp = useCallback((e: React.PointerEvent) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    (e.currentTarget as HTMLElement).style.cursor = 'grab';
+    const proj = targetRef.current - (vel.current*100)/130;
+    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
+  }, [filteredVehicles.length]);
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d*0.006));
+  }, [filteredVehicles.length]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedVehicleForModal) {
-        if (e.key === 'Escape') setSelectedVehicleForModal(null);
-        return;
-      }
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
+    const h = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') stepVehicle(1);
+      if (e.key === 'ArrowLeft')  stepVehicle(-1);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeVehicleList.length, selectedVehicleForModal]);
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [stepVehicle]);
 
-  const paddedIndex = String(currentIndex + 1).padStart(2, '0');
-  const totalCount = String(activeVehicleList.length).padStart(2, '0');
+  const handleFrameClick = useCallback((s: number) => {
+    const el = frameRefs.current[s]; if (!el) return;
+    const idx = Number(el.dataset.idx);
+    if (!isNaN(idx) && idx >= 0 && idx < filteredVehicles.length) selectVehicle(idx);
+  }, [filteredVehicles.length, selectVehicle]);
+
+  // ─────────────────────── RENDER ───────────────────────────────────────────
+  const cats = [
+    {id:'all',label:'All'},{id:'suv',label:'SUVs'},
+    {id:'sedan',label:'Sedans'},{id:'van',label:'Vans'},{id:'specialty',label:'Specialty'},
+  ];
+  const caps = [{id:'all',label:'Any'},{id:'1-3',label:'1–3'},{id:'4-6',label:'4–6'},{id:'7+',label:'7+'}];
+  const KEYS = ['L2','L1','L0','R0','R1','R2','R3'];
 
   return (
     <section
-      ref={observatoryRef}
-      className="w-full bg-obsidian text-warm-ivory pt-6 pb-20 px-4 sm:px-8 lg:px-14 relative overflow-hidden"
+      className="w-full bg-[#0d0b09] text-[#f3f4f6] relative overflow-hidden select-none"
+      style={{ minHeight: 'calc(100vh - 66px)' }}
     >
-      <div className="max-w-7xl mx-auto space-y-6 relative z-10">
-        
-        {/* COMPACT OBSERVATORY HEADER */}
-        <div className="flex flex-wrap items-end justify-between border-b border-white/10 pb-4 gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="w-3.5 h-3.5 text-champagne-gold" />
-              <span className="text-[10px] font-mono tracking-[0.35em] uppercase text-champagne-gold font-medium">
-                FLEET OBSERVATORY // {activeVehicleList.length} VEHICLES AVAILABLE
-              </span>
-            </div>
-            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-warm-ivory tracking-wide leading-none">
-              The Bespoke Collection. <span className="italic font-light gold-gradient-text">Curated & Chauffeured.</span>
-            </h2>
-          </div>
+      {/* Vignette */}
+      <div className="pointer-events-none absolute inset-0 z-10"
+        style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.55) 100%)'}} />
 
-          <div className="flex items-center gap-2 font-mono text-xs text-muted-gray">
-            <span className="text-warm-ivory font-semibold text-sm">{paddedIndex}</span>
-            <span className="text-white/30">/</span>
-            <span>{totalCount}</span>
+      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
+      <header className="relative z-20 flex items-start justify-between px-5 sm:px-10 pt-5 pb-3">
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-baseline gap-2.5">
+            <span className="font-display font-bold text-[15px] tracking-[0.22em] uppercase">FBGH</span>
+            <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-[#5c6167]">Luxury Transportation</span>
           </div>
+          <span className="font-mono text-[7px] tracking-[0.22em] uppercase text-[#5c6167]">Fleet Exhibition — Collection Gallery</span>
         </div>
 
-        {/* ENHANCED FILTER BAR */}
-        <div className="luxury-glass-dark rounded-xl p-4 sm:p-5 shadow-2xl">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            
-            {/* Category Tabs */}
-            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar">
-              {[
-                { id: 'all', label: 'ALL' },
-                { id: 'suv', label: 'SUVS' },
-                { id: 'sedan', label: 'SEDANS' },
-                { id: 'van', label: 'VANS' },
-                { id: 'specialty', label: 'SPECIALTY' },
-              ].map((cat) => {
-                const isActive = selectedCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedCategory(cat.id);
-                      setCurrentIndex(0);
-                    }}
-                    className={`relative py-1.5 px-3.5 sm:px-4 text-[11px] sm:text-xs font-mono tracking-[0.2em] uppercase transition-all duration-300 ${
-                      isActive
-                        ? 'text-champagne-gold font-semibold'
-                        : 'text-warm-ivory/60 hover:text-warm-ivory'
-                    }`}
-                  >
-                    {cat.label}
-                    {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-champagne-gold via-champagne-gold-light to-champagne-gold shadow-[0_0_12px_rgba(201,164,92,0.8)]" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Capacity Filter */}
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] font-mono tracking-[0.25em] text-muted-gray uppercase">
-                CAPACITY:
-              </span>
-              <div className="flex items-center gap-1.5">
-                {[
-                  { id: 'all', label: 'ANY' },
-                  { id: '1-3', label: '1–3' },
-                  { id: '4-6', label: '4–6' },
-                  { id: '7+', label: '7+' },
-                ].map((cap) => {
-                  const isActive = passengerFilter === cap.id;
-                  return (
-                    <button
-                      key={cap.id}
-                      type="button"
-                      onClick={() => {
-                        setPassengerFilter(cap.id);
-                        setCurrentIndex(0);
-                      }}
-                      className={`px-3 py-1 text-[10px] font-mono tracking-wider rounded-sm transition-all duration-300 border ${
-                        isActive
-                          ? 'bg-champagne-gold/20 border-champagne-gold text-champagne-gold font-bold shadow-[0_0_15px_rgba(201,164,92,0.4)]'
-                          : 'bg-white/5 border-white/10 text-warm-ivory/60 hover:border-white/30 hover:text-warm-ivory'
-                      }`}
-                    >
-                      {cap.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* MASTER VEHICLE SHOWCASE CARD WITH VERTICAL STRIP */}
-        <div className="luxury-glass-dark border border-white/10 rounded-xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.8)] relative vehicle-card-reflection">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-            
-            {/* Left Column: Vertical Strip + Main Vehicle Stage (7 cols) */}
-            <div className="lg:col-span-7 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              
-              {/* Vertical Strip */}
-              <div className="flex sm:flex-col gap-2 flex-shrink-0 w-full sm:w-20 lg:w-24 overflow-x-auto sm:overflow-visible no-scrollbar">
-                
-                {/* Mode Switcher: Views vs Fleet */}
-                <div className="hidden sm:flex items-center justify-between pb-1.5 border-b border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setStripMode('angles')}
-                    className={`text-[8.5px] font-mono tracking-wider uppercase transition-colors ${
-                      stripMode === 'angles' ? 'text-champagne-gold font-bold' : 'text-muted-gray hover:text-warm-ivory'
-                    }`}
-                    title="View multi-angle gallery of current vehicle"
-                  >
-                    VIEWS
-                  </button>
-                  <span className="text-white/20 text-[9px]">|</span>
-                  <button
-                    type="button"
-                    onClick={() => setStripMode('vehicles')}
-                    className={`text-[8.5px] font-mono tracking-wider uppercase transition-colors ${
-                      stripMode === 'vehicles' ? 'text-champagne-gold font-bold' : 'text-muted-gray hover:text-warm-ivory'
-                    }`}
-                    title="Browse fleet roster vertically"
-                  >
-                    FLEET
-                  </button>
-                </div>
-
-                {stripMode === 'angles' ? (
-                  <>
-                    {vehicleAngles.map((thumb) => {
-                      const isActive = activeAngle === thumb.id;
-                      return (
-                        <button
-                          key={thumb.id}
-                          type="button"
-                          onClick={() => setActiveAngle(thumb.id as any)}
-                          className={`relative aspect-[16/10] sm:aspect-[16/11] w-16 sm:w-full rounded-sm overflow-hidden border transition-all duration-300 flex-shrink-0 group cursor-pointer ${
-                            isActive
-                              ? 'border-champagne-gold ring-2 ring-champagne-gold/60 shadow-[0_0_20px_rgba(201,164,92,0.6)] scale-[1.03] opacity-100'
-                              : 'border-white/15 opacity-60 hover:opacity-100 hover:border-white/40'
-                          }`}
-                          title={thumb.label}
-                        >
-                          <img
-                            src={thumb.img}
-                            alt={thumb.label}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                          {isActive && (
-                            <div className="absolute inset-0 border-2 border-champagne-gold pointer-events-none" />
-                          )}
-                        </button>
-                      );
-                    })}
-
-                    {/* +8 Photos Button */}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedVehicleForModal(currentVehicle)}
-                      className="aspect-[16/10] sm:aspect-[16/11] w-16 sm:w-full rounded-sm bg-gradient-to-br from-champagne-gold/10 to-champagne-gold/5 border border-champagne-gold/30 flex flex-col items-center justify-center text-champagne-gold hover:from-champagne-gold/20 hover:to-champagne-gold/10 hover:border-champagne-gold transition-all flex-shrink-0 group cursor-pointer"
-                      title="View full high-resolution dossier & interior gallery"
-                    >
-                      <span className="font-mono text-xs font-semibold group-hover:scale-110 transition-transform">
-                        +8
-                      </span>
-                      <span className="text-[7.5px] font-mono tracking-widest text-muted-gray uppercase">
-                        PHOTOS
-                      </span>
-                    </button>
-                  </>
-                ) : (
-                  /* Fleet Roster Mode */
-                  <div className="flex sm:flex-col gap-1.5 max-h-[320px] overflow-y-auto no-scrollbar">
-                    {activeVehicleList.map((vehicle, idx) => {
-                      const isCurrent = idx === currentIndex;
-                      return (
-                        <button
-                          key={vehicle.id}
-                          type="button"
-                          onClick={() => handleSelectVehicle(idx)}
-                          className={`relative aspect-[16/11] w-16 sm:w-full rounded-sm overflow-hidden border transition-all duration-300 flex-shrink-0 text-left group cursor-pointer ${
-                            isCurrent
-                              ? 'border-champagne-gold ring-2 ring-champagne-gold/60 shadow-[0_0_20px_rgba(201,164,92,0.6)] opacity-100'
-                              : 'border-white/15 opacity-55 hover:opacity-100 hover:border-white/40'
-                          }`}
-                          title={vehicle.name}
-                        >
-                          <img
-                            src={vehicle.image}
-                            alt={vehicle.name}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-x-0 bottom-0 bg-obsidian/90 px-1.5 py-1 text-[7px] font-mono text-warm-ivory truncate">
-                            {vehicle.name}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Main Vehicle Stage */}
-              <div className="flex-1 flex flex-col justify-between space-y-3">
-                <div
-                  className={`relative aspect-[16/10] w-full overflow-hidden bg-soft-black border border-white/10 rounded-sm shadow-2xl transition-all duration-500 ease-out group ${
-                    isTransitioning
-                      ? 'opacity-25 scale-[0.98]'
-                      : 'opacity-100 scale-100'
-                  }`}
-                >
-                  <img
-                    src={getVehicleAngleImage(currentVehicle, activeAngle)}
-                    alt={`${currentVehicle.name} - ${activeAngle}`}
-                    className="w-full h-full object-cover luminous-media transition-transform duration-1000 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-obsidian/80 to-transparent pointer-events-none" />
-                </div>
-
-                {/* Sub-bar */}
-                <div className="flex items-center justify-between pt-2 px-1 text-xs font-mono text-muted-gray">
-                  <div className="flex items-center gap-1.5 font-mono">
-                    <span className="text-warm-ivory font-semibold text-base">{paddedIndex}</span>
-                    <span className="text-white/25">/</span>
-                    <span>{totalCount}</span>
-                  </div>
-
-                  <div className="flex-1 mx-4 sm:mx-6 flex items-center justify-center gap-1.5 overflow-hidden">
-                    {activeVehicleList.slice(0, 12).map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => handleSelectVehicle(i)}
-                        className={`h-0.5 rounded-full transition-all duration-300 ${
-                          (currentIndex % Math.min(activeVehicleList.length, 12)) === i
-                            ? 'w-7 sm:w-9 bg-gradient-to-r from-champagne-gold to-champagne-gold-light shadow-[0_0_10px_rgba(201,164,92,0.8)]'
-                            : 'w-2 sm:w-3 bg-white/20 hover:bg-white/50'
-                        }`}
-                        aria-label={`Jump to vehicle ${i + 1}`}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handlePrev}
-                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/20 hover:border-champagne-gold hover:text-champagne-gold flex items-center justify-center text-warm-ivory transition-all hover:shadow-[0_0_15px_rgba(201,164,92,0.4)]"
-                      aria-label="Previous vehicle"
-                    >
-                      <ChevronLeft className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/20 hover:border-champagne-gold hover:text-champagne-gold flex items-center justify-center text-warm-ivory transition-all hover:shadow-[0_0_15px_rgba(201,164,92,0.4)]"
-                      aria-label="Next vehicle"
-                    >
-                      <ChevronRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* Right Column: Technical Card & CTAs (5 cols) */}
-            <div
-              className={`lg:col-span-5 space-y-6 lg:pl-4 transition-all duration-400 ${
-                isTransitioning ? 'opacity-20 translate-x-2' : 'opacity-100 translate-x-0'
-              }`}
-            >
-              <div>
-                <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-warm-ivory tracking-wide leading-tight">
-                  {currentVehicle.name}
-                </h2>
-                <span className="text-[10px] font-mono tracking-[0.3em] text-champagne-gold uppercase font-medium mt-2 inline-block">
-                  {currentVehicle.categoryLabel}
-                </span>
-              </div>
-
-              {/* 4 Circular Spec Chips */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y border-white/10 font-mono">
-                <div className="flex items-start gap-2.5 text-warm-ivory">
-                  <div className="w-9 h-9 rounded-full bg-champagne-gold/15 flex items-center justify-center flex-shrink-0">
-                    <Users className="w-4 h-4 text-champagne-gold" />
-                  </div>
-                  <div>
-                    <div className="text-base font-bold text-warm-ivory leading-none">
-                      {currentVehicle.passengers}
-                    </div>
-                    <div className="text-[8.5px] text-muted-gray uppercase tracking-widest mt-1.5">
-                      PASSENGERS
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 text-warm-ivory">
-                  <div className="w-9 h-9 rounded-full bg-champagne-gold/15 flex items-center justify-center flex-shrink-0">
-                    <Briefcase className="w-4 h-4 text-champagne-gold" />
-                  </div>
-                  <div>
-                    <div className="text-base font-bold text-warm-ivory leading-none">
-                      {currentVehicle.luggage}
-                    </div>
-                    <div className="text-[8.5px] text-muted-gray uppercase tracking-widest mt-1.5">
-                      LUGGAGE
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 text-warm-ivory">
-                  <div className="w-9 h-9 rounded-full bg-champagne-gold/15 flex items-center justify-center flex-shrink-0">
-                    <Car className="w-4 h-4 text-champagne-gold" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-warm-ivory leading-none uppercase">
-                      AUTOMATIC
-                    </div>
-                    <div className="text-[8.5px] text-muted-gray uppercase tracking-widest mt-1.5">
-                      TRANSMISSION
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5 text-warm-ivory">
-                  <div className="w-9 h-9 rounded-full bg-champagne-gold/15 flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-4 h-4 text-champagne-gold" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-warm-ivory leading-none uppercase">
-                      AWD
-                    </div>
-                    <div className="text-[8.5px] text-muted-gray uppercase tracking-widest mt-1.5">
-                      DRIVE
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-sm text-warm-ivory/80 leading-relaxed font-light">
-                {currentVehicle.description}
-              </p>
-
-              {/* IDEAL FOR */}
-              <div className="space-y-3">
-                <span className="text-[9.5px] font-mono tracking-[0.3em] text-champagne-gold uppercase font-semibold">
-                  IDEAL FOR
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  {currentVehicle.idealFor.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] font-mono bg-white/5 border border-white/10 px-3.5 py-1.5 text-warm-ivory/80 rounded-sm hover:border-champagne-gold/30 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-4 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => onBookVehicle(currentVehicle)}
-                  className="pb-btn pb-btn-primary inline-flex items-center gap-2"
-                >
-                  <span>REQUEST THIS VEHICLE</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleOpenDossier(currentVehicle)}
-                  className="pb-btn pb-btn-outline inline-flex items-center gap-2"
-                >
-                  <span>VIEW FULL DOSSIER</span>
-                  <span className="text-xs">↓</span>
-                </button>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        {/* 100VH VEHICLE LOOKBOOK DOSSIER SECTION (Smooth in-page reveal) */}
-        {selectedVehicleForDossier && (
-          <VehicleDossier
-            vehicle={selectedVehicleForDossier}
-            onBookVehicle={onBookVehicle}
-            onClose={handleCloseDossier}
-          />
-        )}
-
-        {/* Bottom Concierge Callout */}
-        <div className="luxury-glass-dark border border-white/10 p-6 sm:p-8 rounded-xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-2 relative z-10 max-w-xl">
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
-              NOT SURE WHAT YOU NEED?
-            </h3>
-            <p className="text-xs sm:text-sm text-muted-gray leading-relaxed tracking-wide">
-              Our 24/7 dedicated fleet concierge will analyze your passenger count, luggage load, itinerary, and protocol requirements to assign the perfect vehicle.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex-shrink-0">
-            <button
-              onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary inline-flex items-center gap-2"
-            >
-              <span>SPEAK WITH CONCIERGE</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+        <nav className="flex items-center gap-5 sm:gap-7 pt-1">
+          {cats.map(c => (
+            <button key={c.id} onClick={() => setSelectedCategory(c.id)}
+              className={`relative font-display font-semibold text-[10.5px] tracking-[0.2em] uppercase pb-0.5 transition-colors ${
+                selectedCategory===c.id ? 'text-[#cfa869]' : 'text-[#8b9096] hover:text-[#f3f4f6]'}`}>
+              {c.label}
+              {selectedCategory===c.id && <span className="absolute left-0 right-0 bottom-0 h-px bg-[#cfa869]" />}
             </button>
-          </div>
+          ))}
+        </nav>
+      </header>
+
+      {/* ── STAGE ──────────────────────────────────────────────────────────── */}
+      <main className="relative z-20" style={{height:'clamp(300px,54vh,620px)'}}>
+
+        {/* Class tag */}
+        <div className="absolute top-1 right-5 sm:right-10 z-30 font-mono text-[7.5px] tracking-[0.24em] uppercase text-[#cfa869] opacity-75 pointer-events-none">
+          {vehicle.categoryLabel}
         </div>
 
+        {/* ── INFO CARD ─────────────────────────────────────────────────── */}
+        <aside className="info-card absolute left-4 sm:left-8 z-40 flex flex-col gap-3"
+          style={{
+            top:'50%',transform:'translateY(-50%)',
+            width:'clamp(174px,16vw,214px)',
+            background:'rgba(14,12,10,0.82)',backdropFilter:'blur(18px)',
+            WebkitBackdropFilter:'blur(18px)',
+            border:'1px solid rgba(255,255,255,0.09)',borderRadius:'12px',
+            padding:'18px 16px',boxShadow:'0 30px 60px -20px rgba(0,0,0,0.92)',
+          }}>
+          <h2 className="font-display font-bold text-[16px] leading-tight text-center text-[#f3f4f6] tracking-tight">
+            {vehicle.name}
+          </h2>
+
+          <div className="grid grid-cols-2 gap-3 py-3"
+            style={{borderTop:'1px solid rgba(255,255,255,0.08)',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
+            {([
+              {v:vehicle.passengers,l:'Passengers'},
+              {v:vehicle.luggage,   l:'Luggage'},
+              {v:vehicle.transmission??'Automatic',l:'Transmission',sm:true},
+              {v:vehicle.drivetrain??'AWD',        l:'Drivetrain',  sm:true},
+            ] as {v:string|number,l:string,sm?:boolean}[]).map(({v:val,l,sm}) => (
+              <div key={l}>
+                <b className={`block font-display font-semibold text-[#f3f4f6] ${sm?'text-[9px] uppercase truncate':'text-[15px]'}`}>{val}</b>
+                <span className="font-mono text-[6.5px] tracking-[0.16em] uppercase text-[#5c6167]">{l}</span>
+              </div>
+            ))}
+          </div>
+
+          <button onClick={() => setDetailsOpen(o=>!o)} aria-expanded={detailsOpen}
+            className="flex items-center justify-between w-full font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#cfa869] py-0.5 hover:brightness-110 transition-all">
+            <span>⚙ Fine Grain Details</span>
+            <span className="text-[12px] transition-transform duration-300 inline-block"
+              style={{transform:detailsOpen?'rotate(45deg)':'none'}}>＋</span>
+          </button>
+
+          <div className="overflow-hidden transition-all duration-500"
+            style={{maxHeight:detailsOpen?'220px':'0',opacity:detailsOpen?1:0}}>
+            <ul className="space-y-1.5">
+              {vehicle.idealFor.slice(0,2).map(item => (
+                <li key={item} className="flex items-start justify-between gap-1.5 pb-1.5"
+                  style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
+                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167] flex-shrink-0 mt-0.5">FOR</span>
+                  <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6] text-right leading-tight">{item}</b>
+                </li>
+              ))}
+              <li className="flex items-start justify-between gap-1.5 pb-1.5"
+                style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
+                <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167] flex-shrink-0 mt-0.5">AUDIO</span>
+                <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6] text-right leading-tight">{vehicle.specs.soundSystem}</b>
+              </li>
+              {vehicle.specs.wifi && (
+                <li className="flex items-start justify-between gap-1.5">
+                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#5c6167]">WI-FI</span>
+                  <b className="font-sans font-medium text-[8.5px] text-[#f3f4f6]">ONBOARD</b>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          <button onClick={() => onBookVehicle(vehicle)}
+            className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded font-display font-semibold text-[9px] tracking-[0.22em] uppercase transition-all hover:brightness-110 hover:-translate-y-px"
+            style={{background:'linear-gradient(140deg,#dcb877,#c09a4f)',color:'#171310'}}>
+            Request Vehicle <ArrowUpRight className="w-2.5 h-2.5" />
+          </button>
+        </aside>
+
+        {/* ── DRAG STRIP ────────────────────────────────────────────────── */}
+        <div ref={stripRef} className="absolute inset-0 cursor-grab"
+          onPointerDown={onDown} onPointerMove={onMove}
+          onPointerUp={onUp} onPointerCancel={onUp} onWheel={onWheel}>
+
+          {/* Side frames */}
+          {KEYS.map((key,si) => (
+            <div key={key}
+              ref={el => { frameRefs.current[si] = el; }}
+              onClick={() => handleFrameClick(si)}
+              data-idx=""
+              className="absolute top-1/2 -translate-y-1/2 overflow-hidden bg-[#141110] z-[4] hover:brightness-110"
+              style={{borderRadius:'8px',boxShadow:'0 18px 40px -18px rgba(0,0,0,0.8)',willChange:'left,opacity',transition:'opacity 0.08s linear'}}>
+              <img alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
+              <div className="fl absolute bottom-0 inset-x-0 px-1.5 py-0.5 font-mono text-[6px] tracking-wider uppercase truncate text-white/70"
+                style={{background:'rgba(10,9,8,0.82)'}} />
+            </div>
+          ))}
+
+          {/* Aperture */}
+          <div ref={apertureRef} className="ap-el absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[6]"
+            style={{
+              width:'clamp(200px,34%,500px)',height:'92%',borderRadius:'14px',
+              background:'#0d0b09',
+              boxShadow:'0 40px 90px -30px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
+            }}>
+            {/* Ribbon */}
+            <div ref={trackRef} className="flex h-full" style={{willChange:'transform'}} data-built="" />
+
+            {/* Gradient */}
+            <div className="absolute inset-0 pointer-events-none z-[2]"
+              style={{background:'linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 44%)'}} />
+
+            {/* Caption */}
+            <div className="absolute left-4 bottom-3.5 z-[3] flex flex-col items-start gap-1.5 pointer-events-none">
+              <span className="font-display font-semibold text-[13px] tracking-tight text-white"
+                style={{textShadow:'0 2px 14px rgba(0,0,0,0.7)'}}>
+                {vehicle.name}
+              </span>
+              <span className="font-mono text-[7px] tracking-[0.18em] uppercase text-white/90 px-2 py-0.5"
+                style={{borderRadius:'3px',background:'rgba(10,9,8,0.55)',border:'1px solid rgba(255,255,255,0.14)',backdropFilter:'blur(6px)'}}>
+                {galleryMode==='exterior'?'Exterior':'Interior'} · {pad2(safePhoto+1)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* ── THUMBNAILS ─────────────────────────────────────────────────────── */}
+      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2.5 overflow-x-auto no-scrollbar"
+        style={{height:'52px',padding:'0 10px'}}>
+        {gallery.map((src,i) => (
+          <button key={i} onClick={() => setPhotoIndex(i)}
+            aria-label={`${galleryMode} photo ${i+1}`}
+            className="flex-shrink-0 overflow-hidden transition-all duration-200"
+            style={{
+              width:38,height:27,borderRadius:'6px',
+              backgroundImage:`url("${src}")`,backgroundSize:'cover',backgroundPosition:'center',
+              boxShadow:i===safePhoto
+                ?'0 0 0 1.5px #cfa869,0 6px 18px rgba(207,168,105,0.35)'
+                :'0 0 0 1px rgba(255,255,255,0.14),0 4px 12px rgba(0,0,0,0.55)',
+              opacity:i===safePhoto?1:0.45,
+              filter:i===safePhoto?'none':'saturate(0.65) brightness(0.75)',
+              transform:i===safePhoto?'scale(1.06)':undefined,
+            }} />
+        ))}
       </div>
 
-      {/* Full-Screen Vehicle Modal */}
-      <VehicleModal
-        vehicle={selectedVehicleForModal}
-        onClose={() => setSelectedVehicleForModal(null)}
-        onBookVehicle={onBookVehicle}
-      />
+      {/* ── FOOTER CONTROLS ────────────────────────────────────────────────── */}
+      <footer className="ctrl-bar relative z-20 grid items-center gap-4 px-5 sm:px-10 pb-6 pt-1"
+        style={{gridTemplateColumns:'1fr auto 1fr'}}>
+
+        {/* Counter */}
+        <span className="font-mono text-[9.5px] tracking-[0.18em] text-[#8b9096]">
+          <b className="text-[#cfa869] font-medium">{pad2(safeIdx+1)}</b>
+          {' '}
+          <span className="text-[#5c6167]">/ {pad2(filteredVehicles.length)}</span>
+        </span>
+
+        {/* Prev · toggle · Next */}
+        <div className="flex items-center gap-3">
+          <button onClick={() => stepVehicle(-1)} aria-label="Previous"
+            className="w-7 h-7 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869]"
+            style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❮</button>
+
+          <div className="relative flex"
+            style={{padding:'3px',borderRadius:'30px',border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.03)'}}>
+            <div className="absolute top-[3px] h-[calc(100%-6px)] transition-all duration-420"
+              style={{left:'3px',width:'76px',borderRadius:'30px',
+                transform:galleryMode==='interior'?'translateX(76px)':'translateX(0)',
+                background:'linear-gradient(140deg,#e0bd80,#b98f45)',
+                boxShadow:'0 4px 14px rgba(207,168,105,0.35)'}} />
+            {(['exterior','interior'] as const).map(m => (
+              <button key={m} onClick={() => setGalleryMode(m)}
+                className="relative z-10 font-display font-semibold text-[10.5px] tracking-[0.16em] uppercase transition-colors"
+                style={{padding:'5px 0',width:'76px',borderRadius:'30px',
+                  color:galleryMode===m?'#171310':'#8b9096',whiteSpace:'nowrap'}}>
+                {m==='exterior'?'Exterior':'Interior'}
+              </button>
+            ))}
+          </div>
+
+          <button onClick={() => stepVehicle(1)} aria-label="Next"
+            className="w-7 h-7 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869]"
+            style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❯</button>
+        </div>
+
+        {/* Capacity filter */}
+        <div className="flex items-center justify-end gap-1.5">
+          <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
+          {caps.map(c => (
+            <button key={c.id} onClick={() => setPassengerFilter(c.id)}
+              className="font-mono text-[9px] tracking-widest transition-all"
+              style={{
+                padding:'4px 10px',borderRadius:'4px',
+                border:passengerFilter===c.id?'1px solid #cfa869':'1px solid rgba(255,255,255,0.1)',
+                background:passengerFilter===c.id?'rgba(207,168,105,0.18)':'rgba(255,255,255,0.04)',
+                color:passengerFilter===c.id?'#cfa869':'#8b9096',
+                boxShadow:passengerFilter===c.id?'0 0 12px rgba(207,168,105,0.4)':undefined,
+              }}>
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </footer>
     </section>
   );
 };

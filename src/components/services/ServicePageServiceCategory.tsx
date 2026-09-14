@@ -158,7 +158,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                 SERVICE DISCIPLINES
               </span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#F4F1EA] tracking-wide leading-[1.08]">
+            <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[1.04]">
               Tailored for every occasion.
             </h2>
             <p className="text-xs sm:text-sm text-white/60 leading-relaxed max-w-xl font-light">
@@ -168,7 +168,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
 
           <button
             onClick={() => onNavigate?.("fleet")}
-            className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.2em] text-[#C5A059] uppercase hover:text-white transition-colors cursor-pointer self-start md:self-end group"
+            className="inline-flex items-center gap-2 text-xs font-mono tracking-[0.2em] text-[#E0B268] uppercase hover:text-white transition-colors cursor-pointer self-start md:self-end group"
           >
             <span>VIEW FLEET SPECIFICATIONS</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -196,17 +196,17 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                   <div className="flex items-center justify-between group">
                     <div className="flex items-center gap-4 sm:gap-6">
                       <span className={`font-mono text-xs sm:text-sm transition-colors ${
-                        isActive ? "text-[#C5A059] font-bold" : "text-white/40 group-hover:text-white"
+                        isActive ? "text-[#E0B268] font-bold" : "text-white/40 group-hover:text-white"
                       }`}>
                         {tier.num}
                       </span>
                       
                       <div className="flex items-center gap-3">
                         <Icon className={`w-4 h-4 transition-colors ${
-                          isActive ? "text-[#C5A059]" : "text-white/40 group-hover:text-[#C5A059]"
+                          isActive ? "text-[#E0B268]" : "text-white/40 group-hover:text-[#E0B268]"
                         }`} />
-                        <h3 className={`font-serif text-xl sm:text-2xl lg:text-3xl uppercase tracking-wide transition-colors ${
-                          isActive ? "text-[#F4F1EA]" : "text-white/60 group-hover:text-white"
+                        <h3 className={`font-display font-bold text-xl sm:text-2xl lg:text-3xl uppercase tracking-tight transition-colors ${
+                          isActive ? "text-[#F4EDE4]" : "text-white/60 group-hover:text-white"
                         }`}>
                           {tier.title}
                         </h3>
@@ -214,11 +214,11 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-xs text-[#C5A059] font-medium hidden sm:inline-block">
+                      <span className="font-mono text-xs text-[#E0B268] font-medium hidden sm:inline-block">
                         {tier.rate}
                       </span>
                       <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${
-                        isActive ? "rotate-90 text-[#C5A059]" : "text-white/30 group-hover:text-white"
+                        isActive ? "rotate-90 text-[#E0B268]" : "text-white/30 group-hover:text-white"
                       }`} />
                     </div>
                   </div>
@@ -226,7 +226,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                   {/* Expanded Content Drawer */}
                   {isActive && (
                     <div className="pt-5 pl-8 sm:pl-12 space-y-5 animate-fadeIn">
-                      <p className="font-serif italic text-base sm:text-lg text-[#C5A059]">
+                      <p className="font-sans text-base sm:text-lg text-[#E0B268] font-medium">
                         {tier.headline}
                       </p>
 
@@ -307,7 +307,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                   <div className="font-mono text-[9px] tracking-[0.25em] text-[#C5A059] uppercase font-semibold">
                     DISPATCH ACTIVE
                   </div>
-                  <div className="font-serif text-sm text-[#F4F1EA] uppercase mt-0.5">
+                  <div className="font-display font-bold text-sm text-[#F4EDE4] uppercase tracking-wide mt-0.5">
                     {currentTier.title}
                   </div>
                   <div className="font-mono text-[10px] text-white/50 mt-0.5">

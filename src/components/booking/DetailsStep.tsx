@@ -44,7 +44,7 @@ export const DetailsStep: React.FC = () => {
             <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
               STEP 02 OF 03
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
+            <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight">
               WHEN ARE YOU TRAVELING?
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">
@@ -217,7 +217,7 @@ export const DetailsStep: React.FC = () => {
             <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
               CAPACITY REQUIREMENTS
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
+            <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight">
               YOUR PARTY &amp; CARGO
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">

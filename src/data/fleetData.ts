@@ -1,4 +1,4 @@
-﻿export interface Vehicle {
+export interface Vehicle {
   id: string;
   name: string;
   tagline: string;
@@ -7,8 +7,12 @@
   class: string;
   passengers: number;
   luggage: number;
+  transmission?: string;
+  drivetrain?: string;
   image: string;
   interiorImage: string;
+  exteriorGallery?: string[];
+  interiorGallery?: string[];
   description: string;
   idealFor: string[];
   features: string[];
@@ -36,8 +40,20 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SUV',
     passengers: 6,
     luggage: 4,
+    transmission: 'Automatic',
+    drivetrain: 'FWD / AWD',
     image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Engineered for executive privacy and effortless long-distance poise. Features reclining captain chairs with power ottomans, acoustic isolation, and dedicated onboard connectivity.',
     idealFor: ['Corporate Roadshows', 'Airport Group Transfers', 'Executive Family Travel'],
     features: ['Reclining VIP Ottoman Seats', 'Dual Sunroofs', 'Encrypted High-Speed Wi-Fi', 'Bose Premium Audio', 'Privacy Shades'],
@@ -61,8 +77,21 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'ULTRA LUXURY SUV',
     passengers: 6,
     luggage: 6,
+    transmission: '10-Speed Auto',
+    drivetrain: '4WD',
     image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Extended wheelbase commanding stature with full semi-aniline leather seating, AKG Studio Reference 36-speaker sound architecture, and colossal rear luggage volume.',
     idealFor: ['Diplomatic & VIP Delegations', 'Heavy Luggage Airport Transfers', 'Red Carpet Arrivals'],
     features: ['Extended Wheelbase Cargo', 'AKG 36-Speaker Audio', 'OLED Curved Cockpit', 'Tri-Zone Climate Control', 'Chilled Console Cooler'],
@@ -85,8 +114,23 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'FIRST CLASS SUV',
     passengers: 4,
     luggage: 3,
+    transmission: '9G-TRONIC',
+    drivetrain: 'AWD 4MATIC',
     image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1541348263662-e0c86629c983?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'The pinnacle of SUV prestige. Executive rear lounge seats with active calf massage, silver-plated champagne flutes, panoramic roof with acoustic glazing, and E-Active Body Control.',
     idealFor: ['Celebrity & Private Aviation', 'High-Stakes Bilateral Meetings', 'Ultra-Luxury Escapes'],
     features: ['Air Suspension Glide', 'Champagne Chiller & Silver Flutes', 'Heated & Cooled Cupholders', 'Burmester High-End 3D Sound', 'Quiet Cabin Acoustic Glass'],
@@ -110,8 +154,20 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'ULTRA LUXURY SUV',
     passengers: 4,
     luggage: 4,
+    transmission: 'Automatic',
+    drivetrain: 'Intelligent AWD',
     image: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1541348263662-e0c86629c983?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Long wheelbase configuration with SV Signature Suite rear console, ceramic dials, power deployable club table, and active noise-cancelling headrest speakers.',
     idealFor: ['Hamptons & Coastal Transfers', 'Discreet Executive Commutes', 'Private Estate Travel'],
     features: ['Meridian Signature 35-Speaker Audio', 'Power Deployable Club Tables', 'Executive Rear Seating', 'Cabin Air Purification Pro'],
@@ -134,8 +190,21 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'FIRST CLASS JET VAN',
     passengers: 8,
     luggage: 8,
+    transmission: 'Automatic',
+    drivetrain: 'RWD / AWD',
     image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Custom coachbuilt custom interior featuring Italian Maybach-pattern leather captain chairs, dual 43-inch 4K Smart TVs, Apple TV, motorized privacy partition, and integrated bar.',
     idealFor: ['Mobile Executive Boardrooms', 'Artists & Tour Ensembles', 'Inter-city Group Shuttles'],
     features: ['Motorized Privacy Partition', 'Dual 43" 4K Smart Displays', 'Starlight Fibre Optic Ceiling', 'HDMI & Apple AirPlay', 'Wet Bar & Nespresso Machine'],
@@ -160,8 +229,19 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE LUXURY SHUTTLE',
     passengers: 14,
     luggage: 14,
+    transmission: '9G-TRONIC Auto',
+    drivetrain: 'RWD High-Stability',
     image: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Designed for effortless group transfers without sacrificing individual comfort. High ceiling walk-in cabin, bespoke leather forward-facing recliners, individual USB-C ports, and massive luggage garage.',
     idealFor: ['Corporate Summits & Retreats', 'Wedding Bridal Parties', 'Airport Terminal Shuttles'],
     features: ['High-Roof Stand-up Cabin', 'Individual Reading Lights & Air Vents', 'Massive Rear Cargo Partition', 'Dedicated Passenger PA System'],
@@ -182,8 +262,22 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '9G-TRONIC Auto',
+    drivetrain: 'AWD 4MATIC',
     image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1555353540-64580b51c258?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'A masterclass in quiet grace. Features rear Executive Seat package with heated neck warmers, Burmester 4D surround sound with in-seat exciters, active ambient lighting, and AIRMATIC suspension.',
     idealFor: ['C-Suite Executive Commutes', 'Financial Roadshows', 'Discreet Night Outings'],
     features: ['Rear Executive Recliner', 'Burmester 4D High-End Audio', 'Energizing Comfort Fragrance System', 'Rear Touchscreen Tablet Control'],
@@ -206,8 +300,21 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'BESPOKE ROYAL SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '8-Speed Satellite',
+    drivetrain: 'Planar AWD',
     image: 'https://images.unsplash.com/photo-1631295868223-63265b40d9e4?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1631295868223-63265b40d9e4?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Extended wheelbase with Planar Suspension magic carpet ride, Shooting Star headliner, open-pore wood veneers, whisper-quiet double-glazed acoustic glass with 100kg of sound deadening.',
     idealFor: ['High-Profile Red Carpets', 'Ultra-VIP Dignitary Travel', 'Milestone Celebrations'],
     features: ['Shooting Star Headliner', 'Effortless Power Doors', 'Champagne Cooler with Crystal Flutes', 'Lambswool Carpets'],
@@ -231,8 +338,20 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '8-Speed Steptronic',
+    drivetrain: 'xDrive AWD',
     image: 'https://images.unsplash.com/photo-1555353540-64580b51c258?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1555353540-64580b51c258?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Equipped with the groundbreaking 31.3-inch 8K BMW Theatre Screen dropping from the panoramic sky roof, Bowers & Wilkins Diamond Surround sound, and Executive Lounge rear seating.',
     idealFor: ['Tech Founders & Executives', 'Film Screenings on the Go', 'Airport Commutes'],
     features: ['31.3" 8K BMW Theatre Display', 'Bowers & Wilkins Diamond 36-Speaker Audio', 'Automatic Closing Doors', 'Sky Lounge Panoramic Glass'],
@@ -254,8 +373,18 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'ELECTRIC FLAGSHIP SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: 'Direct Drive EV',
+    drivetrain: 'Dual-Motor 4MATIC',
     image: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Near-zero acoustic signature with 56-inch MBUX Hyperscreen, HEPA air filtration system eliminating 99.65% of particulate matter, and serene electric acceleration.',
     idealFor: ['Eco-Conscious Executives', 'Clean Energy Corporate Travel', 'City Hub Transfers'],
     features: ['Hyperscreen Cockpit', 'Hospital-Grade HEPA Air Purification', 'Zero Local Emissions', 'Acoustic Glass Coating'],
@@ -276,8 +405,19 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'PREMIUM SUV',
     passengers: 6,
     luggage: 6,
+    transmission: '10-Speed SelectShift',
+    drivetrain: 'Intelligent 4WD',
     image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Black Label Invitation theme with Venetian leather, 30-way Perfect Position massage seats, Revel Ultima 3D audio, and extraordinary luggage clearance.',
     idealFor: ['Family Vacations', 'Ski and Mountain Retreats', 'Corporate Delegations'],
     features: ['30-Way Perfect Position Massage Seats', 'Revel Ultima 28-Speaker Audio', 'Panoramic Vista Roof', 'Heavy Weather Capability'],
@@ -298,8 +438,20 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'FIRST CLASS SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '8-Speed Dual-Clutch',
+    drivetrain: 'Active AWD',
     image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1631295868223-63265b40d9e4?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Diamond-in-diamond quilted leather, rotating central dashboard, Naim for Bentley 2200W sound system, and supreme dynamic poise over long highway corridors.',
     idealFor: ['Country Club Events', 'Gala Evenings', 'Luxury Weekend Getaways'],
     features: ['Naim 2200W Audiophile Audio', 'Diamond Quilted Interior', 'All-Wheel Steering Agility', 'Rear Touchscreen Remote'],
@@ -321,8 +473,19 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE VIP VAN',
     passengers: 7,
     luggage: 6,
+    transmission: '9G-TRONIC Auto',
+    drivetrain: '4MATIC AWD',
     image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Face-to-face conference seating configuration with foldable mahogany work center table, Burmester surround, and whisper-quiet suspension for on-the-move discussions.',
     idealFor: ['Confidential Board Meetings', 'Diplomatic Envoys', 'Family Airport Transfers'],
     features: ['Face-to-Face Club Seating', 'Foldable Conference Table', 'Luggage Compartment Divider', 'Burmester Surround Sound'],
@@ -343,8 +506,21 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SPORT SUV',
     passengers: 6,
     luggage: 4,
+    transmission: '8-Speed Steptronic',
+    drivetrain: 'xDrive AWD',
     image: 'https://images.unsplash.com/photo-1555353540-64580b51c258?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1555353540-64580b51c258?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Full-size 3-row luxury SUV with individual captain chairs, Bowers & Wilkins Diamond surround sound, 5-zone automatic climate, and panoramic glass roof with LED star pattern.',
     idealFor: ['Corporate Offsites', 'Executive Ski Trips', 'City-to-Airport Transit'],
     features: ['Panoramic LED Sky Lounge', 'Bowers & Wilkins 3D Audio', '5-Zone Climate Control', 'Individual USB-C at Every Seat'],
@@ -365,8 +541,18 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'ELECTRIC LUXURY SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: 'Direct Drive EV',
+    drivetrain: 'Dual-Motor AWD',
     image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Sublime glass canopy roof extending seamlessly from windshield to rear, 500+ mile zero-emission range, and Surreal Sound Pro 21-speaker acoustic mastery.',
     idealFor: ['Forward-Thinking Leaders', 'Architectural City Tours', 'Airport Express'],
     features: ['Glass Canopy Ceiling', 'Surreal Sound Pro Audio', 'Ultra-Fast 900V Architecture', 'Sustainable PurLuxe Interior'],
@@ -386,8 +572,19 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '8-Speed Tiptronic',
+    drivetrain: 'quattro AWD',
     image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Extended wheelbase with rear relaxation foot-warming massage seat, matrix LED reading lamps, and predictive active suspension floating over road imperfections.',
     idealFor: ['Confidential Executive Travel', 'Finance Sector Commutes', 'Hotel Concierge Bookings'],
     features: ['Rear Foot Massage Function', 'Predictive Active Suspension', 'Bang & Olufsen 3D Advanced Sound', 'Valcona Leather Diamond Stitch'],
@@ -409,8 +606,22 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'BESPOKE ROYAL SUV',
     passengers: 4,
     luggage: 4,
+    transmission: '8-Speed Satellite',
+    drivetrain: 'Permanent AWD',
     image: 'https://images.unsplash.com/photo-1631295868223-63265b40d9e4?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1631295868223-63265b40d9e4?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1541348263662-e0c86629c983?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Dominant posture wrapped in deep bespoke dark chrome, viewing suite tailgate seating, refrigerated rear champagne cabinet, and 6.75L Twin-Turbo V12 serenity.',
     idealFor: ['Ultra-High Net Worth Travel', 'Hamptons & Mountain Estates', 'Celebrity Arrivals'],
     features: ['Tailgate Viewing Suite', 'Infinity Symbol Carbon Fiber Veneers', 'Starlight Headliner', 'Bespoke Audio Acoustic Studio'],
@@ -434,8 +645,20 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'MOBILE OFFICE VAN',
     passengers: 10,
     luggage: 10,
+    transmission: '9G-TRONIC Auto',
+    drivetrain: 'RWD / AWD',
     image: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1502744688674-c619d1586c9e?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'Equipped with dual 55-inch video conferencing displays, dedicated Starlink satellite high-speed internet, conference table with microphone arrays, and encrypted communications router.',
     idealFor: ['M&A Deal Roadshows', 'Executive Strategy Sessions', 'State Department Convoys'],
     features: ['Starlink Satellite Internet', 'Dual 55" Conference Displays', 'Full Privacy Partition', 'Nespresso Coffee Bar', 'Printer & Wireless Scan Station'],
@@ -458,8 +681,19 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SEDAN',
     passengers: 3,
     luggage: 3,
+    transmission: '8-Speed Automatic',
+    drivetrain: 'AWD',
     image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1555353540-64580b51c258?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: 'First-class rear seat with independent footrest and heating, Mood Curator light and fragrance themes, Bang & Olufsen 23-speaker 3D audio, and easy-close power doors.',
     idealFor: ['International Business Delegations', 'Airport Meets', 'Discreet City Travel'],
     features: ['Mood Curator Ambient Aromatherapy', 'Bang & Olufsen 3D Sound', 'Rear Dual Touchscreens', 'Easy Close Smart Doors'],
@@ -480,8 +714,21 @@ export const FLEET_DATA: Vehicle[] = [
     class: 'EXECUTIVE SUV',
     passengers: 4,
     luggage: 4,
+    transmission: '10-Speed Direct Shift',
+    drivetrain: 'Full-Time 4WD',
     image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
     interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    exteriorGallery: [
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1541348263662-e0c86629c983?auto=format&fit=crop&w=1600&q=85'
+    ],
+    interiorGallery: [
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
+      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+    ],
     description: '4-seat ultra-luxury layout with rear ottoman recliner angled up to 48 degrees, Mark Levinson 25-speaker Reference Surround sound, and multi-terrain hydraulic comfort suspension.',
     idealFor: ['Winter & Mountain Excursions', 'Airport VIP Pickups', 'Secure Commutes'],
     features: ['48-Degree VIP Ottoman Recliner', 'Mark Levinson 25-Speaker Reference Audio', 'Ceiling Air Diffusers', 'Wireless Phone Charging Pad'],

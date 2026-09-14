@@ -124,10 +124,10 @@ export const VehicleDossier: React.FC<VehicleDossierProps> = ({
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-champagne-gold">
                 {vehicle.categoryLabel}
               </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-warm-ivory tracking-tight mt-1">
+              <h2 className="font-display font-black text-3xl sm:text-4xl text-[#F4EDE4] tracking-tight mt-1">
                 {vehicle.name}
               </h2>
-              <p className="text-xs sm:text-sm text-muted-gray italic font-serif mt-1.5">
+              <p className="text-xs sm:text-sm text-muted-gray font-sans mt-1.5">
                 "{vehicle.tagline}"
               </p>
             </div>

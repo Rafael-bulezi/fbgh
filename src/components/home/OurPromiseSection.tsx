@@ -154,14 +154,14 @@ export const OurPromiseSection: React.FC<OurPromiseSectionProps> = ({
             <div className="overflow-hidden">
               <h2
                 key={`headline-${active.id}`}
-                className="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#111110] leading-[1.05] tracking-tight font-normal animate-fadeIn"
+                className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#111110] leading-[1.02] tracking-tight animate-fadeIn"
               >
                 <span>{active.headlineWord1} </span>
-                <span className="text-[#C5A059] font-normal italic">
+                <span className="text-[#C5A059] font-bold">
                   {active.headlineWord2}{' '}
                 </span>
                 {active.headlineWord3 && (
-                  <span className="font-light">{active.headlineWord3}</span>
+                  <span>{active.headlineWord3}</span>
                 )}
               </h2>
             </div>

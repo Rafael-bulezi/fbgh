@@ -21,9 +21,9 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
           <span className="text-[10px] font-sans tracking-[0.3em] uppercase text-champagne-gold font-medium">
             REGIONAL & GLOBAL COVERAGE
           </span>
-          <h1 className="font-serif text-4xl sm:text-6xl text-warm-ivory tracking-wide leading-tight">
+          <h1 className="font-display font-black text-4xl sm:text-6xl text-[#F4EDE4] tracking-tight leading-[0.98]">
             DESTINATIONS &<br />
-            <span className="italic font-normal text-champagne-gold">TRAVEL CORRIDORS.</span>
+            <span className="text-[#E0B268]">TRAVEL CORRIDORS.</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-gray max-w-lg mx-auto font-light leading-relaxed">
             Flawless navigation across New York, Philadelphia, major private aviation FBOs, and regional coastal estates.
@@ -56,7 +56,7 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
                 <span className="text-[10px] tracking-[0.25em] text-champagne-gold uppercase">
                   {dest.subtitle}
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl text-warm-ivory tracking-wide">
+                <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#F4EDE4] tracking-tight">
                   {dest.name}
                 </h2>
               </div>

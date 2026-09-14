@@ -96,7 +96,7 @@ export const JourneyStep: React.FC = () => {
             <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
               STEP 01 OF 03
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
+            <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight">
               WHAT ARE YOU TRAVELING FOR?
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">
@@ -161,7 +161,7 @@ export const JourneyStep: React.FC = () => {
             <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
               ROUTING &amp; DISPATCH
             </span>
-            <h3 className="font-serif text-xl sm:text-2xl text-warm-ivory tracking-wide">
+            <h3 className="font-display font-bold text-xl sm:text-2xl text-[#F4EDE4] tracking-tight">
               WHERE ARE WE TAKING YOU?
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">
