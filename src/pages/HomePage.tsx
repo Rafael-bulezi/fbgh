@@ -179,13 +179,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
       />
 
       {/* ── 7. FINAL INVOCATION: ARRIVE WITH INTENTION ── */}
-      <section className="w-full relative min-h-[50vh] flex items-center justify-center bg-[#0E0C0A] overflow-hidden select-none">
+      <section className="w-full relative min-h-[55vh] sm:min-h-[65vh] flex items-center justify-center bg-[#0E0C0A] overflow-hidden select-none py-20">
         <img
           src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920&auto=format&fit=crop"
           alt="Luxury Vehicle at Night"
-          className="absolute inset-0 w-full h-full object-cover luminous-media opacity-40"
+          className="absolute inset-0 w-full h-full object-cover object-center luminous-media opacity-75"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0E0C0A] via-transparent to-[#0E0C0A]" />
+        {/* Dark cinematic scrim to make text pop while keeping full image richness */}
+        <div className="absolute inset-0 bg-[#0E0C0A]/40" />
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0D0A08] to-transparent pointer-events-none" />
 
         <div className="relative z-10 text-center space-y-6 p-6 max-w-2xl">
           <h2 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-[#F4EDE4] tracking-tight uppercase leading-[0.95]">

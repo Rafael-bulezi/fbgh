@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 
 interface FooterProps {
@@ -6,16 +6,15 @@ interface FooterProps {
   onOpenBooking: () => void;
 }
 
-const PILL_CATEGORIES = [
-  { id: 'all', label: 'ALL FLEET', route: 'fleet' },
-  { id: 'sedans', label: 'EXECUTIVE SEDANS', route: 'fleet' },
-  { id: 'suvs', label: 'LUXURY SUVS', route: 'fleet' },
-  { id: 'services', label: 'CHAUFFEUR SERVICES', route: 'services' },
-  { id: 'experience', label: 'THE RENTAL EXPERIENCE', route: 'experience' },
+const NAV_PAGES = [
+  { id: 'home',         label: 'HOME',         route: 'home' },
+  { id: 'services',     label: 'SERVICES',     route: 'services' },
+  { id: 'fleet',        label: 'FLEET',        route: 'fleet' },
+  { id: 'experience',   label: 'EXPERIENCE',   route: 'experience' },
+  { id: 'destinations', label: 'DESTINATIONS', route: 'destinations' },
 ];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => {
-  const [activePill, setActivePill] = useState<string>('all');
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -23,22 +22,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
 
   return (
     <footer 
-      className="w-full text-[#F4EDE4] pt-28 sm:pt-40 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-t border-white/[0.06]"
+      className="w-full text-[#F4EDE4] pt-16 sm:pt-24 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-t border-white/[0.08]"
       style={{
         background: 'radial-gradient(130% 90% at 50% 0%, #15110E 0%, #0D0A08 40%, #060504 100%)'
       }}
     >
-      {/* ── 00. HERO-STYLE WHITE CURVED TOP SECTION ── */}
-      {/* White/light panel at the very top, curving organically into the dark footer */}
-      <div className="absolute top-0 inset-x-0 overflow-hidden leading-none z-20 pointer-events-none">
-        {/* The light-coloured curved panel — like the hero CurvedHero white side */}
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-20 sm:h-28 md:h-36 block">
-          <path d="M0,0 L1440,0 L1440,40 C1080,110 720,5 360,75 C180,110 60,30 0,55 Z" fill="#FAF8F5" />
-        </svg>
-      </div>
-
       {/* Luminous Champagne Hairline Top Border */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E0A852]/50 to-transparent z-30" />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E0A852]/60 to-transparent z-20" />
+      <div className="absolute top-0 inset-x-0 h-8 bg-gradient-to-b from-[#E0A852]/[0.04] to-transparent pointer-events-none" />
 
       {/* Soft Multi-Layered Champagne Ambient Glow */}
       <div 
@@ -96,36 +87,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </span>
           </div>
 
-          {/* ── 02. INTERACTIVE PILL SWITCHER — left-to-right champagne fill on hover ── */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mt-10 sm:mt-12 max-w-4xl mx-auto">
-            {PILL_CATEGORIES.map((pill) => {
-              const isActive = pill.id === activePill;
-              return (
-                <button
-                  key={pill.id}
-                  type="button"
-                  onClick={() => {
-                    setActivePill(pill.id);
-                    onNavigate(pill.route);
-                    scrollToTop();
-                  }}
-                  className={`footer-pill-btn relative overflow-hidden px-5 sm:px-7 py-2.5 sm:py-3 rounded-[3px] font-display text-[11px] sm:text-xs tracking-wider uppercase font-semibold transition-colors duration-300 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#22180F] border border-[#E0A852] text-[#F4EDE4] shadow-[0_0_24px_rgba(224,168,82,0.3)] scale-105'
-                      : 'bg-transparent border border-white/20 text-white/60 hover:text-[#0D0A08] hover:border-[#E0A852]'
-                  }`}
-                >
-                  {/* Left-to-right fill overlay (only for inactive pills) */}
-                  {!isActive && (
-                    <span
-                      aria-hidden="true"
-                      className="footer-pill-fill absolute inset-0 origin-left scale-x-0 bg-[#E0A852] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-[-1]"
-                    />
-                  )}
-                  <span className="relative z-10">{pill.label}</span>
-                </button>
-              );
-            })}
+          {/* ── 02. NAV PAGE BUTTONS — styled like pb-btn-outline (gold border, left-to-right fill) ── */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-10 sm:mt-12 max-w-3xl mx-auto">
+            {NAV_PAGES.map((page) => (
+              <button
+                key={page.id}
+                type="button"
+                onClick={() => {
+                  onNavigate(page.route);
+                  scrollToTop();
+                }}
+                className="pb-btn pb-btn-outline !px-6 !py-2.5 !text-[10.5px] cursor-pointer"
+              >
+                {page.label}
+              </button>
+            ))}
           </div>
         </div>
 
