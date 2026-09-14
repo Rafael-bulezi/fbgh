@@ -23,55 +23,32 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
 
   return (
     <footer 
-      className="w-full text-[#F4EDE4] pt-20 sm:pt-28 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-t border-white/[0.06]"
+      className="w-full text-[#F4EDE4] pt-28 sm:pt-40 pb-12 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-t border-white/[0.06]"
       style={{
         background: 'radial-gradient(130% 90% at 50% 0%, #15110E 0%, #0D0A08 40%, #060504 100%)'
       }}
     >
-      {/* ── 00. CURVED DIVIDER TRANSITION AT TOP (NO BG IMAGE) ── */}
-      <div className="absolute top-0 inset-x-0 overflow-hidden leading-none z-20 pointer-events-none -translate-y-[1px]">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-12 sm:h-16 text-[#08080A] fill-current">
-          <path d="M0,0 L1440,0 L1440,28 C1160,75 880,10 640,46 C400,82 180,16 0,52 Z" />
+      {/* ── 00. HERO-STYLE WHITE CURVED TOP SECTION ── */}
+      {/* White/light panel at the very top, curving organically into the dark footer */}
+      <div className="absolute top-0 inset-x-0 overflow-hidden leading-none z-20 pointer-events-none">
+        {/* The light-coloured curved panel — like the hero CurvedHero white side */}
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-20 sm:h-28 md:h-36 block">
+          <path d="M0,0 L1440,0 L1440,40 C1080,110 720,5 360,75 C180,110 60,30 0,55 Z" fill="#FAF8F5" />
         </svg>
       </div>
 
       {/* Luminous Champagne Hairline Top Border */}
-      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E0A852]/50 to-transparent z-20" />
-      <div className="absolute top-0 inset-x-0 h-10 bg-gradient-to-b from-[#E0A852]/[0.03] to-transparent pointer-events-none" />
-
-      {/* Exquisite Architectural Micro-Grid Pattern */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #E0A852 1px, transparent 1px),
-            linear-gradient(to bottom, #E0A852 1px, transparent 1px)
-          `,
-          backgroundSize: '48px 48px',
-          maskImage: 'radial-gradient(ellipse 90% 70% at 50% 20%, black 20%, transparent 85%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 20%, black 20%, transparent 85%)',
-        }}
-      />
-
-      {/* Haute-Couture Diagonal Weave Texture */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.02]"
-        style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, #FFFFFF 0, #FFFFFF 1px, transparent 0, transparent 24px)',
-          maskImage: 'radial-gradient(ellipse 80% 50% at 50% 0%, black 10%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 50% at 50% 0%, black 10%, transparent 70%)',
-        }}
-      />
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#E0A852]/50 to-transparent z-30" />
 
       {/* Soft Multi-Layered Champagne Ambient Glow */}
       <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[380px] pointer-events-none opacity-35 blur-[120px]"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[380px] pointer-events-none opacity-25 blur-[120px]"
         style={{
           background: 'radial-gradient(ellipse at center, #E0A852 0%, #6E441D 45%, transparent 75%)'
         }}
       />
       <div 
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1100px] h-[280px] pointer-events-none opacity-20 blur-[140px]"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1100px] h-[280px] pointer-events-none opacity-15 blur-[140px]"
         style={{
           background: 'radial-gradient(ellipse at center, #C9A45C 0%, transparent 70%)'
         }}
@@ -94,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
               xmlns="http://www.w3.org/2000/svg"
               role="img"
               aria-label="Faith Based Global Holdings Logo"
-              className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 drop-shadow-[0_4px_30px_rgba(224,168,82,0.4)] transition-transform duration-500 group-hover:scale-105"
+              className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 drop-shadow-[0_4px_30px_rgba(224,168,82,0.4)] transition-transform duration-500 group-hover:scale-105"
             >
               <path
                 fill="#E0A852"
@@ -105,13 +82,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </svg>
           </div>
 
-          {/* Refined Headline Hierarchy: Faith Based (twice as big) & Global Holdings (10% smaller & gold) */}
+          {/* Refined Headline Hierarchy: Faith Based (~10% smaller) & Global Holdings (smaller & gold) */}
           <div
             onClick={scrollToTop}
             className="group relative flex flex-col items-center cursor-pointer px-4 select-none"
             title="Faith Based Global Holdings"
           >
-            <h2 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-black tracking-tight uppercase leading-[0.92] text-[#F4EDE4] text-center">
+            <h2 className="font-display text-[2.8rem] sm:text-[4rem] md:text-[4.5rem] lg:text-[6.75rem] xl:text-[7.65rem] font-black tracking-tight uppercase leading-[0.92] text-[#F4EDE4] text-center">
               FAITH BASED
             </h2>
             <span className="font-display text-sm sm:text-lg md:text-2xl lg:text-3xl tracking-[0.28em] font-bold text-[#E0A852] uppercase mt-2 sm:mt-4 text-center">
@@ -119,7 +96,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </span>
           </div>
 
-          {/* ── 02. INTERACTIVE PILL SWITCHER (Matching website 3px rounded buttons) ── */}
+          {/* ── 02. INTERACTIVE PILL SWITCHER — left-to-right champagne fill on hover ── */}
           <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mt-10 sm:mt-12 max-w-4xl mx-auto">
             {PILL_CATEGORIES.map((pill) => {
               const isActive = pill.id === activePill;
@@ -132,13 +109,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
                     onNavigate(pill.route);
                     scrollToTop();
                   }}
-                  className={`px-5 sm:px-7 py-2.5 sm:py-3 rounded-[3px] font-display text-[11px] sm:text-xs tracking-wider uppercase font-semibold transition-all duration-300 cursor-pointer ${
+                  className={`footer-pill-btn relative overflow-hidden px-5 sm:px-7 py-2.5 sm:py-3 rounded-[3px] font-display text-[11px] sm:text-xs tracking-wider uppercase font-semibold transition-colors duration-300 cursor-pointer ${
                     isActive
                       ? 'bg-[#22180F] border border-[#E0A852] text-[#F4EDE4] shadow-[0_0_24px_rgba(224,168,82,0.3)] scale-105'
-                      : 'bg-[#141210]/70 border border-white/10 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/[0.04]'
+                      : 'bg-transparent border border-white/20 text-white/60 hover:text-[#0D0A08] hover:border-[#E0A852]'
                   }`}
                 >
-                  {pill.label}
+                  {/* Left-to-right fill overlay (only for inactive pills) */}
+                  {!isActive && (
+                    <span
+                      aria-hidden="true"
+                      className="footer-pill-fill absolute inset-0 origin-left scale-x-0 bg-[#E0A852] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] z-[-1]"
+                    />
+                  )}
+                  <span className="relative z-10">{pill.label}</span>
                 </button>
               );
             })}
