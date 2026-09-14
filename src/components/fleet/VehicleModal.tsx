@@ -28,7 +28,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
             <span className="text-[10px] tracking-[0.25em] text-champagne-gold uppercase font-medium">
               FLEET SPECIFICATION
             </span>
-            <span className="text-white/20">?</span>
+            <span className="text-white/20">·</span>
             <span className="text-xs text-muted-gray tracking-wider uppercase">
               {vehicle.categoryLabel}
             </span>
@@ -161,10 +161,10 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-6 border-t border-white/10 bg-obsidian">
+        <div className="flex flex-col-reverse sm:flex-row items-center justify-between p-4 sm:p-6 border-t border-white/10 bg-obsidian gap-3">
           <button
             onClick={onClose}
-            className="pb-btn-text text-xs tracking-[0.2em] font-mono text-muted-gray uppercase"
+            className="pb-btn-text text-xs tracking-[0.2em] font-mono text-muted-gray uppercase w-full sm:w-auto text-center"
           >
             <span>RETURN TO FLEET</span>
           </button>
@@ -174,7 +174,7 @@ export const VehicleModal: React.FC<VehicleModalProps> = ({
               onBookVehicle(vehicle);
               onClose();
             }}
-            className="pb-btn pb-btn-primary"
+            className="pb-btn pb-btn-primary w-full sm:w-auto justify-center"
           >
             <span>BOOK THIS VEHICLE</span>
             <ArrowRight className="w-4 h-4" />

@@ -81,6 +81,20 @@ h1, h2, h3, h4, h5, h6 {
 .pb-btn-text:hover svg { transform: translateX(5px); }
 .pb-btn-text:active { transform: translateY(1px); }
 
+@media (max-width: 640px) {
+  .pb-btn {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    gap: 8px;
+  }
+  .pb-btn-primary {
+    padding: 12px 20px;
+  }
+  .pb-btn-outline {
+    padding: 11px 18px;
+  }
+}
+
 .lm-wrap { display: block; overflow: hidden; }
 .lm-line { display: block; transform: translateY(115%); transition: transform 1.1s cubic-bezier(0.16,1,0.3,1); }
 .lm-in .lm-line, .lm-line.in { transform: translateY(0); }

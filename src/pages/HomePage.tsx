@@ -159,7 +159,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
 
           <button
             onClick={onOpenBooking}
-            className="pb-btn pb-btn-primary flex-shrink-0"
+            className="pb-btn pb-btn-primary flex-shrink-0 w-full md:w-auto"
           >
             <span>BOOK YOUR JOURNEY</span>
             <ArrowRight className="w-4 h-4" />
@@ -207,22 +207,22 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/40 to-obsidian" />
 
         <div className="relative z-10 text-center space-y-6 p-6 max-w-2xl">
-          <h2 className="font-display font-light text-4xl sm:text-6xl text-warm-ivory tracking-wider uppercase text-contrast-title">
+          <h2 className="font-display font-light text-3xl sm:text-5xl md:text-6xl text-warm-ivory tracking-wider uppercase text-contrast-title">
             ARRIVE WITH<br />
             <span className="italic text-champagne-gold font-serif">INTENTION.</span>
           </h2>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xs sm:max-w-none mx-auto">
             <button
               onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary"
+              className="pb-btn pb-btn-primary w-full sm:w-auto"
             >
               <span>BOOK A RIDE</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <a
               href="tel:9295650100"
-              className="pb-btn pb-btn-outline"
+              className="pb-btn pb-btn-outline w-full sm:w-auto"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>(929) 565-0100</span>

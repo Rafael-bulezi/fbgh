@@ -52,7 +52,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
     <section
       ref={sectionRef}
       id="home-experience-section"
-      className="home-experience-section w-full h-screen min-h-[640px] max-h-[1080px] bg-[#ECE5D8] text-[#111111] py-5 sm:py-7 lg:py-8 px-6 sm:px-12 lg:px-20 relative overflow-hidden select-none border-y border-[#D8CFBF] flex flex-col justify-between"
+      className="home-experience-section w-full min-h-[640px] md:h-screen md:max-h-[1080px] bg-[#ECE5D8] text-[#111111] py-6 sm:py-8 lg:py-8 px-5 sm:px-12 lg:px-20 relative overflow-hidden select-none border-y border-[#D8CFBF] flex flex-col justify-between"
     >
       {/* ── 1. BACKGROUND MONUMENTAL WATERMARK ("STANDARD") ───────────── */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
@@ -95,10 +95,21 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
       </div>
 
       {/* ── 4. ARCHITECTURAL RETICLE & 4-QUADRANT COMPOSITION ───────────── */}
-      <div className="max-w-7xl mx-auto w-full relative z-10 flex-grow flex items-center justify-center my-auto min-h-[460px]">
+      <div className="max-w-7xl mx-auto w-full relative z-10 flex-grow flex flex-col items-center justify-center my-auto min-h-[460px]">
         
-        {/* CENTERPIECE: PERFECTLY CENTERED RETICLE CIRCLE + CROSSHAIRS */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        {/* Mobile Headline Lockup */}
+        <div className="md:hidden text-center py-6 space-y-2 z-10 relative">
+          <h2 className="font-display font-black text-3xl sm:text-4xl tracking-tight text-[#111111] leading-[0.98]">
+            EVERYTHING<br />
+            <span className="text-[#B89658]">CONSIDERED.</span>
+          </h2>
+          <p className="font-mono text-[9px] tracking-[0.28em] text-[#967C52] uppercase font-medium">
+            SO THE JOURNEY FEELS EFFORTLESS.
+          </p>
+        </div>
+
+        {/* DESKTOP CENTERPIECE: PERFECTLY CENTERED RETICLE CIRCLE + CROSSHAIRS */}
+        <div className="hidden md:flex absolute inset-0 items-center justify-center pointer-events-none z-0">
           <div className="w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] lg:w-[440px] lg:h-[440px] rounded-full border border-[#C5A059]/25 relative flex items-center justify-center">
             {/* Vertical Crosshair Line */}
             <div className="absolute -top-12 -bottom-12 w-px bg-gradient-to-b from-transparent via-[#C5A059]/30 to-transparent" />
@@ -107,8 +118,8 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
           </div>
         </div>
 
-        {/* CENTERPIECE: PERFECTLY CENTERED HEADLINE LOCKUP */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 text-center select-none">
+        {/* DESKTOP CENTERPIECE: PERFECTLY CENTERED HEADLINE LOCKUP */}
+        <div className="hidden md:flex absolute inset-0 flex-col items-center justify-center pointer-events-none z-10 text-center select-none">
           <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-[4rem] tracking-tight text-[#111111] leading-[0.95]">
             EVERYTHING<br />
             <span className="text-[#B89658]">CONSIDERED.</span>
@@ -127,7 +138,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
           className="w-full h-full flex flex-col justify-between py-2 sm:py-4 relative z-20 pointer-events-auto"
         >
           {/* TOP ROW: QUADRANTS 1 & 2 */}
-          <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8">
             
             {/* ── QUADRANT 1: TOP-LEFT (PUNCTUALITY) ── */}
             <div
@@ -232,7 +243,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
           </div>
 
           {/* BOTTOM ROW: QUADRANTS 3 & 4 */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 pt-6">
             
             {/* ── QUADRANT 3: BOTTOM-LEFT (PRECISION) ── */}
             <div

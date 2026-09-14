@@ -225,7 +225,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
 
                   {/* Expanded Content Drawer */}
                   {isActive && (
-                    <div className="pt-5 pl-8 sm:pl-12 space-y-5 animate-fadeIn">
+                    <div className="pt-5 pl-4 sm:pl-12 space-y-5 animate-fadeIn">
                       <p className="font-sans text-base sm:text-lg text-[#E0B268] font-medium">
                         {tier.headline}
                       </p>
@@ -263,7 +263,7 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                             e.stopPropagation();
                             onOpenBooking(tier.id);
                           }}
-                          className="pb-btn pb-btn-primary"
+                          className="pb-btn pb-btn-primary w-full sm:w-auto"
                         >
                           <span>REQUEST THIS SERVICE</span>
                           <ArrowRight className="w-3.5 h-3.5" />

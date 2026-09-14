@@ -21,11 +21,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
         <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5">
           <div className="inline-flex items-center gap-3 text-champagne-gold text-[10px] tracking-[0.3em] uppercase font-mono font-medium text-contrast-eyebrow">
             <span className="w-8 h-[1px] bg-champagne-gold" />
-            <span>ABOUT PB PRIVATE TRANSPORTATION</span>
+            <span>ABOUT FAITH BASED GLOBAL HOLDINGS</span>
             <span className="w-8 h-[1px] bg-champagne-gold" />
           </div>
 
-          <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-[#F4EDE4] tracking-tight leading-[0.98] text-contrast-title">
+          <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F4EDE4] tracking-tight leading-[0.98] text-contrast-title">
             MORE THAN DRIVERS.<br />
             <span className="text-[#E0B268]">CURATORS OF ARRIVAL.</span>
           </h1>
@@ -34,17 +34,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             We are a high-touch private transportation agency founded on human warmth, uncompromising discretion, and the quiet precision that turns every journey into a sanctuary.
           </p>
 
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xs sm:max-w-none mx-auto">
             <button
               onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary"
+              className="pb-btn pb-btn-primary w-full sm:w-auto"
             >
               <span>EXPERIENCE THE PROTOCOL</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => onNavigate('fleet')}
-              className="pb-btn pb-btn-outline"
+              className="pb-btn pb-btn-outline w-full sm:w-auto"
             >
               <span>EXPLORE THE FLEET</span>
             </button>
@@ -244,7 +244,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
               ))}
             </div>
 
-            <div className="pt-2 flex items-center gap-6">
+            <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <a
                 href="tel:9295650100"
                 className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-champagne-gold hover:underline uppercase"
@@ -253,11 +253,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
                 <span>DIRECT LINE: (929) 565-0100</span>
               </a>
               <a
-                href="mailto:hello@pbtransport.com"
+                href="mailto:concierge@fbglobalholdings.com"
                 className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-warm-ivory/80 hover:text-champagne-gold uppercase"
               >
                 <Mail className="w-3.5 h-3.5" />
-                <span>DISPATCH@PBTRANSPORT.COM</span>
+                <span>CONCIERGE@FBGLOBALHOLDINGS.COM</span>
               </a>
             </div>
           </div>
@@ -279,10 +279,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             </p>
           </div>
 
-          <div className="relative z-10 flex-shrink-0">
+          <div className="relative z-10 flex-shrink-0 w-full md:w-auto">
             <button
               onClick={onOpenBooking}
-              className="px-8 py-4 bg-obsidian text-warm-ivory text-xs font-semibold tracking-[0.2em] uppercase hover:bg-champagne-gold hover:text-obsidian transition-colors shadow-xl rounded"
+              className="w-full md:w-auto px-8 py-4 bg-obsidian text-warm-ivory text-xs font-semibold tracking-[0.2em] uppercase hover:bg-champagne-gold hover:text-obsidian transition-colors shadow-xl rounded"
             >
               REQUEST A RIDE &rarr;
             </button>

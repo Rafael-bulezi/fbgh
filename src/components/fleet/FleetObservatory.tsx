@@ -10,7 +10,7 @@ import React, {
   useMemo,
 } from 'react';
 import { FLEET_DATA, type Vehicle } from '../../data/fleetData';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 
 interface FleetObservatoryProps {
   onBookVehicle: (vehicle: Vehicle) => void;
@@ -35,6 +35,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
   const [galleryMode, setGalleryMode]           = useState<'exterior'|'interior'>('exterior');
   const [photoIndex, setPhotoIndex]             = useState(0);
   const [detailsOpen, setDetailsOpen]           = useState(false);
+  const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false);
 
   // Animation state
   const posRef      = useRef(0);
@@ -340,19 +341,20 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.6) 100%)'}} />
 
       {/* ── HEADER ─────────────────────────────────────────────────────────── */}
-      <header className="relative z-20 flex items-start justify-between px-6 sm:px-12 pt-6 pb-3">
-        <div className="flex flex-col gap-1">
+      <header className="relative z-20 flex flex-col md:flex-row md:items-start justify-between px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 sm:pb-3 gap-3">
+        <div className="flex flex-col gap-0.5">
           <div className="flex items-baseline gap-2.5">
-            <span className="font-display font-extrabold text-[16px] tracking-[0.22em] uppercase text-[#F4EDE4]">FBGH</span>
-            <span className="font-mono text-[7.5px] tracking-[0.24em] uppercase text-[#71767D]">Luxury Transportation</span>
+            <span className="font-display font-extrabold text-[15px] sm:text-[16px] tracking-[0.22em] uppercase text-[#F4EDE4]">FBGH</span>
+            <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.24em] uppercase text-[#71767D]">Luxury Transportation</span>
           </div>
-          <span className="font-mono text-[7px] tracking-[0.24em] uppercase text-[#5c6167]">Fleet Exhibition — Collection Gallery</span>
+          <span className="font-mono text-[6.5px] sm:text-[7px] tracking-[0.24em] uppercase text-[#5c6167] hidden sm:block">Fleet Exhibition — Collection Gallery</span>
         </div>
 
-        <nav className="flex items-center gap-6 sm:gap-8 pt-1">
+        {/* Category Navigation: Smooth horizontal pill scroll on mobile */}
+        <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar py-1">
           {cats.map(c => (
             <button key={c.id} onClick={() => setSelectedCategory(c.id)}
-              className={`relative font-display font-semibold text-[11px] tracking-[0.22em] uppercase pb-0.5 transition-colors cursor-pointer ${
+              className={`relative font-display font-semibold text-[10.5px] sm:text-[11px] tracking-[0.2em] uppercase pb-0.5 transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${
                 selectedCategory===c.id ? 'text-[#cfa869]' : 'text-[#8b9096] hover:text-[#f3f4f6]'}`}>
               {c.label}
               {selectedCategory===c.id && <span className="absolute left-0 right-0 bottom-0 h-px bg-[#cfa869]" />}
@@ -362,15 +364,15 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
       </header>
 
       {/* ── EXPANDED MAIN STAGE (TALL MAJESTIC APERTURE) ────────────────────── */}
-      <main className="relative z-20 w-full flex-1" style={{minHeight:'clamp(500px, 66vh, 740px)'}}>
+      <main className="relative z-20 w-full flex-1" style={{minHeight:'clamp(440px, 64vh, 740px)'}}>
 
         {/* Class tag */}
-        <div className="absolute top-2 right-6 sm:right-12 z-30 font-mono text-[8px] tracking-[0.26em] uppercase text-[#cfa869] opacity-80 pointer-events-none">
+        <div className="absolute top-2 right-4 sm:right-12 z-30 font-mono text-[7.5px] sm:text-[8px] tracking-[0.26em] uppercase text-[#cfa869] opacity-80 pointer-events-none hidden xs:block">
           {vehicle.categoryLabel} / Executive Collection
         </div>
 
-        {/* ── FLOATING GLASS INFO CARD ──────────────────────────────────── */}
-        <aside className="info-card absolute left-4 sm:left-10 z-40 flex flex-col gap-3.5"
+        {/* ── FLOATING GLASS INFO CARD (DESKTOP ONLY) ─────────────────── */}
+        <aside className="info-card hidden md:flex absolute left-4 sm:left-10 z-40 flex-col gap-3.5"
           style={{
             top:'50%',transform:'translateY(-50%)',
             width:'clamp(185px,17vw,225px)',
@@ -465,8 +467,8 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
           {/* Majestic Central Aperture (TALL, BOLD, DOMINANT) */}
           <div ref={apertureRef} className="ap-el absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[6]"
             style={{
-              width:'clamp(320px, 36vw, 540px)',
-              height:'96%',
+              width:'clamp(280px, 36vw, 540px)',
+              height:'95%',
               borderRadius:'20px',
               background:'#0d0b09',
               boxShadow:'0 45px 100px -25px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
@@ -476,27 +478,109 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
 
             {/* Gradient Scrim for Legibility */}
             <div className="absolute inset-0 pointer-events-none z-[2]"
-              style={{background:'linear-gradient(to top,rgba(0,0,0,0.78) 0%,rgba(0,0,0,0.15) 36%,transparent 55%)'}} />
+              style={{background:'linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.2) 36%,transparent 55%)'}} />
 
-            {/* In-Aperture Bottom Caption */}
-            <div className="absolute left-5 bottom-4 z-[3] flex flex-col items-start gap-1.5 pointer-events-none">
-              <span className="font-display font-extrabold text-[15px] sm:text-[16px] tracking-tight text-white"
-                style={{textShadow:'0 2px 16px rgba(0,0,0,0.8)'}}>
-                {vehicle.name}
-              </span>
-              <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-white/95 px-2.5 py-1"
-                style={{borderRadius:'4px',background:'rgba(10,9,8,0.65)',border:'1px solid rgba(255,255,255,0.16)',backdropFilter:'blur(8px)'}}>
-                {galleryMode==='exterior'?'Exterior':'Interior'} · {pad2(safePhoto+1)}
-              </span>
+            {/* In-Aperture Bottom Caption with mobile specs trigger */}
+            <div className="absolute left-4 sm:left-5 bottom-3 sm:bottom-4 right-4 sm:right-5 z-[3] flex items-end justify-between pointer-events-none">
+              <div className="flex flex-col items-start gap-1">
+                <span className="font-display font-black text-[15px] sm:text-[17px] tracking-tight text-white drop-shadow-md">
+                  {vehicle.name}
+                </span>
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.2em] uppercase text-white/95 px-2 py-0.5 rounded bg-black/60 border border-white/15 backdrop-blur-md">
+                    {galleryMode==='exterior'?'Exterior':'Interior'} · {pad2(safePhoto+1)}
+                  </span>
+                  <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.16em] uppercase text-[#E0B268] px-2 py-0.5 rounded bg-black/60 border border-[#E0B268]/30 backdrop-blur-md">
+                    {vehicle.passengers} Pax
+                  </span>
+                </div>
+              </div>
+
+              {/* Mobile Specs Button */}
+              <button
+                type="button"
+                onClick={() => setMobileDetailsOpen(true)}
+                className="md:hidden pointer-events-auto px-2.5 py-1 rounded-full bg-[#E0B268] text-obsidian font-display font-bold text-[8.5px] tracking-[0.18em] uppercase flex items-center gap-1 shadow-lg cursor-pointer hover:brightness-110 active:scale-95 transition-all"
+              >
+                <span>Specs</span>
+                <ArrowUpRight className="w-2.5 h-2.5" />
+              </button>
             </div>
           </div>
         </div>
       </main>
 
+      {/* ── MOBILE DETAILS MODAL DRAWER ───────────────────────────────────── */}
+      {mobileDetailsOpen && (
+        <div className="md:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end p-4 animate-in fade-in duration-200">
+          <div className="bg-[#12100E] border border-white/15 rounded-2xl p-5 space-y-4 max-h-[85vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div>
+                <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#cfa869] block">
+                  {vehicle.categoryLabel}
+                </span>
+                <h3 className="font-display font-bold text-lg text-white">
+                  {vehicle.name}
+                </h3>
+              </div>
+              <button
+                onClick={() => setMobileDetailsOpen(false)}
+                className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:text-white cursor-pointer"
+                aria-label="Close details"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5 py-2 border-b border-white/10">
+              {[
+                { v: vehicle.passengers, l: 'Passengers' },
+                { v: vehicle.luggage, l: 'Luggage' },
+                { v: vehicle.transmission ?? 'Automatic', l: 'Transmission', sm: true },
+                { v: vehicle.drivetrain ?? 'AWD', l: 'Drivetrain', sm: true },
+              ].map(({ v: val, l, sm }) => (
+                <div key={l} className="bg-white/[0.03] p-2.5 rounded border border-white/5">
+                  <b className={`block font-display font-bold text-[#F4EDE4] ${sm ? 'text-[10px] uppercase truncate' : 'text-[15px]'}`}>{val}</b>
+                  <span className="font-mono text-[7px] tracking-[0.16em] uppercase text-[#71767D]">{l}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <span className="font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#cfa869] block">Ideal Uses & Amenities</span>
+              <div className="flex flex-wrap gap-1.5">
+                {vehicle.idealFor.map(item => (
+                  <span key={item} className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[9.5px] text-white/80 font-sans">
+                    {item}
+                  </span>
+                ))}
+              </div>
+              <div className="pt-2 text-[9.5px] font-mono text-white/60 space-y-1">
+                <div>AUDIO: <b className="text-white/90">{vehicle.specs.soundSystem}</b></div>
+                {vehicle.specs.wifi && <div>WI-FI: <b className="text-[#cfa869]">ONBOARD</b></div>}
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={() => {
+                  setMobileDetailsOpen(false);
+                  onBookVehicle(vehicle);
+                }}
+                className="flex items-center justify-center gap-1.5 w-full py-3 rounded font-display font-bold text-[10px] tracking-[0.24em] uppercase transition-all shadow-lg cursor-pointer"
+                style={{ background: 'linear-gradient(140deg,#dcb877,#c09a4f)', color: '#171310' }}
+              >
+                Request Vehicle <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── THUMBNAILS (FLOATING CAPSULE STRIP WITH GENEROUS SPACING) ───────── */}
-      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2 mt-4 sm:mt-6 px-4"
+      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2 mt-3 sm:mt-6 px-4"
         style={{height:'44px'}}>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/[0.08]">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/[0.08] overflow-x-auto no-scrollbar max-w-full">
           {gallery.map((src,i) => (
             <button key={i} onClick={() => setPhotoIndex(i)}
               aria-label={`${galleryMode} photo ${i+1}`}
@@ -515,19 +599,11 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
         </div>
       </div>
 
-      {/* ── FOOTER CONTROLS (SHIFTED DOWN TO BOTTOM EDGE WITH GENEROUS AIR) ─── */}
-      <footer className="ctrl-bar relative z-20 grid items-center gap-4 px-6 sm:px-12 pt-4 pb-8 sm:pb-10 mt-1"
-        style={{gridTemplateColumns:'1fr auto 1fr'}}>
-
-        {/* Fleet Counter */}
-        <span className="font-mono text-[10px] tracking-[0.2em] text-[#8b9096]">
-          <b className="text-[#cfa869] font-medium">{pad2(safeIdx+1)}</b>
-          {' '}
-          <span className="text-[#5c6167]">/ {pad2(filteredVehicles.length)}</span>
-        </span>
-
-        {/* Center: Prev Arrow · Exterior/Interior Pill Toggle · Next Arrow */}
-        <div className="flex items-center gap-3.5">
+      {/* ── FOOTER CONTROLS (RESPONSIVE 2-TIER ON MOBILE, 3-COL ON DESKTOP) ─── */}
+      <footer className="ctrl-bar relative z-20 flex flex-col md:grid md:grid-cols-3 items-center gap-3 md:gap-4 px-4 sm:px-8 lg:px-12 pt-3 sm:pt-4 pb-6 sm:pb-8 mt-1">
+        
+        {/* Mobile: Top Row / Desktop: Col 2 (Prev · Toggle · Next) */}
+        <div className="flex items-center justify-center gap-3 md:col-start-2">
           <button onClick={() => stepVehicle(-1)} aria-label="Previous"
             className="w-8 h-8 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869] hover:border-[#cfa869] cursor-pointer bg-white/[0.02]"
             style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❮</button>
@@ -536,15 +612,15 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
             style={{border:'1px solid rgba(255,255,255,0.12)',background:'rgba(255,255,255,0.04)'}}>
             <div className="absolute top-[3px] h-[calc(100%-6px)] transition-all duration-400 rounded-full"
               style={{
-                left:'3px',width:'80px',
-                transform:galleryMode==='interior'?'translateX(80px)':'translateX(0)',
+                left:'3px',width:'76px',
+                transform:galleryMode==='interior'?'translateX(76px)':'translateX(0)',
                 background:'linear-gradient(140deg,#e0bd80,#b98f45)',
                 boxShadow:'0 4px 16px rgba(207,168,105,0.4)',
               }} />
             {(['exterior','interior'] as const).map(m => (
               <button key={m} onClick={() => setGalleryMode(m)}
-                className="relative z-10 font-display font-bold text-[10.5px] tracking-[0.18em] uppercase transition-colors cursor-pointer text-center"
-                style={{padding:'6px 0',width:'80px',borderRadius:'30px',
+                className="relative z-10 font-display font-bold text-[10px] sm:text-[10.5px] tracking-[0.18em] uppercase transition-colors cursor-pointer text-center"
+                style={{padding:'5px 0',width:'76px',borderRadius:'30px',
                   color:galleryMode===m?'#171310':'#8b9096',whiteSpace:'nowrap'}}>
                 {m==='exterior'?'Exterior':'Interior'}
               </button>
@@ -556,22 +632,32 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
             style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❯</button>
         </div>
 
-        {/* Capacity Passenger Filter */}
-        <div className="flex items-center justify-end gap-1.5">
-          <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
-          {caps.map(c => (
-            <button key={c.id} onClick={() => setPassengerFilter(c.id)}
-              className="font-mono text-[9px] tracking-widest transition-all cursor-pointer"
-              style={{
-                padding:'4px 11px',borderRadius:'4px',
-                border:passengerFilter===c.id?'1px solid #cfa869':'1px solid rgba(255,255,255,0.1)',
-                background:passengerFilter===c.id?'rgba(207,168,105,0.18)':'rgba(255,255,255,0.04)',
-                color:passengerFilter===c.id?'#cfa869':'#8b9096',
-                boxShadow:passengerFilter===c.id?'0 0 12px rgba(207,168,105,0.4)':undefined,
-              }}>
-              {c.label}
-            </button>
-          ))}
+        {/* Mobile: Bottom Row / Desktop: Col 1 Counter & Col 3 Pax */}
+        <div className="flex items-center justify-between w-full md:contents">
+          {/* Fleet Counter (Col 1 on desktop) */}
+          <span className="font-mono text-[9.5px] sm:text-[10px] tracking-[0.2em] text-[#8b9096] md:col-start-1 md:justify-self-start">
+            <b className="text-[#cfa869] font-medium">{pad2(safeIdx+1)}</b>
+            {' '}
+            <span className="text-[#5c6167]">/ {pad2(filteredVehicles.length)}</span>
+          </span>
+
+          {/* Capacity Passenger Filter (Col 3 on desktop) */}
+          <div className="flex items-center justify-end gap-1 sm:gap-1.5 md:col-start-3 md:justify-self-end">
+            <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
+            {caps.map(c => (
+              <button key={c.id} onClick={() => setPassengerFilter(c.id)}
+                className="font-mono text-[8.5px] sm:text-[9px] tracking-widest transition-all cursor-pointer"
+                style={{
+                  padding:'3px 9px',borderRadius:'4px',
+                  border:passengerFilter===c.id?'1px solid #cfa869':'1px solid rgba(255,255,255,0.1)',
+                  background:passengerFilter===c.id?'rgba(207,168,105,0.18)':'rgba(255,255,255,0.04)',
+                  color:passengerFilter===c.id?'#cfa869':'#8b9096',
+                  boxShadow:passengerFilter===c.id?'0 0 12px rgba(207,168,105,0.4)':undefined,
+                }}>
+                {c.label}
+              </button>
+            ))}
+          </div>
         </div>
       </footer>
     </section>

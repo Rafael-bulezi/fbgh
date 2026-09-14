@@ -32,7 +32,7 @@ export const VehicleDossier: React.FC<VehicleDossierProps> = ({
             <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-champagne-gold font-medium">
               VEHICLE DOSSIER // 100VH LOOKBOOK
             </span>
-            <span className="text-white/20">?</span>
+            <span className="text-white/20">·</span>
             <span className="text-xs font-mono tracking-wider text-muted-gray uppercase">
               {vehicle.categoryLabel}
             </span>
@@ -93,7 +93,7 @@ export const VehicleDossier: React.FC<VehicleDossierProps> = ({
             </div>
 
             {/* Micro Highlights Row */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
               <div className="p-3 bg-soft-black border border-white/5 flex items-center gap-3">
                 <Users className="w-4 h-4 text-champagne-gold flex-shrink-0" />
                 <div className="flex flex-col">

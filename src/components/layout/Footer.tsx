@@ -96,7 +96,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             className="group relative inline-block cursor-pointer px-4 py-2"
             title="Faith Based Global Holdings"
           >
-            <h2 className="footer-text-shimmer font-display text-5xl sm:text-7xl md:text-8xl lg:text-[7.25rem] tracking-tight uppercase font-extrabold leading-[0.92] text-[#F4EDE4]">
+            <h2 className="footer-text-shimmer font-display text-4xl sm:text-6xl md:text-8xl lg:text-[7.25rem] tracking-tight uppercase font-extrabold leading-[0.92] text-[#F4EDE4]">
               FAITH BASED<br />
               GLOBAL HOLDINGS
             </h2>
@@ -262,7 +262,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
           </button>
 
           {/* Policies */}
-          <div className="order-3 flex items-center gap-5 font-mono">
+          <div className="order-3 flex flex-wrap items-center justify-center gap-4 sm:gap-5 font-mono">
             <span className="hover:text-white transition-colors cursor-pointer">PRIVACY</span>
             <span>·</span>
             <span className="hover:text-white transition-colors cursor-pointer">TERMS</span>

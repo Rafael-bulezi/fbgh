@@ -113,7 +113,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
 
         {/* SCENE A: Text + Buttons interactive overlay with contrast protection */}
         <div 
-          className="absolute inset-0 flex flex-col justify-end p-8 sm:p-14 lg:p-20 z-30 max-w-4xl pointer-events-none"
+          className="absolute inset-0 flex flex-col justify-end p-5 sm:p-14 lg:p-20 z-30 max-w-4xl pointer-events-none pb-12 sm:pb-20"
           style={{ 
             transform: `translateY(${yA}px)`,
             opacity: map(p, 0.15, 0.45, 1, 0),
@@ -121,25 +121,25 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           }}
         >
           <div className="relative z-10 max-w-2xl">
-            <div className="flex items-center gap-3 text-champagne-gold text-[10px] tracking-[0.3em] uppercase font-medium mb-3 text-contrast-eyebrow">
-              <span className="w-8 h-[1px] bg-champagne-gold" />
+            <div className="flex items-center gap-2.5 sm:gap-3 text-champagne-gold text-[9.5px] sm:text-[10px] tracking-[0.3em] uppercase font-medium mb-2.5 sm:mb-3 text-contrast-eyebrow">
+              <span className="w-6 sm:w-8 h-[1px] bg-champagne-gold" />
               <span>PRIVATE TRANSPORTATION • ELEVATED</span>
             </div>
 
-            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.95] tracking-tight mb-4 text-contrast-title">
+            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight mb-3 sm:mb-4 text-contrast-title">
               ARRIVE WITH<br />
               <span className="text-[#E0B268]">INTENTION.</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-8 text-contrast-body">
+            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-5 sm:mb-8 text-contrast-body">
               A bespoke private transportation fleet crafted for discerning executives, international travelers, and defining arrivals.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pointer-events-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pointer-events-auto w-full sm:w-auto">
               <button
                 type="button"
                 onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary"
+                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
               >
                 <span>REQUEST A RIDE</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
               <button
                 type="button"
                 onClick={onExploreFleet}
-                className="pb-btn pb-btn-outline"
+                className="pb-btn pb-btn-outline justify-center w-full sm:w-auto"
               >
                 <span>EXPLORE THE FLEET</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -182,7 +182,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
 
         {/* SCENE B: Text + Button interactive overlay with contrast protection */}
         <div 
-          className="absolute inset-0 flex flex-col justify-end items-end text-right p-8 sm:p-14 lg:p-20 z-30 pointer-events-none"
+          className="absolute inset-0 flex flex-col justify-end items-end text-right p-5 sm:p-14 lg:p-20 z-30 pointer-events-none pb-12 sm:pb-20"
           style={{ 
             transform: `translateY(${yB}px)`,
             opacity: map(p, 0.45, 0.85, 0, 1),
@@ -190,25 +190,25 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           }}
         >
           <div className="relative z-10 max-w-2xl text-right flex flex-col items-end">
-            <div className="flex items-center flex-row-reverse gap-3 text-champagne-gold text-[10px] tracking-[0.3em] uppercase font-medium mb-3 text-contrast-eyebrow">
-              <span className="w-8 h-[1px] bg-champagne-gold" />
+            <div className="flex items-center flex-row-reverse gap-2.5 sm:gap-3 text-champagne-gold text-[9.5px] sm:text-[10px] tracking-[0.3em] uppercase font-medium mb-2.5 sm:mb-3 text-contrast-eyebrow">
+              <span className="w-6 sm:w-8 h-[1px] bg-champagne-gold" />
               <span>CHAPTER 02 • THE STANDARD</span>
             </div>
 
-            <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.95] tracking-tight mb-4 text-contrast-title">
+            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight mb-3 sm:mb-4 text-contrast-title">
               OBSESSIVE<br />
               <span className="text-[#E0B268]">PRECISION.</span>
             </h1>
 
-            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-8 text-contrast-body">
+            <p className="text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal mb-5 sm:mb-8 text-contrast-body">
               Where quiet luxury meets relentless reliability. Every stitch, every route, and every moment is calibrated to perfection.
             </p>
 
-            <div className="pointer-events-auto">
+            <div className="pointer-events-auto w-full sm:w-auto flex justify-end">
               <button
                 type="button"
                 onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary"
+                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
               >
                 <span>RESERVE WITH INTENTION</span>
                 <ArrowRight className="w-3.5 h-3.5" />

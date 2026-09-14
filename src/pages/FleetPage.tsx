@@ -73,7 +73,7 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
     <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian pt-16">
       
       {/* 1. CINEMATIC FLEET INTRODUCTION */}
-      <section className="relative pt-20 pb-16 px-6 sm:px-10 lg:px-16 overflow-hidden border-b border-white/5">
+      <section className="relative pt-16 sm:pt-20 pb-10 sm:pb-16 px-4 sm:px-10 lg:px-16 overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 bg-gradient-to-br from-obsidian via-soft-black to-obsidian pointer-events-none" />
         
         <div className="absolute right-0 top-0 bottom-0 w-full lg:w-3/5 opacity-40 pointer-events-none overflow-hidden">
@@ -86,32 +86,32 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
           <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent" />
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10 space-y-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-4 h-4 text-champagne-gold" />
-              <span className="text-[10px] font-mono tracking-[0.4em] text-champagne-gold uppercase font-medium">
+        <div className="max-w-7xl mx-auto relative z-10 space-y-4 sm:space-y-6">
+          <div className="space-y-2.5 sm:space-y-3">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-champagne-gold" />
+              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.4em] text-champagne-gold uppercase font-medium">
                 THE PREMIER FLEET
               </span>
             </div>
 
-            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[80px] text-[#F4EDE4] tracking-tight leading-[0.95]">
+            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] tracking-tight leading-[0.98]">
               MORE THAN<br />
               <span className="text-[#E0B268]">30 VEHICLES.</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-warm-ivory/70 max-w-xl leading-relaxed font-light">
-              An exclusive collection of luxury sedans, SUVs, and executive vansâ€”each meticulously maintained and ready for your journey.
+            <p className="text-xs sm:text-base text-warm-ivory/70 max-w-xl leading-relaxed font-light">
+              An exclusive collection of luxury sedans, SUVs, and executive vans—each meticulously maintained and ready for your journey.
             </p>
           </div>
 
-          <div className="flex items-center gap-8 pt-4 font-mono text-[10px] tracking-[0.25em] text-muted-gray uppercase">
-            <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-8 pt-2 sm:pt-4 font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-muted-gray uppercase">
+            <div className="flex items-center gap-2 sm:gap-2.5">
               <div className="w-1.5 h-1.5 rounded-full bg-champagne-gold shadow-[0_0_12px_rgba(201,164,92,0.8)]" />
               <span>30+ VEHICLES</span>
             </div>
-            <span className="text-white/20">Â·</span>
-            <div className="flex items-center gap-2.5">
+            <span className="text-white/20">·</span>
+            <div className="flex items-center gap-2 sm:gap-2.5">
               <div className="w-1.5 h-1.5 rounded-full bg-champagne-gold shadow-[0_0_12px_rgba(201,164,92,0.8)]" />
               <span>CHAUFFEURED & SELF-DRIVE</span>
             </div>

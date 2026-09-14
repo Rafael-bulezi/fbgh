@@ -94,9 +94,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Determine if the current page at rest has a dark background hero
-  const isDarkPage = ['experience', 'destinations', 'fleet', 'about', 'services'].includes(currentPage);
-  const isDarkTheme = !isSolid && isDarkPage;
+  // All pages feature dark heroes at the top; isDarkTheme when at rest (not scrolled)
+  const isDarkTheme = !isSolid;
 
   // Navigation text colors — dynamic contrast based on page background & scroll state
   const linkActiveClass = isDarkTheme
@@ -118,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           className={`relative max-w-5xl mx-auto flex items-center justify-between transition-all duration-500 rounded-lg overflow-visible ${
             isSolid
               ? 'h-16 px-6 sm:px-8 luxury-glass border border-black/8 shadow-[0_16px_40px_rgba(0,0,0,0.12)]'
-              : 'h-24 px-4 bg-transparent'
+              : 'h-20 sm:h-24 px-4 bg-transparent'
           }`}
         >
 
@@ -190,7 +189,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right: CTA + Hide + Mobile Burger */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-4">
             <RequestRideTooltip>
               <button
                 onClick={onOpenBooking}
@@ -201,13 +200,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </RequestRideTooltip>
 
-            {/* Hide Navbar Icon Button */}
+            {/* Hide Navbar Icon Button — hidden on small phones to save space */}
             <button
               type="button"
               onClick={() => setIsManuallyHidden(true)}
               title="Hide Navigation Bar"
               aria-label="Hide Navigation Bar"
-              className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 group flex-shrink-0 ${
+              className={`hidden sm:flex w-8 h-8 rounded-full border items-center justify-center transition-all duration-300 group flex-shrink-0 cursor-pointer ${
                 isDarkTheme
                   ? 'border-white/20 text-warm-ivory/80 hover:text-champagne-gold hover:bg-white/10 hover:border-champagne-gold/60'
                   : 'border-black/15 text-ink-black/70 hover:text-champagne-gold hover:bg-black/5 hover:border-champagne-gold/60'
@@ -222,27 +221,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               />
             </button>
 
-            {/* Mobile Burger */}
+            {/* Prominent High-Contrast Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col justify-center items-end gap-1.5 w-8 h-8 p-1 focus:outline-none"
-              aria-label="Toggle navigation menu"
+              className={`md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border transition-all duration-300 focus:outline-none flex-shrink-0 cursor-pointer ${
+                mobileMenuOpen
+                  ? 'border-[#E0B268]/60 bg-white/10 text-warm-ivory'
+                  : isDarkTheme
+                  ? 'border-white/20 bg-black/40 backdrop-blur-md hover:border-champagne-gold/60 text-warm-ivory'
+                  : 'border-black/15 bg-black/5 hover:border-black/30 text-ink-black'
+              }`}
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
             >
-              <span
-                className={`h-[1.5px] transition-all duration-300 ${
-                  mobileMenuOpen || isDarkTheme ? 'bg-warm-ivory' : 'bg-ink-black'
-                } ${mobileMenuOpen ? 'w-6 translate-y-2 rotate-45' : 'w-6'}`}
-              />
-              <span
-                className={`h-[1.5px] transition-all duration-300 ${
-                  mobileMenuOpen || isDarkTheme ? 'bg-warm-ivory' : 'bg-ink-black'
-                } ${mobileMenuOpen ? 'opacity-0' : 'w-4'}`}
-              />
-              <span
-                className={`h-[1.5px] transition-all duration-300 ${
-                  mobileMenuOpen || isDarkTheme ? 'bg-warm-ivory' : 'bg-ink-black'
-                } ${mobileMenuOpen ? 'w-6 -translate-y-2 -rotate-45' : 'w-5'}`}
-              />
+              <div className="w-5 flex flex-col items-center justify-center gap-1">
+                <span
+                  className={`h-[2px] rounded-full transition-all duration-300 transform ${
+                    mobileMenuOpen || isDarkTheme ? 'bg-[#E0B268]' : 'bg-ink-black'
+                  } ${mobileMenuOpen ? 'w-5 translate-y-[6px] rotate-45' : 'w-5'}`}
+                />
+                <span
+                  className={`h-[2px] rounded-full transition-all duration-300 ${
+                    mobileMenuOpen || isDarkTheme ? 'bg-warm-ivory' : 'bg-ink-black'
+                  } ${mobileMenuOpen ? 'opacity-0 scale-0' : 'w-3.5'}`}
+                />
+                <span
+                  className={`h-[2px] rounded-full transition-all duration-300 transform ${
+                    mobileMenuOpen || isDarkTheme ? 'bg-[#E0B268]' : 'bg-ink-black'
+                  } ${mobileMenuOpen ? 'w-5 -translate-y-[6px] -rotate-45' : 'w-4.5'}`}
+                />
+              </div>
             </button>
           </div>
 
@@ -368,52 +376,64 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* MOBILE FULL-SCREEN MENU */}
       <div
-        className={`fixed inset-0 z-40 bg-obsidian/98 backdrop-blur-3xl transition-all duration-600 flex flex-col justify-between p-8 pt-28 md:hidden ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 z-40 bg-[#0A0908]/98 backdrop-blur-3xl transition-all duration-500 flex flex-col justify-between p-6 sm:p-8 pt-24 pb-8 md:hidden ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'
         }`}
       >
-        <div className="flex flex-col space-y-6">
+        <div className="flex flex-col space-y-5 max-w-md mx-auto w-full">
           <div className="flex items-center justify-between text-[9px] font-mono tracking-[0.35em] uppercase text-champagne-gold border-b border-white/10 pb-3">
             <span>FBGH DIRECTORY</span>
-            <span>24/7 DISPATCH</span>
+            <span>24/7 CONCIERGE</span>
           </div>
 
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-2 pt-1">
             {[
               { id: 'home', num: '01', label: 'Home' },
               { id: 'fleet', num: '02', label: 'Fleet' },
               { id: 'services', num: '03', label: 'Services' },
               { id: 'experience', num: '04', label: 'Experience' },
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className="flex items-baseline gap-4 text-left group"
-              >
-                <span className="font-mono text-xs text-champagne-gold tracking-widest">
-                  {item.num}
-                </span>
-                <span className="font-serif text-3xl sm:text-4xl text-warm-ivory group-hover:text-champagne-gold transition-colors tracking-wide">
-                  {item.label}
-                </span>
-              </button>
-            ))}
+              { id: 'destinations', num: '05', label: 'Destinations' },
+              { id: 'about', num: '06', label: 'About' },
+            ].map((item) => {
+              const isActive = currentPage === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className="flex items-baseline gap-4 text-left group py-1.5 transition-all cursor-pointer"
+                >
+                  <span className={`font-mono text-xs tracking-widest transition-colors ${
+                    isActive ? 'text-[#E0B268] font-bold' : 'text-champagne-gold/70 group-hover:text-champagne-gold'
+                  }`}>
+                    {item.num}
+                  </span>
+                  <span className={`font-display font-black text-2xl sm:text-3xl tracking-tight transition-colors ${
+                    isActive ? 'text-[#E0B268]' : 'text-warm-ivory group-hover:text-[#E0B268]'
+                  }`}>
+                    {item.label}
+                  </span>
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E0B268] ml-auto self-center" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="space-y-6 pt-6 border-t border-white/10">
+        <div className="space-y-4 pt-5 border-t border-white/10 max-w-md mx-auto w-full">
           <button
             onClick={() => {
               setMobileMenuOpen(false);
               onOpenBooking();
             }}
-            className="w-full pb-btn pb-btn-primary justify-center py-4"
+            className="w-full pb-btn pb-btn-primary justify-center py-3.5"
           >
             <span>REQUEST A RIDE</span>
             <ArrowUpRight className="w-4 h-4" />
           </button>
 
-          <div className="flex items-center justify-between text-[9px] font-mono tracking-widest text-muted-gray uppercase">
+          <div className="flex items-center justify-between text-[8.5px] font-mono tracking-widest text-muted-gray uppercase">
             <span>NEW YORK · PHILADELPHIA</span>
             <span className="text-champagne-gold">CONCIERGE 24/7</span>
           </div>

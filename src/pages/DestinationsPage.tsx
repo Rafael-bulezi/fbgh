@@ -17,11 +17,11 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
         />
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-black/40 to-black/80" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4">
-          <span className="text-[10px] font-sans tracking-[0.3em] uppercase text-champagne-gold font-medium">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-3.5 sm:space-y-4">
+          <span className="text-[9.5px] sm:text-[10px] font-sans tracking-[0.3em] uppercase text-champagne-gold font-medium">
             REGIONAL & GLOBAL COVERAGE
           </span>
-          <h1 className="font-display font-black text-4xl sm:text-6xl text-[#F4EDE4] tracking-tight leading-[0.98]">
+          <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl text-[#F4EDE4] tracking-tight leading-[0.98]">
             DESTINATIONS &<br />
             <span className="text-[#E0B268]">TRAVEL CORRIDORS.</span>
           </h1>
@@ -31,11 +31,11 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-20 space-y-20">
+      <section className="max-w-7xl mx-auto px-5 sm:px-12 lg:px-20 py-12 sm:py-20 space-y-12 sm:space-y-20">
         {DESTINATIONS_DATA.map((dest) => (
           <div
             key={dest.id}
-            className="bg-soft-black border border-white/10 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center group hover:border-champagne-gold/50 transition-all duration-500"
+            className="bg-soft-black border border-white/10 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center group hover:border-champagne-gold/50 transition-all duration-500"
           >
             <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden">
               <img
@@ -51,12 +51,12 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
               </div>
             </div>
 
-            <div className="lg:col-span-6 p-8 sm:p-10 space-y-6">
+            <div className="lg:col-span-6 p-5 sm:p-10 space-y-5 sm:space-y-6">
               <div className="space-y-1">
                 <span className="text-[10px] tracking-[0.25em] text-champagne-gold uppercase">
                   {dest.subtitle}
                 </span>
-                <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#F4EDE4] tracking-tight">
+                <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-[#F4EDE4] tracking-tight">
                   {dest.name}
                 </h2>
               </div>
@@ -71,10 +71,10 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
                 </span>
                 <div className="space-y-2">
                   {dest.popularRoutes.map((route, i) => (
-                    <div key={i} className="flex items-center justify-between text-xs p-2.5 bg-obsidian border border-white/5">
+                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between text-xs p-2.5 bg-obsidian border border-white/5 gap-1 sm:gap-0">
                       <div className="flex items-center gap-2 text-warm-ivory">
                         <span>{route.from}</span>
-                        <span className="text-champagne-gold">?</span>
+                        <span className="text-champagne-gold">→</span>
                         <span>{route.to}</span>
                       </div>
                       <div className="flex items-center gap-3 text-muted-gray font-mono text-[11px]">

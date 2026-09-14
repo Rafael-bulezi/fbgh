@@ -84,41 +84,41 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         <div className="absolute inset-0 bg-gradient-to-r from-[#08080A]/90 via-[#08080A]/55 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#08080A]/80 via-transparent to-[#08080A]/25" />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-8 sm:px-14 lg:px-20 pb-16 pt-36">
-          <div className="max-w-xl space-y-6">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-14 lg:px-20 pb-12 sm:pb-16 pt-28 sm:pt-36">
+          <div className="max-w-xl space-y-4 sm:space-y-6">
 
             {/* Eyebrow */}
-            <div className="inline-flex items-center gap-3">
+            <div className="inline-flex items-center gap-2.5 sm:gap-3">
               <span className="w-6 h-[1px] bg-[#C5A059]" />
-              <span className="text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-medium">
+              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-medium">
                 THE EXPERIENCE
               </span>
             </div>
 
             {/* Headline */}
-            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[82px] text-[#F4EDE4] leading-[0.95] tracking-tight">
+            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight">
               MORE FREEDOM.<br />
               <span className="text-[#E0B268]">MORE YOURS.</span>
             </h1>
 
             {/* Body */}
-            <p className="text-sm sm:text-base text-[#F4F1EA]/80 leading-relaxed max-w-md font-light">
+            <p className="text-xs sm:text-base text-[#F4F1EA]/80 leading-relaxed max-w-md font-light">
               From choosing your vehicle to getting back on the road, FBGH keeps the rental experience
               clear, comfortable and easy to navigate.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-2 w-full sm:w-auto">
               <button
                 onClick={() => onNavigate?.('fleet')}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 border border-[#C5A059] text-[#C5A059] text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-[#C5A059] hover:text-obsidian transition-all duration-300 group cursor-pointer"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 border border-[#C5A059] text-[#C5A059] text-[10.5px] sm:text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-[#C5A059] hover:text-obsidian transition-all duration-300 group cursor-pointer w-full sm:w-auto"
               >
                 <span>EXPLORE THE FLEET</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </button>
               <button
                 onClick={() => onOpenBooking()}
-                className="pb-btn pb-btn-primary"
+                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
               >
                 <span>RENT A CAR</span>
                 <ArrowRight className="w-3.5 h-3.5" />

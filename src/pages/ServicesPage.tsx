@@ -68,29 +68,29 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         <div className="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-obsidian/60 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 via-transparent to-obsidian/30" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pb-16 pt-36 w-full">
-          <div className="max-w-xl space-y-6">
-            <div className="inline-flex items-center gap-3">
-              <span className="w-6 h-[1px] bg-champagne-gold" />
-              <span className="text-[10px] font-mono tracking-[0.35em] text-champagne-gold uppercase font-medium text-contrast-eyebrow">
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-10 lg:px-16 pb-12 sm:pb-16 pt-28 sm:pt-36 w-full">
+          <div className="max-w-xl space-y-4 sm:space-y-6">
+            <div className="inline-flex items-center gap-2.5 sm:gap-3">
+              <span className="w-5 sm:w-6 h-[1px] bg-champagne-gold" />
+              <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.35em] text-champagne-gold uppercase font-medium text-contrast-eyebrow">
                 SERVICES
               </span>
             </div>
 
-            <h1 className="font-display font-black text-5xl sm:text-7xl lg:text-[80px] text-[#F4EDE4] leading-[0.95] tracking-tight text-contrast-title">
+            <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight text-contrast-title">
               YOUR JOURNEY,<br />
               <span className="text-[#E0B268]">OUR SERVICE.</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-warm-ivory/85 leading-relaxed text-contrast-body max-w-lg">
+            <p className="text-xs sm:text-sm md:text-base text-warm-ivory/85 leading-relaxed text-contrast-body max-w-lg">
               Airport transfers, executive travel, hourly chauffeur service, private events and journeys between cities.
               Whatever the occasion, FBGH delivers effortless mobility and flawless discretion.
             </p>
 
-            <div className="flex flex-wrap items-center gap-5 pt-2">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 pt-2 w-full sm:w-auto">
               <button
                 onClick={scrollToCategories}
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 border border-champagne-gold text-champagne-gold text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-champagne-gold hover:text-obsidian transition-all duration-300 group cursor-pointer"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-6 py-3 sm:py-3.5 border border-champagne-gold text-champagne-gold text-[10.5px] sm:text-[11px] tracking-[0.2em] uppercase font-sans font-medium hover:bg-champagne-gold hover:text-obsidian transition-all duration-300 group cursor-pointer w-full sm:w-auto"
               >
                 <span>EXPLORE SERVICES</span>
                 <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
@@ -98,7 +98,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
 
               <button
                 onClick={() => onOpenBooking()}
-                className="pb-btn pb-btn-primary"
+                className="pb-btn pb-btn-primary justify-center w-full sm:w-auto"
               >
                 <span>REQUEST A RIDE</span>
                 <ArrowRight className="w-3.5 h-3.5" />
