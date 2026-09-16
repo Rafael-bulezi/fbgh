@@ -1,750 +1,506 @@
-// FleetObservatory.tsx — Exhibition Rail Edition (Polished & Expanded)
-// Two independent navigation systems:
-//   1. Fleet rail  → which vehicle (drag / arrows / keyboard / side-frame click)
-//   2. Gallery     → which photo of that vehicle (Ext/Int toggle + bottom thumbnails)
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Users,
+  Briefcase,
+  Fuel,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Shield,
+  Phone,
+  Images
+} from 'lucide-react';
 import { FLEET_DATA, type Vehicle } from '../../data/fleetData';
-import { ArrowUpRight, X } from 'lucide-react';
 
-interface FleetObservatoryProps {
-  onBookVehicle: (vehicle: Vehicle) => void;
-  onOpenBooking: () => void;
+export interface FleetObservatoryProps {
+  onBookVehicle?: (vehicle: Vehicle) => void;
+  onOpenBooking?: () => void;
 }
 
-function getExteriorPhotos(v: Vehicle): string[] {
-  return v.exteriorGallery && v.exteriorGallery.length > 0 ? v.exteriorGallery : [v.image];
+export interface ShowcaseCar {
+  vehicleId: string;
+  brand: string;
+  model: string;
+  subModel: string;
+  mpg: string;
+  shortInfo: string;
+  description: string;
+  exteriorPhoto: string;
+  interiorPhoto: string;
+  thumbImg: string;
 }
-function getInteriorPhotos(v: Vehicle): string[] {
-  return v.interiorGallery && v.interiorGallery.length > 0 ? v.interiorGallery : [v.interiorImage];
-}
-function pad2(n: number) { return String(n).padStart(2, '0'); }
 
-export const FleetObservatory: React.FC<FleetObservatoryProps> = ({
-  onBookVehicle,
-  onOpenBooking: _onOpenBooking,
-}) => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [passengerFilter, setPassengerFilter]   = useState('all');
-  const [currentIndex, setCurrentIndex]         = useState(0);
-  const [galleryMode, setGalleryMode]           = useState<'exterior'|'interior'>('exterior');
-  const [photoIndex, setPhotoIndex]             = useState(0);
-  const [detailsOpen, setDetailsOpen]           = useState(false);
-  const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false);
-  const [scrollDirection, setScrollDirection]   = useState<'horizontal' | 'vertical' | null>(null);
+export const SHOWCASE_CARS: ShowcaseCar[] = [
+  {
+    vehicleId: 'cadillac-escalade-esv',
+    brand: 'CADILLAC',
+    model: 'ESCALADE',
+    subModel: 'ESV',
+    mpg: 'UP TO 21 MPG',
+    shortInfo: 'Full-size luxury SUV with extra luggage room',
+    description: 'Extended full-size luxury SUV with comfortable seating for up to 6 passengers and plenty of room for heavy luggage. Smooth ride, quiet cabin, and perfect for airport travel or long distances.',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    vehicleId: 'kia-carnival-vip',
+    brand: 'KIA',
+    model: 'CARNIVAL',
+    subModel: 'VIP LOUNGE',
+    mpg: 'UP TO 26 MPG',
+    shortInfo: 'Executive VIP lounge with reclining captain seats',
+    description: 'Executive travel with reclining second-row captain chairs, power footrests, and quiet privacy. Great for corporate roadshows or relaxing family trips for up to 6 passengers.',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    vehicleId: 'mercedes-maybach-gls600',
+    brand: 'MERCEDES-BENZ',
+    model: 'MAYBACH',
+    subModel: 'GLS 600',
+    mpg: 'UP TO 20 MPG',
+    shortInfo: 'First-class luxury SUV with rear massage seating',
+    description: 'Our most luxurious 4-passenger SUV. Equipped with executive rear massage seating, dedicated climate controls, and a smooth quiet ride for special occasions and VIP travel.',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    vehicleId: 'mercedes-sprinter-jet-edition',
+    brand: 'MERCEDES-BENZ',
+    model: 'SPRINTER',
+    subModel: 'JET EDITION',
+    mpg: 'UP TO 19 MPG',
+    shortInfo: 'Spacious luxury van for families and groups of up to 8',
+    description: 'First-class Mercedes-Benz van for a family or group of 8. High-ceiling cabin, leather captain chairs, encrypted Wi-Fi, and generous luggage space for everyone on board.',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=600&auto=format&fit=crop',
+  },
+];
 
-  // Animation state
-  const posRef      = useRef(0);
-  const targetRef   = useRef(0);
-  const rafRef      = useRef(0);
-  const ribbonKey   = useRef('');
+export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicle }) => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [photoMode, setPhotoMode] = useState<'exterior' | 'interior'>('exterior');
+  const [lightboxVehicle, setLightboxVehicle] = useState<Vehicle | null>(null);
+  const [showDescriptionMore, setShowDescriptionMore] = useState(false);
 
-  // Drag state
-  const dragging    = useRef(false);
-  const startX      = useRef(0);
-  const startY      = useRef(0);
-  const dragBase    = useRef(0);
-  const lastX       = useRef(0);
-  const lastT       = useRef(0);
-  const vel         = useRef(0);
+  const mainImgRef = useRef<HTMLDivElement>(null);
 
-  // DOM refs
-  const stripRef    = useRef<HTMLDivElement>(null);
-  const apertureRef = useRef<HTMLDivElement>(null);
-  const trackRef    = useRef<HTMLDivElement>(null);
-  const curIdxRef   = useRef(0);
-  const galModeRef  = useRef<'exterior'|'interior'>('exterior');
-  const photoIdxRef = useRef(0);
-  const wheelTimer  = useRef<number | null>(null);
-
-  // 7 side frame slots: 0=L2 1=L1 2=L0 3=R0 4=R1 5=R2 6=R3
-  const frameRefs = useRef<(HTMLDivElement | null)[]>(Array(7).fill(null));
-
-  // ----- derived -----
-  const filteredVehicles = useMemo(() => {
-    let list = FLEET_DATA;
-    if (selectedCategory === 'specialty')
-      list = list.filter(v => v.category === 'electric' || v.class.toLowerCase().includes('special'));
-    else if (selectedCategory !== 'all')
-      list = list.filter(v => v.category === selectedCategory);
-    if (passengerFilter === '1-3') list = list.filter(v => v.passengers <= 3);
-    if (passengerFilter === '4-6') list = list.filter(v => v.passengers >= 4 && v.passengers <= 6);
-    if (passengerFilter === '7+')  list = list.filter(v => v.passengers >= 7);
-    return list.length ? list : FLEET_DATA;
-  }, [selectedCategory, passengerFilter]);
-
-  const safeIdx     = Math.min(currentIndex, filteredVehicles.length - 1);
-  const vehicle     = filteredVehicles[safeIdx] ?? FLEET_DATA[0];
-  const gallery     = galleryMode === 'exterior' ? getExteriorPhotos(vehicle) : getInteriorPhotos(vehicle);
-  const safePhoto   = Math.min(photoIndex, gallery.length - 1);
-
-  // keep refs in sync
-  useEffect(() => { curIdxRef.current   = safeIdx;      }, [safeIdx]);
-  useEffect(() => { galModeRef.current  = galleryMode;  }, [galleryMode]);
-  useEffect(() => { photoIdxRef.current = safePhoto;    }, [safePhoto]);
-
-  // reset on filter change
-  useEffect(() => {
-    setCurrentIndex(0); posRef.current = 0; targetRef.current = 0;
-    setPhotoIndex(0); setGalleryMode('exterior');
-  }, [selectedCategory, passengerFilter]);
-
-  useEffect(() => { setPhotoIndex(0); }, [safeIdx]);
-  useEffect(() => { setPhotoIndex(0); }, [galleryMode]);
-
-  // ----- ribbon rebuild (continuous aperture window) -----
-  const rebuildRibbon = useCallback(() => {
-    const ap  = apertureRef.current;
-    const trk = trackRef.current;
-    if (!ap || !trk) return;
-    const apW = ap.offsetWidth;
-    if (!apW) return;
-
-    const vehicles = filteredVehicles;
-    const ci = curIdxRef.current;
-    const gm = galModeRef.current;
-    const pi = photoIdxRef.current;
-
-    // Full recreation only when item count changes
-    if (trk.children.length !== vehicles.length) {
-      while (trk.firstChild) trk.removeChild(trk.firstChild);
-      vehicles.forEach((v, i) => {
-        const div = document.createElement('div');
-        div.style.cssText = `flex:0 0 auto;width:${apW}px;height:100%;position:relative;overflow:hidden;`;
-        const img = document.createElement('img');
-        img.draggable = false;
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
-        const isCurrent = i === ci;
-        const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
-        const src = isCurrent ? (photos[pi] ?? photos[0] ?? v.image) : (photos[0] ?? v.image);
-        img.src = src;
-        img.dataset.src = src;
-        div.appendChild(img);
-        trk.appendChild(div);
-      });
-    } else {
-      // In-place update to prevent DOM destruction
-      for (let i = 0; i < vehicles.length; i++) {
-        const div = trk.children[i] as HTMLElement;
-        if (!div) continue;
-        div.style.width = `${apW}px`;
-        const img = div.querySelector('img') as HTMLImageElement | null;
-        if (img) {
-          const v = vehicles[i];
-          const isCurrent = i === ci;
-          const photos = gm === 'exterior' ? getExteriorPhotos(v) : getInteriorPhotos(v);
-          const src = isCurrent ? (photos[pi] ?? photos[0] ?? v.image) : (photos[0] ?? v.image);
-          if (img.dataset.src !== src) {
-            img.src = src;
-            img.dataset.src = src;
-          }
-        }
-      }
-    }
-  }, [filteredVehicles]);
-
-  // ----- layout frames with depth, perspective scaling, and gallery spacing -----
-  const layoutFrames = useCallback(() => {
-    const strip = stripRef.current;
-    const ap    = apertureRef.current;
-    const trk   = trackRef.current;
-    if (!strip || !ap || !trk) return;
-
-    const pos   = posRef.current;
-    const apW   = ap.offsetWidth;
-    const sw    = strip.clientWidth;
-    const apL   = (sw - apW) / 2;
-    const apR   = apL + apW;
-
-    // Updated side frame sizing - taller side frames (30% taller, 0.88 ratio)
-    const fw    = Math.min(128, Math.max(90, sw * 0.086));
-    const fh    = fw * 0.88; // 30% taller (was 0.68)
-    const sep   = 12; // Precise 12px gap from central aperture and between side frames
-    const P     = fw + sep;
-    const i     = Math.floor(pos + 1e-9);
-    const f     = pos - i;
-
-    // Symmetrical positioning: frames sit exactly `sep` (12px) off aperture edges
-    const left  = (k: number) => apL - sep - fw - (k - 1) * P;
-    const right = (k: number) => apR + sep + k * P;
-
-    const slots = [
-      { idx: i - 2, left: left(2) - f * P, opacity: 0.35 * (1 - f), scale: 0.80 },
-      { idx: i - 1, left: left(1) - f * P, opacity: 0.70 - 0.35 * f, scale: 0.90 },
-      { idx: i,     left: apL - f * P,      opacity: 1, scale: 1.0 }, // Main frame - no interpolation
-      { idx: i + 1, left: right(0) - f * P, opacity: 0.85, scale: 0.98 },
-      { idx: i + 2, left: right(1) - f * P, opacity: 0.60, scale: 0.90 },
-      { idx: i + 3, left: right(2) - f * P, opacity: 0.32, scale: 0.82 },
-      { idx: i + 4, left: right(3) - f * P, opacity: 0.12, scale: 0.75 },
-    ];
-
-    slots.forEach(({ idx, left: lPos, opacity, scale }, s) => {
-      const el = frameRefs.current[s];
-      if (!el) return;
-      const valid = idx >= 0 && idx < filteredVehicles.length;
-      el.dataset.idx   = String(idx);
-      el.style.width   = `${fw}px`;
-      el.style.height  = `${fh}px`;
-      el.style.cursor  = valid ? 'pointer' : 'default';
-      el.style.pointerEvents = valid ? 'auto' : 'none';
-      el.style.opacity = String(Math.min(1, Math.max(0, opacity)).toFixed(3));
-      el.style.left    = `${lPos.toFixed(2)}px`;
-      el.style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
-      el.style.transformOrigin = s < 3 ? 'right center' : 'left center';
-
-      if (valid) {
-        const v = filteredVehicles[idx];
-        const imgEl = el.querySelector('img') as HTMLImageElement|null;
-        if (imgEl && imgEl.dataset.src !== v.image) { imgEl.src = v.image; imgEl.dataset.src = v.image; }
-        const label = el.querySelector('.fl') as HTMLElement|null;
-        if (label && label.textContent !== v.name) label.textContent = v.name;
-      }
-    });
-
-    if (apW > 0) {
-      trk.style.transform = `translate3d(${(-pos * apW).toFixed(2)}px,0,0)`;
-      // Verify track frame widths precisely match apW
-      for (let j = 0; j < trk.children.length; j++) {
-        const div = trk.children[j] as HTMLElement;
-        if (div && div.style.width !== `${apW}px`) {
-          div.style.width = `${apW}px`;
-        }
-      }
-    }
-  }, [filteredVehicles]);
-
-  // ----- animation loop -----
-  useEffect(() => {
-    const vehicles = filteredVehicles;
-    let last = -1;
-    const tick = () => {
-      if (!dragging.current) {
-        // 20% slower lerp (0.096 instead of 0.12) for a stately, smooth glide
-        posRef.current += (targetRef.current - posRef.current) * 0.096;
-        if (Math.abs(targetRef.current - posRef.current) < 0.0004) posRef.current = targetRef.current;
-      }
-      const vis = Math.max(0, Math.min(vehicles.length - 1, Math.round(posRef.current)));
-      if (vis !== last && !dragging.current) { last = vis; setCurrentIndex(vis); }
-      layoutFrames();
-      const nk = `${vehicles.length}|${galModeRef.current}|${vis}|${photoIdxRef.current}`;
-      if (ribbonKey.current !== nk) { ribbonKey.current = nk; rebuildRibbon(); }
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [filteredVehicles, layoutFrames, rebuildRibbon]);
-
-  // resize → invalidate ribbon & reposition immediately
-  useEffect(() => {
-    const ro = new ResizeObserver(() => {
-      ribbonKey.current = '';
-      layoutFrames();
-    });
-    if (apertureRef.current) ro.observe(apertureRef.current);
-    if (stripRef.current) ro.observe(stripRef.current);
-    return () => ro.disconnect();
-  }, [layoutFrames]);
-
-  // Cleanup wheel timer on unmount
-  useEffect(() => {
-    return () => {
-      if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
-    };
-  }, []);
-
-  // ----- navigation -----
-  const selectVehicle = useCallback((idx: number) => {
-    const c = Math.max(0, Math.min(filteredVehicles.length - 1, idx));
-    setCurrentIndex(c); targetRef.current = c;
-    setPhotoIndex(0); setDetailsOpen(false);
-  }, [filteredVehicles.length]);
-
-  const stepVehicle = useCallback((dir: number) => {
-    const next = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(targetRef.current) + dir));
-    setCurrentIndex(next); targetRef.current = next;
-    setPhotoIndex(0); setDetailsOpen(false);
-  }, [filteredVehicles.length]);
-
-  // ----- drag handlers -----
-  const onDown = useCallback((e: React.PointerEvent) => {
-    const t = e.target as HTMLElement;
-    if (t.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
-    
-    // Reset direction tracking
-    setScrollDirection(null);
-
-    dragging.current = true;
-    startX.current = lastX.current = e.clientX;
-    startY.current = e.clientY;
-    lastT.current = performance.now();
-    dragBase.current = targetRef.current;
-    vel.current = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
-  }, []);
-
-  const onMove = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current) return;
-
-    const dx = e.clientX - startX.current;
-    const dy = e.clientY - startY.current;
-
-    // Track scroll direction: only allow horizontal gestures if user is not swiping vertically
-    if (Math.abs(dx) > Math.abs(dy) * 1.5) {
-      setScrollDirection('horizontal');
-    } else if (Math.abs(dy) > Math.abs(dx) * 1.5) {
-      setScrollDirection('vertical');
-    }
-
-    if (scrollDirection === 'vertical') return;
-
-    const now = performance.now();
-    const dt = Math.max(1, now - lastT.current);
-    vel.current = 0.65 * vel.current + 0.35 * ((e.clientX - lastX.current) / dt);
-    lastX.current = e.clientX;
-    lastT.current = now;
-
-    // 20% slower drag responsiveness
-    targetRef.current = Math.max(-0.25, Math.min(filteredVehicles.length - 0.75, dragBase.current - dx / 185));
-    posRef.current = targetRef.current;
-  }, [filteredVehicles.length, scrollDirection]);
-
-  const onUp = useCallback((e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    dragging.current = false;
-    const wasVertical = scrollDirection === 'vertical';
-    setScrollDirection(null);
-    (e.currentTarget as HTMLElement).style.cursor = 'grab';
-    if (!wasVertical) {
-      const proj = targetRef.current - (vel.current * 90) / 185;
-      targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, Math.round(proj)));
-    }
-  }, [filteredVehicles.length, scrollDirection]);
-
-  const onWheel = useCallback((e: React.WheelEvent) => {
-    const t = e.target as HTMLElement;
-    if (t.closest('.info-card,.thumb-bar')) return;
-
-    // Prevent horizontal scrolling if we're in vertical scroll mode
-    if (scrollDirection === 'vertical') return;
-
-    // Only handle horizontal wheel events or shift+wheel
-    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (!d) return;
-
-    e.preventDefault();
-    // 20% slower wheel scrolling
-    targetRef.current = Math.max(0, Math.min(filteredVehicles.length - 1, targetRef.current + d * 0.0038));
-    if (wheelTimer.current) window.clearTimeout(wheelTimer.current);
-    wheelTimer.current = window.setTimeout(() => {
-      targetRef.current = Math.round(targetRef.current);
-    }, 140);
-  }, [filteredVehicles.length, scrollDirection]);
-
-  // Touch listener for direction resolution and preventing conflict with vertical page scroll
-  useEffect(() => {
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.target && e.target instanceof Element && e.target.closest('.info-card,.thumb-bar,.ctrl-bar,.ap-el')) return;
-      setScrollDirection(null);
-      if (e.touches[0]) {
-        startX.current = e.touches[0].pageX;
-        startY.current = e.touches[0].pageY;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!scrollDirection && e.touches[0]) {
-        const touch = e.touches[0];
-        const dx = Math.abs(touch.pageX - startX.current);
-        const dy = Math.abs(touch.pageY - startY.current);
-
-        if (dx > dy * 1.5) {
-          setScrollDirection('horizontal');
-        } else if (dy > dx * 1.5) {
-          setScrollDirection('vertical');
-        }
-      }
-    };
-
-    const stripElement = stripRef.current;
-    if (stripElement) {
-      stripElement.addEventListener('touchstart', handleTouchStart, { passive: true });
-      stripElement.addEventListener('touchmove', handleTouchMove, { passive: true });
-    }
-
-    return () => {
-      if (stripElement) {
-        stripElement.removeEventListener('touchstart', handleTouchStart);
-        stripElement.removeEventListener('touchmove', handleTouchMove);
-      }
-    };
-  }, [scrollDirection]);
+  const showcase = SHOWCASE_CARS[activeIdx];
+  const vehicle = FLEET_DATA.find((v) => v.id === showcase.vehicleId) || FLEET_DATA[0];
+  const currentPhoto = photoMode === 'exterior' ? showcase.exteriorPhoto : showcase.interiorPhoto;
 
   useEffect(() => {
-    const h = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') stepVehicle(1);
-      if (e.key === 'ArrowLeft')  stepVehicle(-1);
+    setPhotoMode('exterior');
+    setShowDescriptionMore(false);
+  }, [activeIdx]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (lightboxVehicle && e.key === 'Escape') setLightboxVehicle(null);
     };
-    window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
-  }, [stepVehicle]);
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [lightboxVehicle]);
 
-  const handleFrameClick = useCallback((s: number) => {
-    const el = frameRefs.current[s]; if (!el) return;
-    const idx = Number(el.dataset.idx);
-    if (!isNaN(idx) && idx >= 0 && idx < filteredVehicles.length) selectVehicle(idx);
-  }, [filteredVehicles.length, selectVehicle]);
+  const prev = () => setActiveIdx((i) => (i === 0 ? SHOWCASE_CARS.length - 1 : i - 1));
+  const next = () => setActiveIdx((i) => (i === SHOWCASE_CARS.length - 1 ? 0 : i + 1));
 
-  // ─────────────────────── RENDER ───────────────────────────────────────────
-  const cats = [
-    {id:'all',label:'All'},{id:'suv',label:'SUVs'},
-    {id:'sedan',label:'Sedans'},{id:'van',label:'Vans'},{id:'specialty',label:'Specialty'},
-  ];
-  const caps = [{id:'all',label:'Any'},{id:'1-3',label:'1–3'},{id:'4-6',label:'4–6'},{id:'7+',label:'7+'}];
-  const KEYS = ['L2','L1','L0','R0','R1','R2','R3'];
+  const openModal = () => setLightboxVehicle(vehicle);
+
+  // Marquee check: if title is more than 2 words
+  const fullName = `${showcase.model} ${showcase.subModel}`.trim();
+  const nameWords = fullName.split(' ');
+  const isMarquee = nameWords.length > 2;
 
   return (
-    <section
-      className="w-full bg-[#0d0b09] text-[#f3f4f6] relative overflow-hidden select-none flex flex-col justify-between"
-      style={{ minHeight: '92vh' }}
-    >
-      {/* Background vignette & ambient glow */}
-      <div className="pointer-events-none absolute inset-0 z-10"
-        style={{background:'radial-gradient(115% 85% at 50% 45%,transparent 55%,rgba(0,0,0,0.6) 100%)'}} />
+    <section className="w-full bg-[#0E0C0A] min-h-screen flex flex-col justify-center px-5 sm:px-10 lg:px-14 py-8 lg:py-14 box-border">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between my-auto gap-6 lg:gap-8">
 
-      {/* ── HEADER: CAR CATEGORY NAVIGATION ON THE LEFT, RIGHT EMPTY ─────── */}
-      <header className="relative z-20 flex items-center justify-between px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-2 sm:pb-3">
-        {/* Category Navigation on the left side */}
-        <nav className="flex items-center gap-4 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar py-1">
-          {cats.map(c => (
-            <button key={c.id} onClick={() => setSelectedCategory(c.id)}
-              className={`relative font-display font-semibold text-[10.5px] sm:text-[11px] tracking-[0.2em] uppercase pb-0.5 transition-colors cursor-pointer whitespace-nowrap flex-shrink-0 ${
-                selectedCategory===c.id ? 'text-[#cfa869]' : 'text-[#8b9096] hover:text-[#f3f4f6]'}`}>
-              {c.label}
-              {selectedCategory===c.id && <span className="absolute left-0 right-0 bottom-0 h-px bg-[#cfa869]" />}
-            </button>
-          ))}
-        </nav>
-        {/* Empty right side */}
-        <div className="hidden sm:block" />
-      </header>
+        {/* ── TWO-COLUMN SHOWCASE ─────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center flex-1">
 
-      {/* ── EXPANDED MAIN STAGE (TALL MAJESTIC APERTURE) ────────────────────── */}
-      <main className="relative z-20 w-full flex-1" style={{minHeight:'clamp(440px, 64vh, 740px)'}}>
-
-        {/* Class tag */}
-        <div className="absolute top-2 right-4 sm:right-12 z-30 font-mono text-[7.5px] sm:text-[8px] tracking-[0.26em] uppercase text-[#cfa869] opacity-80 pointer-events-none hidden xs:block">
-          {vehicle.categoryLabel} / Executive Collection
-        </div>
-
-        {/* ── FLOATING GLASS INFO CARD (DESKTOP ONLY) ─────────────────── */}
-        <aside className="info-card hidden md:flex absolute left-4 sm:left-10 z-40 flex-col gap-3.5"
-          style={{
-            top:'50%',transform:'translateY(-50%)',
-            width:'clamp(185px,17vw,225px)',
-            background:'rgba(14,12,10,0.84)',backdropFilter:'blur(20px)',
-            WebkitBackdropFilter:'blur(20px)',
-            border:'1px solid rgba(255,255,255,0.09)',borderRadius:'14px',
-            padding:'20px 18px',boxShadow:'0 30px 70px -20px rgba(0,0,0,0.95)',
-          }}>
-          <h2 className="font-display font-extrabold text-[17px] sm:text-[18px] leading-tight text-center text-[#F4EDE4] tracking-tight">
-            {vehicle.name}
-          </h2>
-
-          <div className="grid grid-cols-2 gap-3 py-3"
-            style={{borderTop:'1px solid rgba(255,255,255,0.08)',borderBottom:'1px solid rgba(255,255,255,0.08)'}}>
-            {([
-              {v:vehicle.passengers,l:'Passengers'},
-              {v:vehicle.luggage,   l:'Luggage'},
-              {v:vehicle.transmission??'Automatic',l:'Transmission',sm:true},
-              {v:vehicle.drivetrain??'AWD',        l:'Drivetrain',  sm:true},
-            ] as {v:string|number,l:string,sm?:boolean}[]).map(({v:val,l,sm}) => (
-              <div key={l}>
-                <b className={`block font-display font-bold text-[#F4EDE4] ${sm?'text-[9.5px] uppercase truncate':'text-[16px]'}`}>{val}</b>
-                <span className="font-mono text-[7px] tracking-[0.16em] uppercase text-[#71767D]">{l}</span>
-              </div>
-            ))}
-          </div>
-
-          <button onClick={() => setDetailsOpen(o=>!o)} aria-expanded={detailsOpen}
-            className="flex items-center justify-between w-full font-mono text-[7.5px] tracking-[0.2em] uppercase text-[#cfa869] py-0.5 hover:brightness-110 transition-all cursor-pointer">
-            <span>⚙ Fine Grain Details</span>
-            <span className="text-[12px] transition-transform duration-300 inline-block"
-              style={{transform:detailsOpen?'rotate(45deg)':'none'}}>＋</span>
-          </button>
-
-          <div className="overflow-hidden transition-all duration-500"
-            style={{maxHeight:detailsOpen?'220px':'0',opacity:detailsOpen?1:0}}>
-            <ul className="space-y-1.5">
-              {vehicle.idealFor.slice(0,2).map(item => (
-                <li key={item} className="flex items-start justify-between gap-1.5 pb-1.5"
-                  style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D] flex-shrink-0 mt-0.5">FOR</span>
-                  <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4] text-right leading-tight">{item}</b>
-                </li>
-              ))}
-              <li className="flex items-start justify-between gap-1.5 pb-1.5"
-                style={{borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-                <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D] flex-shrink-0 mt-0.5">AUDIO</span>
-                <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4] text-right leading-tight">{vehicle.specs.soundSystem}</b>
-              </li>
-              {vehicle.specs.wifi && (
-                <li className="flex items-start justify-between gap-1.5">
-                  <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D]">WI-FI</span>
-                  <b className="font-sans font-medium text-[8.5px] text-[#F4EDE4]">ONBOARD</b>
-                </li>
-              )}
-            </ul>
-          </div>
-
-          <button onClick={() => onBookVehicle(vehicle)}
-            className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded font-display font-bold text-[9.5px] tracking-[0.24em] uppercase transition-all hover:brightness-110 hover:-translate-y-px cursor-pointer"
-            style={{background:'linear-gradient(140deg,#dcb877,#c09a4f)',color:'#171310'}}>
-            Request Vehicle <ArrowUpRight className="w-3 h-3" />
-          </button>
-        </aside>
-
-        {/* ── DRAG STRIP (CONTINUOUS RAIL SURFACE) ────────────────────── */}
-        <div
-          ref={stripRef}
-          className="absolute inset-0 cursor-grab touch-none"
-          style={{ touchAction: 'pan-x' }}
-          onPointerDown={onDown}
-          onPointerMove={onMove}
-          onPointerUp={onUp}
-          onPointerCancel={onUp}
-          onWheel={onWheel}
-        >
-
-          {/* Polished Side Frames (with depth perspective, scale diminution, and dark gradient scrim) */}
-          {KEYS.map((key,si) => (
-            <div key={key}
-              ref={el => { frameRefs.current[si] = el; }}
-              onClick={() => handleFrameClick(si)}
-              data-idx=""
-              className="absolute top-1/2 overflow-hidden bg-[#141110] z-[4] hover:brightness-110 transition-all duration-200"
-              style={{
-                borderRadius:'12px',
-                border:'1px solid rgba(255,255,255,0.1)',
-                boxShadow:'0 24px 50px -15px rgba(0,0,0,0.85)',
-                willChange:'left,opacity,transform',
-              }}>
-              <img alt="" className="w-full h-full object-cover pointer-events-none" draggable={false} />
-              {/* Soft dark vignette gradient on background frames so central hero pops */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
-              <div className="fl absolute bottom-0 inset-x-0 px-2 py-1 font-display font-medium text-[7.5px] tracking-wider uppercase truncate text-white/85"
-                style={{background:'rgba(10,9,8,0.75)',backdropFilter:'blur(4px)'}} />
+          {/* LEFT: vehicle info */}
+          <div className="lg:col-span-4 space-y-4 text-[#F4EDE4]">
+            
+            {/* BRAND & MODEL TAG (Replaced "FEATURED VEHICLE") */}
+            <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
+              <span className="w-4 h-[1.5px] bg-[#C5A059]" />
+              <span>BRAND: {showcase.brand}</span>
+              <span className="text-white/30">·</span>
+              <span>MODEL: {showcase.model}</span>
             </div>
-          ))}
 
-          {/* Majestic Central Aperture (TALL, BOLD, DOMINANT) */}
-          <div ref={apertureRef} className="ap-el absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden z-[6]"
-            style={{
-              width:'clamp(240px, 34vw, 480px)',
-              height:'92%',
-              borderRadius:'20px',
-              background:'#0d0b09',
-              boxShadow:'0 45px 100px -25px rgba(0,0,0,0.95),0 0 0 1px rgba(255,255,255,0.08)',
-            }}>
-            {/* Seamless Physical Track */}
-            <div ref={trackRef} className="flex h-full" style={{willChange:'transform'}} data-built="" />
+            {/* CAR NAME WITH MARQUEE IF > 2 WORDS & SUBMODEL IN SMALLER LETTER */}
+            <div className="min-h-[50px] flex items-center">
+              {isMarquee ? (
+                <div className="overflow-hidden whitespace-nowrap max-w-full relative group py-1">
+                  <div className="inline-flex gap-10 animate-marquee-text group-hover:[animation-play-state:paused]">
+                    <div className="flex items-baseline gap-2.5">
+                      <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
+                        {showcase.model}
+                      </h2>
+                      <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
+                        {showcase.subModel}
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-2.5" aria-hidden="true">
+                      <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
+                        {showcase.model}
+                      </h2>
+                      <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
+                        {showcase.subModel}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
+                    {showcase.model}
+                  </h2>
+                  <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
+                    {showcase.subModel}
+                  </span>
+                </div>
+              )}
+            </div>
 
-            {/* Gradient Scrim for Legibility */}
-            <div className="absolute inset-0 pointer-events-none z-[2]"
-              style={{background:'linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.2) 36%,transparent 55%)'}} />
+            {/* DOWN-TO-EARTH CAR INFO */}
+            <p className="text-xs sm:text-sm font-mono tracking-wider text-[#C5A059] font-semibold">
+              {showcase.shortInfo}
+            </p>
 
-            {/* In-Aperture Bottom Caption with mobile specs trigger */}
-            <div className="absolute left-4 sm:left-5 bottom-3 sm:bottom-4 right-4 sm:right-5 z-[3] flex items-end justify-between pointer-events-none">
-              <div className="flex flex-col items-start gap-1">
-                <span className="font-display font-black text-[15px] sm:text-[17px] tracking-tight text-white drop-shadow-md">
-                  {vehicle.name}
+            {/* CONSISTENT LENGTH DESCRIPTION WITH MORE / LESS TOGGLE */}
+            <div className="space-y-1">
+              <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-md font-light">
+                {showDescriptionMore ? (
+                  <>
+                    {showcase.description}
+                    <button
+                      type="button"
+                      onClick={() => setShowDescriptionMore(false)}
+                      className="ml-2 text-[#C5A059] hover:underline font-mono text-[10px] uppercase font-bold cursor-pointer"
+                    >
+                      (less)
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {showcase.description.length > 135
+                      ? `${showcase.description.slice(0, 135)}...`
+                      : showcase.description}
+                    {showcase.description.length > 135 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowDescriptionMore(true)}
+                        className="ml-2 text-[#C5A059] hover:underline font-mono text-[10px] uppercase font-bold cursor-pointer"
+                      >
+                        (more)
+                      </button>
+                    )}
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* BIGGER SPECS ICONS */}
+            <div className="flex items-center gap-6 pt-2 text-white/90">
+              <div className="flex items-center gap-2.5">
+                <Users className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+                  {vehicle.passengers} PASS.
                 </span>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.2em] uppercase text-white/95 px-2 py-0.5 rounded bg-black/60 border border-white/15 backdrop-blur-md">
-                    {galleryMode==='exterior'?'Exterior':'Interior'} · {pad2(safePhoto+1)}
-                  </span>
-                  <span className="font-mono text-[7px] sm:text-[7.5px] tracking-[0.16em] uppercase text-[#E0B268] px-2 py-0.5 rounded bg-black/60 border border-[#E0B268]/30 backdrop-blur-md">
-                    {vehicle.passengers} Pax
-                  </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Briefcase className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+                  {vehicle.luggage} BAGS
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Fuel className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+                  {showcase.mpg}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT: photo area */}
+          <div className="lg:col-span-8 flex flex-col gap-3.5">
+
+            {/* Main photo + 3 stacked thumbnails side by side, equal height */}
+            <div className="flex gap-3 sm:gap-4" style={{ height: 'clamp(310px, 44vh, 480px)' }}>
+
+              {/* Main Photo */}
+              <div
+                ref={mainImgRef}
+                className="flex-1 rounded-2xl overflow-hidden relative group bg-black/20 border border-white/10 shadow-2xl"
+              >
+                <img
+                  src={currentPhoto}
+                  alt={vehicle.name}
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+
+                {/* Gallery overlay button */}
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="absolute top-4 right-4 bg-black/60 hover:bg-black/85 text-white backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase inline-flex items-center gap-2 transition-all border border-white/15 cursor-pointer shadow-md"
+                >
+                  <Images className="w-3.5 h-3.5 text-[#C5A059]" />
+                  <span>VIEW GALLERY</span>
+                </button>
+
+                {/* View mode label */}
+                <div className="absolute bottom-4 left-4 text-white/90 font-mono text-[10px] tracking-widest uppercase bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/10">
+                  {photoMode === 'exterior' ? 'EXTERIOR' : 'INTERIOR CABIN'}
                 </div>
               </div>
 
-              {/* Mobile Specs / Close Toggle Button */}
+              {/* 3 stacked thumbnails — same height as main via flex column */}
+              <div className="w-28 sm:w-36 lg:w-44 flex flex-col gap-2.5 h-full">
+                {/* Exterior thumbnail */}
+                <button
+                  type="button"
+                  onClick={() => setPhotoMode('exterior')}
+                  className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'exterior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                >
+                  <img src={showcase.exteriorPhoto} alt="Exterior" className="w-full h-full object-cover" />
+                </button>
+
+                {/* Interior thumbnail */}
+                <button
+                  type="button"
+                  onClick={() => setPhotoMode('interior')}
+                  className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'interior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                >
+                  <img src={showcase.interiorPhoto} alt="Interior" className="w-full h-full object-cover" />
+                </button>
+
+                {/* Gallery thumb */}
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="flex-1 rounded-xl overflow-hidden border border-white/10 hover:border-[#C5A059]/60 opacity-70 hover:opacity-100 transition-all cursor-pointer relative group"
+                >
+                  <img src={vehicle.exteriorGallery?.[1] || showcase.exteriorPhoto} alt="Gallery" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white font-mono text-[9px] tracking-widest uppercase font-semibold">GALLERY</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* BUTTON BAR: EXTERIOR, INTERIOR, AND VIEW DETAILS MOVED HERE */}
+            <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPhotoMode('exterior')}
+                  className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'exterior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                >
+                  EXTERIOR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPhotoMode('interior')}
+                  className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'interior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                >
+                  INTERIOR
+                </button>
+                
+                {/* VIEW DETAILS BUTTON RIGHT UNDER THE CAR */}
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2 bg-[#C5A059] hover:bg-[#B38D45] text-white px-4 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all shadow-md cursor-pointer ml-1"
+                >
+                  <span>VIEW DETAILS</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
               <button
                 type="button"
-                onClick={() => setMobileDetailsOpen((prev) => !prev)}
-                className={`md:hidden pointer-events-auto px-2.5 py-1 rounded-full font-display font-bold text-[8.5px] tracking-[0.18em] uppercase flex items-center gap-1 shadow-lg cursor-pointer active:scale-95 transition-all ${
-                  mobileDetailsOpen
-                    ? 'bg-white/25 text-white border border-white/30 hover:bg-white/35'
-                    : 'bg-[#E0B268] text-obsidian hover:brightness-110'
-                }`}
+                onClick={openModal}
+                className="text-xs font-mono tracking-wider uppercase text-[#967C52] hover:text-[#C5A059] inline-flex items-center gap-2 cursor-pointer transition-colors"
               >
-                <span>{mobileDetailsOpen ? 'Close' : 'Specs'}</span>
-                {mobileDetailsOpen ? (
-                  <X className="w-2.5 h-2.5" />
-                ) : (
-                  <ArrowUpRight className="w-2.5 h-2.5" />
-                )}
+                <span>FULL SPECS</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
             </div>
 
-            {/* Mobile In-Aperture Specs Overlay (Directly over the centered car image) */}
-            {mobileDetailsOpen && (
-              <div className="md:hidden absolute inset-2.5 z-[10] bg-[#0c0a08]/92 backdrop-blur-xl border border-white/15 rounded-2xl p-4 flex flex-col justify-between overflow-y-auto no-scrollbar shadow-2xl animate-in fade-in duration-200">
-                <div className="flex items-start justify-between border-b border-white/10 pb-2.5">
-                  <div>
-                    <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#E0B268] block">
-                      {vehicle.categoryLabel}
-                    </span>
-                    <h3 className="font-display font-bold text-base text-white tracking-tight leading-tight">
-                      {vehicle.name}
-                    </h3>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setMobileDetailsOpen(false)}
-                    className="w-7 h-7 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-white/70 hover:text-white cursor-pointer"
-                    aria-label="Close vehicle specs"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+          </div>
+        </div>
 
-                <div className="grid grid-cols-2 gap-2 py-2 border-b border-white/10">
-                  {[
-                    { v: vehicle.passengers, l: 'Passengers' },
-                    { v: vehicle.luggage, l: 'Luggage' },
-                    { v: vehicle.transmission ?? 'Automatic', l: 'Transmission', sm: true },
-                    { v: vehicle.drivetrain ?? 'AWD', l: 'Drivetrain', sm: true },
-                  ].map(({ v: val, l, sm }) => (
-                    <div key={l} className="bg-white/[0.04] p-2 rounded border border-white/5">
-                      <b className={`block font-display font-bold text-[#F4EDE4] ${sm ? 'text-[9.5px] uppercase truncate' : 'text-[14px]'}`}>{val}</b>
-                      <span className="font-mono text-[6.5px] tracking-[0.14em] uppercase text-[#71767D]">{l}</span>
+        {/* ── VEHICLE CAROUSEL: EXACTLY 4 CARS AT THE BOTTOM WITH AMPLE ROOM ── */}
+        <div className="flex gap-3 sm:gap-4 pt-1 items-stretch">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 flex-1">
+            {SHOWCASE_CARS.map((s, idx) => {
+              const v = FLEET_DATA.find((f) => f.id === s.vehicleId) || FLEET_DATA[0];
+              const isActive = idx === activeIdx;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveIdx(idx)}
+                  className={`relative rounded-xl overflow-hidden cursor-pointer border transition-all duration-300 group text-left ${isActive ? 'border-[#C5A059] ring-2 ring-[#C5A059]/40 scale-[1.02] shadow-xl' : 'border-white/10 hover:border-white/30'}`}
+                  style={{ height: 'clamp(95px, 12vh, 125px)' }}
+                >
+                  <img
+                    src={s.thumbImg}
+                    alt={s.model}
+                    className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 inset-x-0 p-3">
+                    <p className="font-display font-bold text-xs sm:text-sm text-white tracking-tight leading-tight truncate">
+                      {s.model}
+                    </p>
+                    <p className="text-[9px] sm:text-[10px] text-[#C5A059] font-mono tracking-wider uppercase opacity-90 truncate">
+                      {s.subModel} · {v.passengers} PASS
+                    </p>
+                  </div>
+                  {isActive && (
+                    <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#C5A059] shadow-sm" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Prev/Next arrows */}
+          <div className="flex flex-col gap-2 justify-center">
+            <button
+              type="button"
+              onClick={prev}
+              className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+              aria-label="Previous vehicle"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+              aria-label="Next vehicle"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ── VEHICLE DETAIL MODAL ─────────────────────────────────────────────── */}
+      {lightboxVehicle && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setLightboxVehicle(null)}
+        >
+          <div
+            className="relative w-full max-w-3xl bg-[#111114] border border-[#C5A059]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold">VEHICLE DETAILS</span>
+                <span className="text-white/20">·</span>
+                <span className="text-xs text-white/70 font-mono">{lightboxVehicle.categoryLabel}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLightboxVehicle(null)}
+                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:border-[#C5A059] transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-5">
+              <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/40 border border-white/10">
+                <img src={lightboxVehicle.image} alt={lightboxVehicle.name} className="w-full h-full object-cover" />
+              </div>
+
+              <div className="space-y-1.5">
+                <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal tracking-tight">{lightboxVehicle.name}</h3>
+                <p className="text-xs text-[#C5A059] font-mono tracking-widest uppercase">{lightboxVehicle.tagline}</p>
+                <p className="text-xs sm:text-sm text-white/70 leading-relaxed pt-1">{lightboxVehicle.description}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 py-3 border-y border-white/10 text-xs font-mono text-white/80">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#C5A059]" />
+                  <span>{lightboxVehicle.passengers} PASSENGERS</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-[#C5A059]" />
+                  <span>{lightboxVehicle.luggage} LUGGAGE</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[#C5A059]" />
+                  <span>SANITIZED</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold block">FEATURES</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/70">
+                  {lightboxVehicle.features.slice(0, 6).map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
+                      <span>{feat}</span>
                     </div>
                   ))}
                 </div>
-
-                <div className="space-y-1.5 text-xs py-1">
-                  <span className="font-mono text-[7px] tracking-[0.2em] uppercase text-[#E0B268] block">Highlights</span>
-                  <div className="flex flex-wrap gap-1">
-                    {vehicle.idealFor.slice(0, 2).map((item) => (
-                      <span key={item} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[8.5px] text-white/80 font-sans">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="text-[8.5px] font-mono text-white/60 pt-0.5">
-                    AUDIO: <b className="text-white/90">{vehicle.specs.soundSystem}</b>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileDetailsOpen(false);
-                      onBookVehicle(vehicle);
-                    }}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded font-display font-bold text-[9px] tracking-[0.22em] uppercase shadow-lg cursor-pointer bg-[#E0B268] text-obsidian hover:brightness-110 active:scale-95 transition-all"
-                  >
-                    <span>Request Vehicle</span>
-                    <ArrowUpRight className="w-3 h-3" />
-                  </button>
-                </div>
               </div>
-            )}
-          </div>
-        </div>
-      </main>
+            </div>
 
-      {/* ── THUMBNAILS (FLOATING CAPSULE STRIP WITH GENEROUS SPACING) ───────── */}
-      <div className="thumb-bar relative z-20 flex items-center justify-center gap-2 mt-3 sm:mt-6 px-4"
-        style={{height:'44px'}}>
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/[0.08] overflow-x-auto no-scrollbar max-w-full">
-          {gallery.map((src,i) => (
-            <button key={i} onClick={() => setPhotoIndex(i)}
-              aria-label={`${galleryMode} photo ${i+1}`}
-              className="flex-shrink-0 overflow-hidden transition-all duration-300 cursor-pointer"
-              style={{
-                width:36,height:25,borderRadius:'5px',
-                backgroundImage:`url("${src}")`,backgroundSize:'cover',backgroundPosition:'center',
-                boxShadow:i===safePhoto
-                  ?'0 0 0 1.5px #cfa869,0 4px 14px rgba(207,168,105,0.45)'
-                  :'0 0 0 1px rgba(255,255,255,0.12)',
-                opacity:i===safePhoto?1:0.4,
-                filter:i===safePhoto?'none':'saturate(0.65) brightness(0.75)',
-                transform:i===safePhoto?'scale(1.08)':undefined,
-              }} />
-          ))}
-        </div>
-      </div>
-
-      {/* ── FOOTER CONTROLS (RESPONSIVE 2-TIER ON MOBILE, 3-COL ON DESKTOP) ─── */}
-      <footer className="ctrl-bar relative z-20 flex flex-col md:grid md:grid-cols-3 items-center gap-3 md:gap-4 px-4 sm:px-8 lg:px-12 pt-3 sm:pt-4 pb-6 sm:pb-8 mt-1">
-        
-        {/* Mobile: Top Row / Desktop: Col 2 (Prev · Toggle · Next) */}
-        <div className="flex items-center justify-center gap-3 md:col-start-2">
-          <button onClick={() => stepVehicle(-1)} aria-label="Previous"
-            className="w-8 h-8 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869] hover:border-[#cfa869] cursor-pointer bg-white/[0.02]"
-            style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❮</button>
-
-          <div className="relative flex p-[3px] rounded-full"
-            style={{border:'1px solid rgba(255,255,255,0.12)',background:'rgba(255,255,255,0.04)'}}>
-            <div className="absolute top-[3px] h-[calc(100%-6px)] transition-all duration-400 rounded-full"
-              style={{
-                left:'3px',width:'76px',
-                transform:galleryMode==='interior'?'translateX(76px)':'translateX(0)',
-                background:'linear-gradient(140deg,#e0bd80,#b98f45)',
-                boxShadow:'0 4px 16px rgba(207,168,105,0.4)',
-              }} />
-            {(['exterior','interior'] as const).map(m => (
-              <button key={m} onClick={() => setGalleryMode(m)}
-                className="relative z-10 font-display font-bold text-[10px] sm:text-[10.5px] tracking-[0.18em] uppercase transition-colors cursor-pointer text-center"
-                style={{padding:'5px 0',width:'76px',borderRadius:'30px',
-                  color:galleryMode===m?'#171310':'#8b9096',whiteSpace:'nowrap'}}>
-                {m==='exterior'?'Exterior':'Interior'}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-black/40 text-xs">
+              <button
+                type="button"
+                onClick={() => setLightboxVehicle(null)}
+                className="text-white/60 hover:text-white font-mono tracking-wider uppercase cursor-pointer"
+              >
+                CLOSE
               </button>
-            ))}
-          </div>
-
-          <button onClick={() => stepVehicle(1)} aria-label="Next"
-            className="w-8 h-8 rounded-full grid place-items-center font-mono text-[10px] transition-all hover:text-[#cfa869] hover:border-[#cfa869] cursor-pointer bg-white/[0.02]"
-            style={{border:'1px solid rgba(255,255,255,0.14)',color:'#8b9096'}}>❯</button>
-        </div>
-
-        {/* Mobile: Bottom Row / Desktop: Col 1 Counter & Col 3 Pax */}
-        <div className="flex items-center justify-between w-full md:contents">
-          {/* Fleet Counter (Col 1 on desktop) */}
-          <span className="font-mono text-[9.5px] sm:text-[10px] tracking-[0.2em] text-[#8b9096] md:col-start-1 md:justify-self-start">
-            <b className="text-[#cfa869] font-medium">{pad2(safeIdx+1)}</b>
-            {' '}
-            <span className="text-[#5c6167]">/ {pad2(filteredVehicles.length)}</span>
-          </span>
-
-          {/* Capacity Passenger Filter (Col 3 on desktop) */}
-          <div className="flex items-center justify-end gap-1 sm:gap-1.5 md:col-start-3 md:justify-self-end">
-            <span className="font-mono text-[8px] tracking-[0.22em] uppercase text-[#5c6167] mr-1 hidden sm:block">Pax:</span>
-            {caps.map(c => (
-              <button key={c.id} onClick={() => setPassengerFilter(c.id)}
-                className="font-mono text-[8.5px] sm:text-[9px] tracking-widest transition-all cursor-pointer"
-                style={{
-                  padding:'3px 9px',borderRadius:'4px',
-                  border:passengerFilter===c.id?'1px solid #cfa869':'1px solid rgba(255,255,255,0.1)',
-                  background:passengerFilter===c.id?'rgba(207,168,105,0.18)':'rgba(255,255,255,0.04)',
-                  color:passengerFilter===c.id?'#cfa869':'#8b9096',
-                  boxShadow:passengerFilter===c.id?'0 0 12px rgba(207,168,105,0.4)':undefined,
-                }}>
-                {c.label}
-              </button>
-            ))}
+              {onBookVehicle ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLightboxVehicle(null);
+                    onBookVehicle(lightboxVehicle);
+                  }}
+                  className="inline-flex items-center gap-2 text-[#C5A059] hover:underline font-mono tracking-wider uppercase cursor-pointer"
+                >
+                  <span>SELECT THIS VEHICLE</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <a
+                  href="tel:2676424616"
+                  className="inline-flex items-center gap-2 text-[#C5A059] hover:underline font-mono tracking-wider uppercase cursor-pointer"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>(267) 642-4616</span>
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </footer>
+      )}
     </section>
   );
 };
