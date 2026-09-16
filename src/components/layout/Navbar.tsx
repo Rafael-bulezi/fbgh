@@ -137,13 +137,71 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isDarkPage = currentPage === 'about';
   const isDarkTheme = !isSolid && isDarkPage;
 
-  // Navigation text colors — dynamic contrast based on page background & scroll state
-  const linkActiveClass = isDarkTheme
-    ? 'text-warm-ivory font-semibold'
-    : 'text-ink-black font-semibold';
-  const linkInactiveClass = isDarkTheme
-    ? 'text-warm-ivory/80 hover:text-warm-ivory font-medium'
-    : 'text-ink-black/80 hover:text-ink-black font-medium';
+  // Dynamic contrast per element for split CurvedHero layouts
+  const [darkElements, setDarkElements] = useState<Record<string, boolean>>({
+    fleet: false,
+    services: false,
+    experience: true,
+    more: true,
+    rightControls: true,
+  });
+
+  useEffect(() => {
+    if (isSolid) return;
+
+    const checkContrast = () => {
+      if (currentPage === 'about') {
+        setDarkElements({
+          fleet: true,
+          services: true,
+          experience: true,
+          more: true,
+          rightControls: true,
+        });
+        return;
+      }
+
+      // On mobile / tablet (< 1024px), CurvedHero top is solid ivory (#FAF8F5)
+      if (window.innerWidth < 1024) {
+        setDarkElements({
+          fleet: false,
+          services: false,
+          experience: false,
+          more: false,
+          rightControls: false,
+        });
+        return;
+      }
+
+      // Desktop curve boundary at top of hero is ~46.5% of viewport width
+      const splitX = window.innerWidth * 0.465;
+      const ids = ['fleet', 'services', 'experience', 'more', 'rightControls'];
+      const newMap: Record<string, boolean> = {};
+
+      ids.forEach((id) => {
+        const el = document.getElementById(`nav-item-${id}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          newMap[id] = centerX >= splitX;
+        } else {
+          newMap[id] = id === 'experience' || id === 'more' || id === 'rightControls';
+        }
+      });
+
+      setDarkElements(newMap);
+    };
+
+    checkContrast();
+    window.addEventListener('resize', checkContrast);
+    return () => window.removeEventListener('resize', checkContrast);
+  }, [currentPage, isSolid]);
+
+  const getItemTheme = (id: string) => {
+    if (isSolid) return 'light';
+    if (isDarkPage) return 'dark';
+    return darkElements[id] ? 'dark' : 'light';
+  };
 
   return (
     <>
@@ -193,8 +251,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             {navLinks.map((link) => {
               const isActive = currentPage === link.id;
+              const itemTheme = getItemTheme(link.id);
+              const isItemDark = itemTheme === 'dark';
+
               return (
                 <div
+                  id={`nav-item-${link.id}`}
                   key={link.id}
                   className="relative py-1"
                   onMouseEnter={(e) => {
@@ -209,13 +271,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     data-active={isActive}
                     onClick={() => handleNavClick(link.id)}
-                    className={`text-xs font-sans tracking-[0.22em] uppercase transition-colors duration-300 flex items-center gap-1 ${
-                      isActive ? linkActiveClass : linkInactiveClass
+                    className={`text-xs font-sans tracking-[0.22em] uppercase transition-all duration-300 flex items-center gap-1 px-2.5 py-1 rounded-md ${
+                      isItemDark
+                        ? isActive
+                          ? 'text-warm-ivory font-semibold [text-shadow:0_1px_6px_rgba(0,0,0,0.9),0_0_16px_rgba(0,0,0,0.5)] bg-black/20 backdrop-blur-sm border border-white/10'
+                          : 'text-warm-ivory/90 hover:text-warm-ivory font-medium [text-shadow:0_1px_6px_rgba(0,0,0,0.9)] hover:bg-black/30 hover:backdrop-blur-sm'
+                        : isActive
+                          ? 'text-ink-black font-semibold'
+                          : 'text-ink-black/75 hover:text-ink-black font-medium hover:bg-black/5'
                     }`}
                   >
                     <span>{link.label}</span>
                     {link.isMega && (
-                      <span className="text-champagne-gold font-mono text-[10px] ml-0.5">
+                      <span
+                        className={`font-mono text-[10px] ml-0.5 ${
+                          isItemDark ? 'text-champagne-gold' : 'text-[#A37F35]'
+                        }`}
+                      >
                         {megaOpen ? '−' : '+'}
                       </span>
                     )}
@@ -226,28 +298,44 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Dropdown Menu Trigger for Destinations & About Us */}
             <div
+              id="nav-item-more"
               className="relative py-1"
               onMouseEnter={handleMoreEnter}
               onMouseLeave={handleMoreLeave}
             >
-              <button
-                type="button"
-                onClick={() => setMoreDropdownOpen((prev) => !prev)}
-                className={`text-xs font-sans tracking-[0.22em] uppercase transition-colors duration-300 flex items-center gap-1.5 cursor-pointer ${
-                  currentPage === 'destinations' || currentPage === 'about'
-                    ? linkActiveClass
-                    : linkInactiveClass
-                }`}
-                aria-expanded={moreDropdownOpen}
-                aria-haspopup="true"
-              >
-                <span>MORE</span>
-                <ChevronDown
-                  className={`w-3 h-3 transition-transform duration-300 ${
-                    moreDropdownOpen ? 'rotate-180 text-champagne-gold' : ''
-                  }`}
-                />
-              </button>
+              {(() => {
+                const isMoreActive = currentPage === 'destinations' || currentPage === 'about';
+                const isMoreDark = getItemTheme('more') === 'dark';
+
+                return (
+                  <button
+                    type="button"
+                    onClick={() => setMoreDropdownOpen((prev) => !prev)}
+                    className={`text-xs font-sans tracking-[0.22em] uppercase transition-all duration-300 flex items-center gap-1.5 cursor-pointer px-2.5 py-1 rounded-md ${
+                      isMoreDark
+                        ? isMoreActive
+                          ? 'text-warm-ivory font-semibold [text-shadow:0_1px_6px_rgba(0,0,0,0.9),0_0_16px_rgba(0,0,0,0.5)] bg-black/20 backdrop-blur-sm border border-white/10'
+                          : 'text-warm-ivory/90 hover:text-warm-ivory font-medium [text-shadow:0_1px_6px_rgba(0,0,0,0.9)] hover:bg-black/30 hover:backdrop-blur-sm'
+                        : isMoreActive
+                          ? 'text-ink-black font-semibold'
+                          : 'text-ink-black/75 hover:text-ink-black font-medium hover:bg-black/5'
+                    }`}
+                    aria-expanded={moreDropdownOpen}
+                    aria-haspopup="true"
+                  >
+                    <span>MORE</span>
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-300 ${
+                        moreDropdownOpen
+                          ? 'rotate-180 text-champagne-gold'
+                          : isMoreDark
+                            ? 'text-warm-ivory/90 [filter:drop-shadow(0_1px_3px_rgba(0,0,0,0.9))]'
+                            : 'text-ink-black/60'
+                      }`}
+                    />
+                  </button>
+                );
+              })()}
 
               {/* Dropdown Menu Floating Box */}
               <div
@@ -321,20 +409,21 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Hide Navbar Icon Button — Visible on Mobile as well */}
             <button
+              id="nav-item-rightControls"
               type="button"
               onClick={() => setIsManuallyHidden(true)}
               title="Hide Navigation Bar"
               aria-label="Hide Navigation Bar"
               className={`flex w-7 h-7 sm:w-8 sm:h-8 rounded-full border items-center justify-center transition-all duration-300 group flex-shrink-0 cursor-pointer ${
-                isDarkTheme
-                  ? 'border-white/20 text-warm-ivory/80 hover:text-champagne-gold hover:bg-white/10 hover:border-champagne-gold/60'
+                getItemTheme('rightControls') === 'dark'
+                  ? 'border-white/25 text-warm-ivory bg-black/30 backdrop-blur-md shadow-sm hover:text-champagne-gold hover:border-champagne-gold/70 hover:bg-black/50'
                   : 'border-black/15 text-ink-black/70 hover:text-champagne-gold hover:bg-black/5 hover:border-champagne-gold/60'
               }`}
             >
               <EyeOff
                 className={`w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:scale-110 transition-transform ${
-                  isDarkTheme
-                    ? 'text-warm-ivory/80 group-hover:text-champagne-gold'
+                  getItemTheme('rightControls') === 'dark'
+                    ? 'text-warm-ivory group-hover:text-champagne-gold'
                     : 'text-ink-black/70 group-hover:text-champagne-gold'
                 }`}
               />
