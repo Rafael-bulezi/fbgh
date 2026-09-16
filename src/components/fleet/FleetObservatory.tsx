@@ -24,7 +24,6 @@ export interface ShowcaseCar {
   model: string;
   subModel: string;
   mpg: string;
-  shortInfo: string;
   description: string;
   exteriorPhoto: string;
   interiorPhoto: string;
@@ -38,8 +37,7 @@ export const SHOWCASE_CARS: ShowcaseCar[] = [
     model: 'ESCALADE',
     subModel: 'ESV',
     mpg: 'UP TO 21 MPG',
-    shortInfo: 'Full-size luxury SUV with extra luggage room',
-    description: 'Extended full-size luxury SUV with comfortable seating for up to 6 passengers and plenty of room for heavy luggage. Smooth ride, quiet cabin, and perfect for airport travel or long distances.',
+    description: 'Full-size luxury SUV with commanding presence and generous luggage space. Smooth ride and quiet comfort for up to 6 passengers.',
     exteriorPhoto: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
     interiorPhoto: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
     thumbImg: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop',
@@ -48,10 +46,9 @@ export const SHOWCASE_CARS: ShowcaseCar[] = [
     vehicleId: 'kia-carnival-vip',
     brand: 'KIA',
     model: 'CARNIVAL',
-    subModel: 'VIP LOUNGE',
+    subModel: '',
     mpg: 'UP TO 26 MPG',
-    shortInfo: 'Executive VIP lounge with reclining captain seats',
-    description: 'Executive travel with reclining second-row captain chairs, power footrests, and quiet privacy. Great for corporate roadshows or relaxing family trips for up to 6 passengers.',
+    description: 'Executive passenger travel with reclining captain chairs, power footrests, and quiet privacy for up to 6 passengers.',
     exteriorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
     interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
     thumbImg: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600&auto=format&fit=crop',
@@ -62,8 +59,7 @@ export const SHOWCASE_CARS: ShowcaseCar[] = [
     model: 'MAYBACH',
     subModel: 'GLS 600',
     mpg: 'UP TO 20 MPG',
-    shortInfo: 'First-class luxury SUV with rear massage seating',
-    description: 'Our most luxurious 4-passenger SUV. Equipped with executive rear massage seating, dedicated climate controls, and a smooth quiet ride for special occasions and VIP travel.',
+    description: 'Ultra-luxury 4-passenger SUV featuring executive rear massage seating, private climate controls, and whisper-quiet ride quality.',
     exteriorPhoto: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop',
     interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
     thumbImg: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600&auto=format&fit=crop',
@@ -72,10 +68,9 @@ export const SHOWCASE_CARS: ShowcaseCar[] = [
     vehicleId: 'mercedes-sprinter-jet-edition',
     brand: 'MERCEDES-BENZ',
     model: 'SPRINTER',
-    subModel: 'JET EDITION',
+    subModel: '',
     mpg: 'UP TO 19 MPG',
-    shortInfo: 'Spacious luxury van for families and groups of up to 8',
-    description: 'First-class Mercedes-Benz van for a family or group of 8. High-ceiling cabin, leather captain chairs, encrypted Wi-Fi, and generous luggage space for everyone on board.',
+    description: 'First-class luxury van for groups and families of up to 8 passengers. High ceiling, leather captain chairs, and ample luggage room.',
     exteriorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
     interiorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
     thumbImg: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=600&auto=format&fit=crop',
@@ -86,7 +81,6 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
   const [activeIdx, setActiveIdx] = useState(0);
   const [photoMode, setPhotoMode] = useState<'exterior' | 'interior'>('exterior');
   const [lightboxVehicle, setLightboxVehicle] = useState<Vehicle | null>(null);
-  const [showDescriptionMore, setShowDescriptionMore] = useState(false);
 
   const mainImgRef = useRef<HTMLDivElement>(null);
 
@@ -96,7 +90,6 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
 
   useEffect(() => {
     setPhotoMode('exterior');
-    setShowDescriptionMore(false);
   }, [activeIdx]);
 
   useEffect(() => {
@@ -112,11 +105,6 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
 
   const openModal = () => setLightboxVehicle(vehicle);
 
-  // Marquee check: if title is more than 2 words
-  const fullName = `${showcase.model} ${showcase.subModel}`.trim();
-  const nameWords = fullName.split(' ');
-  const isMarquee = nameWords.length > 2;
-
   return (
     <section className="w-full bg-[#0E0C0A] min-h-screen flex flex-col justify-center px-5 sm:px-10 lg:px-14 py-8 lg:py-14 box-border">
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between my-auto gap-6 lg:gap-8">
@@ -125,106 +113,50 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center flex-1">
 
           {/* LEFT: vehicle info */}
-          <div className="lg:col-span-4 space-y-4 text-[#F4EDE4]">
+          <div className="lg:col-span-4 space-y-5 text-[#F4EDE4]">
             
-            {/* BRAND & MODEL TAG (Replaced "FEATURED VEHICLE") */}
-            <div className="flex items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.25em] text-[#C5A059] uppercase font-bold">
-              <span className="w-4 h-[1.5px] bg-[#C5A059]" />
-              <span>BRAND: {showcase.brand}</span>
-              <span className="text-white/30">·</span>
-              <span>MODEL: {showcase.model}</span>
+            {/* BRAND NAME: BIG AND BOLD */}
+            <div className="flex items-center gap-3">
+              <span className="w-6 h-[2px] bg-[#C5A059]" />
+              <span className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#C5A059] tracking-wider uppercase leading-none">
+                {showcase.brand}
+              </span>
             </div>
 
-            {/* CAR NAME WITH MARQUEE IF > 2 WORDS & SUBMODEL IN SMALLER LETTER */}
-            <div className="min-h-[50px] flex items-center">
-              {isMarquee ? (
-                <div className="overflow-hidden whitespace-nowrap max-w-full relative group py-1">
-                  <div className="inline-flex gap-10 animate-marquee-text group-hover:[animation-play-state:paused]">
-                    <div className="flex items-baseline gap-2.5">
-                      <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
-                        {showcase.model}
-                      </h2>
-                      <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
-                        {showcase.subModel}
-                      </span>
-                    </div>
-                    <div className="flex items-baseline gap-2.5" aria-hidden="true">
-                      <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
-                        {showcase.model}
-                      </h2>
-                      <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
-                        {showcase.subModel}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
-                    {showcase.model}
-                  </h2>
-                  <span className="font-serif text-xl sm:text-2xl text-[#C5A059] font-light tracking-wide uppercase">
+            {/* CAR MODEL: ALL IN PURE WHITE */}
+            <div>
+              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal text-white tracking-tight leading-none flex items-baseline gap-3 flex-wrap">
+                <span>{showcase.model}</span>
+                {showcase.subModel && (
+                  <span className="font-serif text-2xl sm:text-3xl lg:text-4xl text-white/80 font-light uppercase">
                     {showcase.subModel}
                   </span>
-                </div>
-              )}
+                )}
+              </h2>
             </div>
 
-            {/* DOWN-TO-EARTH CAR INFO */}
-            <p className="text-xs sm:text-sm font-mono tracking-wider text-[#C5A059] font-semibold">
-              {showcase.shortInfo}
+            {/* NATURAL, DOWN-TO-EARTH DESCRIPTION */}
+            <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-md font-light">
+              {showcase.description}
             </p>
 
-            {/* CONSISTENT LENGTH DESCRIPTION WITH MORE / LESS TOGGLE */}
-            <div className="space-y-1">
-              <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-md font-light">
-                {showDescriptionMore ? (
-                  <>
-                    {showcase.description}
-                    <button
-                      type="button"
-                      onClick={() => setShowDescriptionMore(false)}
-                      className="ml-2 text-[#C5A059] hover:underline font-mono text-[10px] uppercase font-bold cursor-pointer"
-                    >
-                      (less)
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {showcase.description.length > 135
-                      ? `${showcase.description.slice(0, 135)}...`
-                      : showcase.description}
-                    {showcase.description.length > 135 && (
-                      <button
-                        type="button"
-                        onClick={() => setShowDescriptionMore(true)}
-                        className="ml-2 text-[#C5A059] hover:underline font-mono text-[10px] uppercase font-bold cursor-pointer"
-                      >
-                        (more)
-                      </button>
-                    )}
-                  </>
-                )}
-              </p>
-            </div>
-
-            {/* BIGGER SPECS ICONS */}
-            <div className="flex items-center gap-6 pt-2 text-white/90">
-              <div className="flex items-center gap-2.5">
-                <Users className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
-                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+            {/* EVEN BIGGER SPEC ICONS */}
+            <div className="flex items-center gap-7 pt-3 text-white">
+              <div className="flex items-center gap-3">
+                <Users className="w-7 h-7 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-sm uppercase tracking-wider font-bold text-white">
                   {vehicle.passengers} PASS.
                 </span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Briefcase className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
-                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+              <div className="flex items-center gap-3">
+                <Briefcase className="w-7 h-7 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-sm uppercase tracking-wider font-bold text-white">
                   {vehicle.luggage} BAGS
                 </span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Fuel className="w-5 h-5 text-[#C5A059] flex-shrink-0" />
-                <span className="font-mono text-xs uppercase tracking-wider font-medium">
+              <div className="flex items-center gap-3">
+                <Fuel className="w-7 h-7 text-[#C5A059] flex-shrink-0" />
+                <span className="font-mono text-sm uppercase tracking-wider font-bold text-white">
                   {showcase.mpg}
                 </span>
               </div>
@@ -300,7 +232,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
               </div>
             </div>
 
-            {/* BUTTON BAR: EXTERIOR, INTERIOR, AND VIEW DETAILS MOVED HERE */}
+            {/* BUTTON BAR: EXTERIOR, INTERIOR, AND VIEW DETAILS */}
             <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <button
@@ -364,10 +296,10 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-3">
                     <p className="font-display font-bold text-xs sm:text-sm text-white tracking-tight leading-tight truncate">
-                      {s.model}
+                      {s.model} {s.subModel ? s.subModel : ''}
                     </p>
                     <p className="text-[9px] sm:text-[10px] text-[#C5A059] font-mono tracking-wider uppercase opacity-90 truncate">
-                      {s.subModel} · {v.passengers} PASS
+                      {s.brand} · {v.passengers} PASS
                     </p>
                   </div>
                   {isActive && (
