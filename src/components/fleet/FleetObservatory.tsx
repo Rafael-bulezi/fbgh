@@ -80,16 +80,29 @@ export const SHOWCASE_CARS: ShowcaseCar[] = [
 export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicle }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [photoMode, setPhotoMode] = useState<'exterior' | 'interior'>('exterior');
+  const [selectedPhotoIdx, setSelectedPhotoIdx] = useState(0);
   const [lightboxVehicle, setLightboxVehicle] = useState<Vehicle | null>(null);
 
   const mainImgRef = useRef<HTMLDivElement>(null);
 
   const showcase = SHOWCASE_CARS[activeIdx];
   const vehicle = FLEET_DATA.find((v) => v.id === showcase.vehicleId) || FLEET_DATA[0];
-  const currentPhoto = photoMode === 'exterior' ? showcase.exteriorPhoto : showcase.interiorPhoto;
+
+  // 3 stacked photos synced with the active photoMode
+  const exteriorPhotos = (vehicle.exteriorGallery && vehicle.exteriorGallery.length >= 3)
+    ? vehicle.exteriorGallery.slice(0, 3)
+    : [showcase.exteriorPhoto, vehicle.image, showcase.thumbImg];
+
+  const interiorPhotos = (vehicle.interiorGallery && vehicle.interiorGallery.length >= 3)
+    ? vehicle.interiorGallery.slice(0, 3)
+    : [showcase.interiorPhoto, vehicle.interiorImage, showcase.interiorPhoto];
+
+  const activePhotoList = photoMode === 'exterior' ? exteriorPhotos : interiorPhotos;
+  const currentPhoto = activePhotoList[selectedPhotoIdx] || activePhotoList[0];
 
   useEffect(() => {
     setPhotoMode('exterior');
+    setSelectedPhotoIdx(0);
   }, [activeIdx]);
 
   useEffect(() => {
@@ -182,82 +195,70 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
-                {/* Gallery overlay button */}
-                <button
-                  type="button"
-                  onClick={openModal}
-                  className="absolute top-4 right-4 bg-black/60 hover:bg-black/85 text-white backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase inline-flex items-center gap-2 transition-all border border-white/15 cursor-pointer shadow-md"
-                >
-                  <Images className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span>VIEW GALLERY</span>
-                </button>
-
                 {/* View mode label */}
                 <div className="absolute bottom-4 left-4 text-white/90 font-mono text-[10px] tracking-widest uppercase bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/10">
                   {photoMode === 'exterior' ? 'EXTERIOR' : 'INTERIOR CABIN'}
                 </div>
               </div>
 
-              {/* 3 stacked thumbnails — same height as main via flex column */}
+              {/* 3 stacked thumbnails — synced with exterior/interior and equal height via flex column */}
               <div className="w-28 sm:w-36 lg:w-44 flex flex-col gap-2.5 h-full">
-                {/* Exterior thumbnail */}
-                <button
-                  type="button"
-                  onClick={() => setPhotoMode('exterior')}
-                  className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'exterior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
-                >
-                  <img src={showcase.exteriorPhoto} alt="Exterior" className="w-full h-full object-cover" />
-                </button>
-
-                {/* Interior thumbnail */}
-                <button
-                  type="button"
-                  onClick={() => setPhotoMode('interior')}
-                  className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'interior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
-                >
-                  <img src={showcase.interiorPhoto} alt="Interior" className="w-full h-full object-cover" />
-                </button>
-
-                {/* Gallery thumb */}
-                <button
-                  type="button"
-                  onClick={openModal}
-                  className="flex-1 rounded-xl overflow-hidden border border-white/10 hover:border-[#C5A059]/60 opacity-70 hover:opacity-100 transition-all cursor-pointer relative group"
-                >
-                  <img src={vehicle.exteriorGallery?.[1] || showcase.exteriorPhoto} alt="Gallery" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-white font-mono text-[9px] tracking-widest uppercase font-semibold">GALLERY</span>
-                  </div>
-                </button>
+                {activePhotoList.map((photoUrl, pIdx) => {
+                  const isSelected = selectedPhotoIdx === pIdx;
+                  return (
+                    <button
+                      key={pIdx}
+                      type="button"
+                      onClick={() => setSelectedPhotoIdx(pIdx)}
+                      className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02] opacity-100 shadow-md'
+                          : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={photoUrl}
+                        alt={`${photoMode === 'exterior' ? 'Exterior' : 'Interior'} view ${pIdx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* BUTTON BAR: EXTERIOR, INTERIOR, AND VIEW DETAILS */}
+            {/* BUTTON BAR: EXTERIOR, INTERIOR, AND VIEW GALLERY WITH IMAGES ICON */}
             <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setPhotoMode('exterior')}
+                  onClick={() => {
+                    setPhotoMode('exterior');
+                    setSelectedPhotoIdx(0);
+                  }}
                   className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'exterior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
                 >
                   EXTERIOR
                 </button>
                 <button
                   type="button"
-                  onClick={() => setPhotoMode('interior')}
+                  onClick={() => {
+                    setPhotoMode('interior');
+                    setSelectedPhotoIdx(0);
+                  }}
                   className={`px-3.5 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'interior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
                 >
                   INTERIOR
                 </button>
                 
-                {/* VIEW DETAILS BUTTON RIGHT UNDER THE CAR */}
+                {/* VIEW GALLERY BUTTON (WITH IMAGES ICON) */}
                 <button
                   type="button"
                   onClick={openModal}
                   className="inline-flex items-center gap-2 bg-[#C5A059] hover:bg-[#B38D45] text-white px-4 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all shadow-md cursor-pointer ml-1"
                 >
-                  <span>VIEW DETAILS</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <Images className="w-3.5 h-3.5 text-white" />
+                  <span>VIEW GALLERY</span>
                 </button>
               </div>
 
@@ -274,7 +275,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
           </div>
         </div>
 
-        {/* ── VEHICLE CAROUSEL: EXACTLY 4 CARS AT THE BOTTOM WITH AMPLE ROOM ── */}
+        {/* ── VEHICLE CAROUSEL: 4 CARS, 25% TALLER, VIBRANT (NO SEPIA/MUDDINESS) ── */}
         <div className="flex gap-3 sm:gap-4 pt-1 items-stretch">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 flex-1">
             {SHOWCASE_CARS.map((s, idx) => {
@@ -286,14 +287,17 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
                   type="button"
                   onClick={() => setActiveIdx(idx)}
                   className={`relative rounded-xl overflow-hidden cursor-pointer border transition-all duration-300 group text-left ${isActive ? 'border-[#C5A059] ring-2 ring-[#C5A059]/40 scale-[1.02] shadow-xl' : 'border-white/10 hover:border-white/30'}`}
-                  style={{ height: 'clamp(95px, 12vh, 125px)' }}
+                  style={{ height: 'clamp(120px, 15vh, 160px)' }}
                 >
                   <img
                     src={s.thumbImg}
                     alt={s.model}
-                    className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity"
+                    className="w-full h-full object-cover opacity-95 group-hover:opacity-100 transition-all duration-300"
+                    style={{ filter: 'none' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                  {/* Subtle dark gradient only behind the bottom text so cars stay clear & colorful */}
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/90 via-black/45 to-transparent pointer-events-none" />
+                  
                   <div className="absolute bottom-0 inset-x-0 p-3">
                     <p className="font-display font-bold text-xs sm:text-sm text-white tracking-tight leading-tight truncate">
                       {s.model} {s.subModel ? s.subModel : ''}
@@ -315,7 +319,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
             <button
               type="button"
               onClick={prev}
-              className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+              className="w-8 sm:w-9 h-[56px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
               aria-label="Previous vehicle"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -323,7 +327,7 @@ export const FleetObservatory: React.FC<FleetObservatoryProps> = ({ onBookVehicl
             <button
               type="button"
               onClick={next}
-              className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+              className="w-8 sm:w-9 h-[56px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
               aria-label="Next vehicle"
             >
               <ChevronRight className="w-4 h-4" />
