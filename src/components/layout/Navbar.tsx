@@ -233,6 +233,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 size={isSolid ? 'md' : 'lg'}
                 variant={mobileMenuOpen || isDarkTheme ? 'dark' : 'light'}
                 showText={true}
+                animate={false}
                 className="transition-all duration-500 group-hover:scale-105"
               />
             </button>
