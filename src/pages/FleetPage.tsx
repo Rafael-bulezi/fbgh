@@ -52,9 +52,9 @@ const SHOWCASE: {
   {
     vehicleId: 'range-rover-sv-long',
     mpg: 'UP TO 22 MPG',
-    exteriorPhoto: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=1600&auto=format&fit=crop',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?q=80&w=1600&auto=format&fit=crop',
     interiorPhoto: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
-    thumbImg: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?q=80&w=600&auto=format&fit=crop',
   },
   {
     vehicleId: 'mercedes-sprinter-jet-edition',
@@ -114,50 +114,50 @@ export const FleetPage: React.FC<FleetPageProps> = () => {
         variant="sharp-diagonal"
         fromColor="#FAF8F5"
         toColor="#0E0C0A"
-        height="clamp(28px, 3vw, 50px)"
+        height="clamp(30px, 3.5vw, 55px)"
       />
 
-      {/* ── 2. OBSERVATORY: fits in remaining space, ~100vh total with hero ── */}
-      <section className="w-full bg-[#0E0C0A] px-5 sm:px-10 lg:px-14 pt-6 pb-8">
-        <div className="max-w-7xl mx-auto">
+      {/* ── 2. OBSERVATORY: FULL 100VH SECTION ──────────────────────────────── */}
+      <section className="w-full bg-[#0E0C0A] min-h-screen flex flex-col justify-center px-5 sm:px-10 lg:px-14 py-10 lg:py-16 box-border">
+        <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between my-auto gap-8 lg:gap-10">
 
-          {/* ── TWO-COLUMN LAYOUT ────────────────────────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+          {/* ── TWO-COLUMN SHOWCASE ─────────────────────────────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center flex-1">
 
             {/* LEFT: vehicle info */}
-            <div className="lg:col-span-4 space-y-3 text-[#F4EDE4] pt-1">
-              <div className="flex items-center gap-2">
-                <span className="w-4 h-[1.5px] bg-[#C5A059]" />
-                <span className="text-[9px] font-mono tracking-[0.28em] text-[#C5A059] uppercase font-bold">
+            <div className="lg:col-span-4 space-y-4 lg:space-y-5 text-[#F4EDE4]">
+              <div className="flex items-center gap-2.5">
+                <span className="w-5 h-[1.5px] bg-[#C5A059]" />
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.28em] text-[#C5A059] uppercase font-bold">
                   FEATURED VEHICLE
                 </span>
               </div>
 
-              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-white tracking-tight leading-none">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-white tracking-tight leading-none">
                 {vehicle.name}
               </h2>
 
-              <p className="text-[10px] sm:text-[11px] font-mono tracking-[0.22em] text-[#967C52] uppercase font-semibold">
+              <p className="text-xs sm:text-sm font-mono tracking-[0.22em] text-[#967C52] uppercase font-semibold">
                 {vehicle.tagline}
               </p>
 
-              <p className="text-xs text-white/65 leading-relaxed max-w-sm font-light">
+              <p className="text-sm sm:text-base text-white/70 leading-relaxed max-w-md font-light">
                 {vehicle.description.split('.').slice(0, 2).join('.').trim()}.
               </p>
 
               {/* Specs */}
-              <div className="flex items-center gap-5 pt-1 text-white/80">
-                <div className="flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span className="font-mono text-[10px] uppercase tracking-wider">{vehicle.passengers} PASS.</span>
+              <div className="flex items-center gap-6 pt-1 text-white/85">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-mono text-xs uppercase tracking-wider">{vehicle.passengers} PASS.</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Briefcase className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span className="font-mono text-[10px] uppercase tracking-wider">{vehicle.luggage} BAG</span>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-mono text-xs uppercase tracking-wider">{vehicle.luggage} BAG</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Fuel className="w-3.5 h-3.5 text-[#C5A059]" />
-                  <span className="font-mono text-[10px] uppercase tracking-wider">{showcase.mpg}</span>
+                <div className="flex items-center gap-2">
+                  <Fuel className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-mono text-xs uppercase tracking-wider">{showcase.mpg}</span>
                 </div>
               </div>
 
@@ -166,55 +166,55 @@ export const FleetPage: React.FC<FleetPageProps> = () => {
                 <button
                   type="button"
                   onClick={openModal}
-                  className="inline-flex items-center gap-2 bg-[#C5A059] hover:bg-[#B38D45] text-white px-5 py-2.5 rounded-lg text-[11px] font-mono tracking-widest uppercase transition-all shadow-md cursor-pointer"
+                  className="inline-flex items-center gap-2.5 bg-[#C5A059] hover:bg-[#B38D45] text-white px-6 py-3 rounded-lg text-xs font-mono tracking-widest uppercase transition-all shadow-lg hover:shadow-xl cursor-pointer"
                 >
                   <span>VIEW DETAILS</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
             {/* RIGHT: photo area */}
-            <div className="lg:col-span-8 flex flex-col gap-3">
+            <div className="lg:col-span-8 flex flex-col gap-4">
 
               {/* Main photo + 3 stacked thumbnails side by side, equal height */}
-              <div className="flex gap-3" style={{ height: 'clamp(220px, 28vh, 360px)' }}>
+              <div className="flex gap-3 sm:gap-4" style={{ height: 'clamp(320px, 46vh, 500px)' }}>
 
                 {/* Main Photo */}
                 <div
                   ref={mainImgRef}
-                  className="flex-1 rounded-xl overflow-hidden relative group bg-black/20 border border-white/10"
+                  className="flex-1 rounded-2xl overflow-hidden relative group bg-black/20 border border-white/10 shadow-2xl"
                 >
                   <img
                     src={currentPhoto}
                     alt={vehicle.name}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
                   {/* Gallery overlay button */}
                   <button
                     type="button"
                     onClick={openModal}
-                    className="absolute top-3 right-3 bg-black/55 hover:bg-black/75 text-white backdrop-blur-sm px-3 py-1.5 rounded-full text-[10px] font-mono tracking-wider uppercase inline-flex items-center gap-1.5 transition-all border border-white/15 cursor-pointer"
+                    className="absolute top-4 right-4 bg-black/60 hover:bg-black/85 text-white backdrop-blur-md px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wider uppercase inline-flex items-center gap-2 transition-all border border-white/15 cursor-pointer shadow-md"
                   >
-                    <Images className="w-3 h-3 text-[#C5A059]" />
+                    <Images className="w-3.5 h-3.5 text-[#C5A059]" />
                     <span>VIEW GALLERY</span>
                   </button>
 
                   {/* View mode label */}
-                  <div className="absolute bottom-3 left-3 text-white/80 font-mono text-[9px] tracking-widest uppercase bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-md border border-white/10">
+                  <div className="absolute bottom-4 left-4 text-white/90 font-mono text-[10px] tracking-widest uppercase bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-md border border-white/10">
                     {photoMode === 'exterior' ? 'EXTERIOR' : 'INTERIOR CABIN'}
                   </div>
                 </div>
 
                 {/* 3 stacked thumbnails — same height as main via flex column */}
-                <div className="w-28 sm:w-32 lg:w-36 flex flex-col gap-2 h-full">
+                <div className="w-28 sm:w-36 lg:w-44 flex flex-col gap-2.5 h-full">
                   {/* Exterior thumbnail */}
                   <button
                     type="button"
                     onClick={() => setPhotoMode('exterior')}
-                    className={`flex-1 rounded-lg overflow-hidden border transition-all cursor-pointer ${photoMode === 'exterior' ? 'border-[#C5A059] ring-1 ring-[#C5A059]/50' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                    className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'exterior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
                   >
                     <img src={showcase.exteriorPhoto} alt="Exterior" className="w-full h-full object-cover" />
                   </button>
@@ -223,7 +223,7 @@ export const FleetPage: React.FC<FleetPageProps> = () => {
                   <button
                     type="button"
                     onClick={() => setPhotoMode('interior')}
-                    className={`flex-1 rounded-lg overflow-hidden border transition-all cursor-pointer ${photoMode === 'interior' ? 'border-[#C5A059] ring-1 ring-[#C5A059]/50' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                    className={`flex-1 rounded-xl overflow-hidden border transition-all cursor-pointer ${photoMode === 'interior' ? 'border-[#C5A059] ring-2 ring-[#C5A059]/50 scale-[1.02]' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
                   >
                     <img src={showcase.interiorPhoto} alt="Interior" className="w-full h-full object-cover" />
                   </button>
@@ -232,30 +232,30 @@ export const FleetPage: React.FC<FleetPageProps> = () => {
                   <button
                     type="button"
                     onClick={openModal}
-                    className="flex-1 rounded-lg overflow-hidden border border-white/10 hover:border-[#C5A059]/60 opacity-70 hover:opacity-100 transition-all cursor-pointer relative group"
+                    className="flex-1 rounded-xl overflow-hidden border border-white/10 hover:border-[#C5A059]/60 opacity-70 hover:opacity-100 transition-all cursor-pointer relative group"
                   >
                     <img src={vehicle.exteriorGallery?.[1] || showcase.exteriorPhoto} alt="Gallery" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-white font-mono text-[8px] tracking-widest uppercase">GALLERY</span>
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-white font-mono text-[9px] tracking-widest uppercase font-semibold">GALLERY</span>
                     </div>
                   </button>
                 </div>
               </div>
 
               {/* Exterior / Interior toggle row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center gap-2.5">
                   <button
                     type="button"
                     onClick={() => setPhotoMode('exterior')}
-                    className={`px-3.5 py-1.5 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'exterior' ? 'bg-[#F4EDE4] text-[#141416] font-bold' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                    className={`px-4 py-2 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'exterior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
                   >
                     EXTERIOR
                   </button>
                   <button
                     type="button"
                     onClick={() => setPhotoMode('interior')}
-                    className={`px-3.5 py-1.5 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'interior' ? 'bg-[#F4EDE4] text-[#141416] font-bold' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                    className={`px-4 py-2 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'interior' ? 'bg-[#F4EDE4] text-[#141416] font-bold shadow-md' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
                   >
                     INTERIOR
                   </button>
@@ -264,69 +264,70 @@ export const FleetPage: React.FC<FleetPageProps> = () => {
                 <button
                   type="button"
                   onClick={openModal}
-                  className="text-[10px] font-mono tracking-wider uppercase text-[#967C52] hover:text-[#C5A059] inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="text-xs font-mono tracking-wider uppercase text-[#967C52] hover:text-[#C5A059] inline-flex items-center gap-2 cursor-pointer transition-colors"
                 >
                   <span>FULL SPECS</span>
-                  <ArrowRight className="w-2.5 h-2.5" />
+                  <ArrowRight className="w-3 h-3" />
                 </button>
-              </div>
-
-              {/* ── VEHICLE CAROUSEL (actual cars, not categories) ────────── */}
-              <div className="flex gap-2.5 sm:gap-3 mt-1">
-                {SHOWCASE.map((s, idx) => {
-                  const v = FLEET_DATA.find((f) => f.id === s.vehicleId) || FLEET_DATA[0];
-                  const isActive = idx === activeIdx;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setActiveIdx(idx)}
-                      className={`flex-1 relative rounded-xl overflow-hidden cursor-pointer border transition-all duration-300 group ${isActive ? 'border-[#C5A059] ring-2 ring-[#C5A059]/30 scale-[1.03]' : 'border-white/10 hover:border-white/30'}`}
-                      style={{ height: '90px' }}
-                    >
-                      <img
-                        src={s.thumbImg}
-                        alt={v.name}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                      <div className="absolute bottom-0 inset-x-0 p-2">
-                        <p className="font-display font-bold text-[10px] sm:text-[11px] text-white tracking-tight leading-tight truncate">
-                          {v.name.split(' ').slice(0, 2).join(' ')}
-                        </p>
-                        <p className="text-[8px] sm:text-[9px] text-[#C5A059] font-mono tracking-wider uppercase opacity-80 truncate">
-                          {v.categoryLabel}
-                        </p>
-                      </div>
-                      {isActive && (
-                        <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
-                      )}
-                    </button>
-                  );
-                })}
-                {/* Prev/Next arrows */}
-                <div className="flex flex-col gap-1.5 justify-center">
-                  <button
-                    type="button"
-                    onClick={prev}
-                    className="w-7 h-[42px] rounded-md border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer"
-                    aria-label="Previous"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={next}
-                    className="w-7 h-[42px] rounded-md border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer"
-                    aria-label="Next"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
               </div>
 
             </div>
           </div>
+
+          {/* ── VEHICLE CAROUSEL: FULL-WIDTH ROW OF ACTUAL CARS ───────────── */}
+          <div className="flex gap-3 sm:gap-4 pt-2">
+            {SHOWCASE.map((s, idx) => {
+              const v = FLEET_DATA.find((f) => f.id === s.vehicleId) || FLEET_DATA[0];
+              const isActive = idx === activeIdx;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveIdx(idx)}
+                  className={`flex-1 relative rounded-xl overflow-hidden cursor-pointer border transition-all duration-300 group ${isActive ? 'border-[#C5A059] ring-2 ring-[#C5A059]/40 scale-[1.03] shadow-lg' : 'border-white/10 hover:border-white/30'}`}
+                  style={{ height: 'clamp(95px, 12vh, 120px)' }}
+                >
+                  <img
+                    src={s.thumbImg}
+                    alt={v.name}
+                    className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 inset-x-0 p-2.5">
+                    <p className="font-display font-bold text-xs sm:text-sm text-white tracking-tight leading-tight truncate">
+                      {v.name.split(' ').slice(0, 2).join(' ')}
+                    </p>
+                    <p className="text-[9px] sm:text-[10px] text-[#C5A059] font-mono tracking-wider uppercase opacity-90 truncate">
+                      {v.categoryLabel}
+                    </p>
+                  </div>
+                  {isActive && (
+                    <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#C5A059] shadow-sm" />
+                  )}
+                </button>
+              );
+            })}
+            {/* Prev/Next arrows */}
+            <div className="flex flex-col gap-2 justify-center">
+              <button
+                type="button"
+                onClick={prev}
+                className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                className="w-8 sm:w-9 h-[46px] rounded-lg border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer bg-white/5 hover:bg-white/10"
+                aria-label="Next"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
