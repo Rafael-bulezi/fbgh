@@ -9,9 +9,8 @@ interface DestinationsPageProps {
   onOpenBooking: () => void;
 }
 
-const DestinationCard: React.FC<{ dest: (typeof DESTINATIONS_DATA)[0]; onOpenBooking: () => void }> = ({
+const DestinationCard: React.FC<{ dest: (typeof DESTINATIONS_DATA)[0]; onOpenBooking?: () => void }> = ({
   dest,
-  onOpenBooking,
 }) => {
   const [imgRef, parallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.11, maxOffset: 65 });
 
@@ -71,14 +70,6 @@ const DestinationCard: React.FC<{ dest: (typeof DESTINATIONS_DATA)[0]; onOpenBoo
           </div>
         </div>
 
-        <div className="pt-2">
-          <button
-            onClick={onOpenBooking}
-            className="pb-btn pb-btn-primary !px-7 !py-3 !text-xs cursor-pointer shadow-md"
-          >
-            <span>RESERVE IN {dest.name}</span>
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -97,10 +88,6 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
         imageAlt="Metropolitan Destination Map Panorama"
         curveVariant="s-curve"
         theme="light"
-        primaryCta={{
-          label: 'RESERVE A CORRIDOR',
-          onClick: onOpenBooking,
-        }}
       />
 
       {/* 2. DESTINATIONS CARDS GALLERY */}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
 import { useSubtleParallax } from '../../hooks/useSubtleParallax';
 
 export interface HeroCta {
@@ -14,7 +13,7 @@ export interface HeroStatChip {
 }
 
 export interface CurvedHeroProps {
-  eyebrow: string;
+  eyebrow?: string;
   titleLine1: string;
   titleLine2: string;
   description: string;
@@ -28,21 +27,19 @@ export interface CurvedHeroProps {
   statChips?: HeroStatChip[];
   minHeight?: string;
   enableParallax?: boolean;
+  slogan?: string;
 }
 
 export const CurvedHero: React.FC<CurvedHeroProps> = ({
-  eyebrow,
   titleLine1,
   titleLine2,
   description,
+  slogan,
   image,
   imageAlt = 'Faith Based Global Holdings',
   imagePosition = 'object-center',
   curveVariant = 'gentle-wave',
   theme = 'light',
-  primaryCta,
-  secondaryCta,
-  statChips,
   minHeight = 'min-h-[85vh] sm:min-h-[90vh] lg:min-h-screen lg:h-screen',
   enableParallax = true,
 }) => {
@@ -153,14 +150,6 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
         }}
       >
         <div className="max-w-md sm:max-w-lg lg:max-w-xl space-y-3 sm:space-y-5">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
-              {eyebrow}
-            </span>
-          </div>
-
           {/* Headline */}
           <h1
             className={`font-display font-black text-3xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] tracking-tight leading-[0.94] sm:leading-[0.92] ${
@@ -172,59 +161,30 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
             <span className="text-[#C5A059]">{titleLine2}</span>
           </h1>
 
-          {/* Description — capped to 1 sentence on mobile */}
+          {/* Description — on desktop sits cleanly under headline */}
           <p
-            className={`text-xs sm:text-sm md:text-base leading-relaxed font-normal max-w-lg ${
+            className={`hidden sm:block text-sm md:text-base leading-relaxed font-normal max-w-lg ${
               isLight ? 'text-[#4A4A4F]' : 'text-warm-ivory/80'
             }`}
           >
-            <span className="sm:hidden">{firstSentence}</span>
-            <span className="hidden sm:inline">{description}</span>
+            {description}
           </p>
 
-          {/* Stat Chips (if provided) */}
-          {statChips && statChips.length > 0 && (
-            <div className="hidden sm:flex flex-wrap items-center gap-3 sm:gap-5 pt-1 sm:pt-2 font-mono text-[9.5px] sm:text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
-              {statChips.map((chip, i) => (
-                <React.Fragment key={chip.label}>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
-                    <span>{chip.label}</span>
-                  </div>
-                  {i < statChips.length - 1 && <span className="text-[#B0B0B5]">·</span>}
-                </React.Fragment>
-              ))}
-            </div>
+          {slogan && (
+            <p className="hidden sm:block font-mono text-[10px] tracking-[0.35em] text-[#C5A059] uppercase font-medium pt-1">
+              {slogan}
+            </p>
           )}
 
-          {/* Action CTAs — hidden on mobile to maximize visible photography */}
-          {(primaryCta || secondaryCta) && (
-            <div className="hidden sm:flex flex-row items-center gap-2.5 sm:gap-4 pt-2">
-              {primaryCta && (
-                <button
-                  onClick={primaryCta.onClick}
-                  className="pb-btn pb-btn-primary !px-3 sm:!px-7 !py-2.5 sm:!py-3.5 !text-[9.5px] sm:!text-xs whitespace-nowrap cursor-pointer shadow-md hover:shadow-lg flex items-center gap-1.5"
-                >
-                  <span>{primaryCta.label}</span>
-                  {primaryCta.icon ?? <ArrowRight className="w-3.5 h-3.5" />}
-                </button>
-              )}
+        </div>
+      </div>
 
-              {secondaryCta && (
-                <button
-                  onClick={secondaryCta.onClick}
-                  className={`pb-btn pb-btn-outline !px-3 sm:!px-7 !py-2.5 sm:!py-3.5 !text-[9.5px] sm:!text-xs whitespace-nowrap cursor-pointer transition-all flex items-center gap-1.5 ${
-                    isLight
-                      ? '!text-[#141416] !border-[#C5A059] hover:!bg-[#C5A059] hover:!text-obsidian bg-white/70'
-                      : '!text-warm-ivory !border-[#C5A059] hover:!bg-[#C5A059] hover:!text-obsidian'
-                  }`}
-                >
-                  <span>{secondaryCta.label}</span>
-                  {secondaryCta.icon ?? <ArrowRight className="w-3.5 h-3.5" />}
-                </button>
-              )}
-            </div>
-          )}
+      {/* Mobile paragraph positioned on the lower side of the hero so faces & photography remain 100% unobstructed */}
+      <div className="sm:hidden absolute bottom-4 inset-x-4 z-20 flex justify-center pointer-events-none">
+        <div className="bg-[#0c0d0e]/85 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.6)] max-w-xs text-center">
+          <p className="text-[11px] leading-snug font-normal text-[#F4EDE4]/90">
+            {firstSentence}
+          </p>
         </div>
       </div>
     </section>

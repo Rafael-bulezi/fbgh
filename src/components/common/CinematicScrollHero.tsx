@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 interface CinematicScrollHeroProps {
-  onOpenBooking: () => void;
-  onExploreFleet: () => void;
+  onOpenBooking?: () => void;
+  onExploreFleet?: () => void;
 }
 
-export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
-  onOpenBooking,
-  onExploreFleet,
-}) => {
+export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [showInfoA, setShowInfoA] = useState(false);
@@ -105,7 +102,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           >
             <img
               src="https://res.cloudinary.com/dv9jpkgrs/image/upload/v1788409702/ChatGPT_Image_Sep_3_2026_05_22_22_AM_cft0se.png"
-              alt="PB Luxury Chauffeur Vehicle on Wet Pavement"
+              alt="FBGH Luxury Chauffeur Vehicle on Wet Pavement"
               className="w-full h-full object-cover object-center"
             />
             {/* Single clean gradient — left-bottom text legibility only */}
@@ -123,11 +120,6 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           }}
         >
           <div className="relative z-10 max-w-2xl">
-            <div className="flex items-center gap-2.5 sm:gap-3 text-champagne-gold text-[9.5px] sm:text-[10px] tracking-[0.3em] uppercase font-medium mb-2.5 sm:mb-3 text-contrast-eyebrow">
-              <span className="w-6 sm:w-8 h-[1px] bg-champagne-gold" />
-              <span>PRIVATE TRANSPORTATION • ELEVATED</span>
-            </div>
-
             <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight mb-3 sm:mb-4 text-contrast-title">
               ARRIVE WITH<br />
               <span className="text-[#E0B268]">INTENTION.</span>
@@ -143,26 +135,6 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
                 className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1 pointer-events-auto cursor-pointer"
               >
                 {showInfoA ? '− LESS' : '+ MORE'}
-              </button>
-            </div>
-
-            <div className="flex flex-row items-center gap-2 sm:gap-4 pointer-events-auto">
-              <button
-                type="button"
-                onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary !px-2.5 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
-              >
-                <span>REQUEST A RIDE</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={onExploreFleet}
-                className="pb-btn pb-btn-outline !px-2.5 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
-              >
-                <span>EXPLORE FLEET</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           </div>
@@ -182,7 +154,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           >
             <img
               src="https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1920&auto=format&fit=crop"
-              alt="PB Luxury Chauffeur Interior Lounge"
+              alt="FBGH Luxury Chauffeur Interior Lounge"
               className="w-full h-full object-cover object-center"
             />
             {/* Luminous Bottom Contrast Scrim */}
@@ -201,11 +173,6 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
           }}
         >
           <div className="relative z-10 max-w-2xl text-right flex flex-col items-end">
-            <div className="flex items-center flex-row-reverse gap-2.5 sm:gap-3 text-champagne-gold text-[9.5px] sm:text-[10px] tracking-[0.3em] uppercase font-medium mb-2.5 sm:mb-3 text-contrast-eyebrow">
-              <span className="w-6 sm:w-8 h-[1px] bg-champagne-gold" />
-              <span>CHAPTER 02 • THE STANDARD</span>
-            </div>
-
             <h1 className="font-display font-black text-3xl sm:text-5xl md:text-6xl lg:text-[76px] text-[#F4EDE4] leading-[0.98] tracking-tight mb-3 sm:mb-4 text-contrast-title">
               OBSESSIVE<br />
               <span className="text-[#E0B268]">PRECISION.</span>
@@ -213,7 +180,7 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
 
             <div className="mb-3 sm:mb-8 text-right">
               <p className={`text-xs sm:text-sm text-warm-ivory max-w-lg leading-relaxed font-normal text-contrast-body ${showInfoB ? '' : 'line-clamp-2 sm:line-clamp-none'}`}>
-                Where quiet luxury meets relentless reliability. Every stitch, every route, and every moment is calibrated to perfection.
+                Every route planned. Every detail checked. Every ride feels effortless because we handled it already.
               </p>
               <button
                 type="button"
@@ -221,17 +188,6 @@ export const CinematicScrollHero: React.FC<CinematicScrollHeroProps> = ({
                 className="sm:hidden font-mono text-[9px] tracking-widest text-[#E0B268] uppercase mt-1 pointer-events-auto cursor-pointer"
               >
                 {showInfoB ? '− LESS' : '+ MORE'}
-              </button>
-            </div>
-
-            <div className="pointer-events-auto flex justify-end">
-              <button
-                type="button"
-                onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary !px-3 sm:!px-7 !py-2 sm:!py-3.5 !text-[9px] sm:!text-xs whitespace-nowrap"
-              >
-                <span>RESERVE WITH INTENTION</span>
-                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               </button>
             </div>
           </div>

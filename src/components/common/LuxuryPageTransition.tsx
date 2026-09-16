@@ -87,11 +87,11 @@ export const LuxuryPageTransition: React.FC<LuxuryPageTransitionProps> = ({ chil
   const getPageTag = (key: string) => {
     switch (key) {
       case 'fleet':
-        return '01 ? BESPOKE FLEET';
+        return '01 · BESPOKE FLEET';
       case 'services':
-        return '02 ? CONCIERGE & TRANSFERS';
+        return '02 · CONCIERGE & TRANSFERS';
       case 'experience':
-        return '03 ? THE PB STANDARD';
+        return '03 · THE FBGH STANDARD';
       case 'destinations':
         return '04 · PRIVATE CORRIDORS';
       default:

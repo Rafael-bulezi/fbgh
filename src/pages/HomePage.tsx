@@ -4,7 +4,7 @@ import { CurvedDivider } from '../components/common/CurvedDivider';
 import { ObsessivePrecisionSection } from '../components/home/ObsessivePrecisionSection';
 import { PreparedFleetHighlightSection } from '../components/home/PreparedFleetHighlightSection';
 import { HomeExperienceSection } from '../components/home/HomeExperienceSection';
-import { ArrowRight, Phone } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import { TESTIMONIALS_DATA } from '../data/testimonialsData';
 import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
@@ -25,18 +25,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         titleLine1="ARRIVE WITH"
         titleLine2="INTENTION."
         description="A bespoke private transportation fleet crafted for discerning executives, international travelers, and defining arrivals."
+        slogan="PEOPLE · PURPOSE · PROSPERITY"
         image="https://res.cloudinary.com/dv9jpkgrs/image/upload/v1788409702/ChatGPT_Image_Sep_3_2026_05_22_22_AM_cft0se.png"
         imageAlt="FBGH Luxury Chauffeur Vehicle"
         curveVariant="gentle-wave"
         theme="light"
-        primaryCta={{
-          label: 'REQUEST A RIDE',
-          onClick: onOpenBooking,
-        }}
-        secondaryCta={{
-          label: 'EXPLORE FLEET',
-          onClick: () => onNavigate('fleet'),
-        }}
       />
 
       {/* ── TRANSITION 1 → 2: GENTLE WAVE FROM IVORY TO OBSIDIAN ── */}
@@ -144,7 +137,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
       {/* ── 6. DISCREET TRUST: TESTIMONIALS FROM EXECUTIVE CLIENTELE ── */}
       <section className="w-full bg-white py-24 px-6 sm:px-12 lg:px-20 select-none">
         <div className="max-w-6xl mx-auto space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E8E2D6] pb-6 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between pb-4 gap-4">
             <div>
               <span className="text-[10px] font-mono tracking-[0.35em] uppercase text-[#C5A059] font-bold">
                 DISCREET TRUST
@@ -214,20 +207,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
             <span className="text-[#C5A059]">INTENTION.</span>
           </h2>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xs sm:max-w-none mx-auto">
-            <button
-              onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary w-full sm:w-auto !py-3.5 !px-8 cursor-pointer shadow-lg hover:shadow-xl"
-            >
-              <span>BOOK A RIDE</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+          <div className="pt-2 flex items-center justify-center">
             <a
-              href="tel:9295650100"
-              className="pb-btn pb-btn-outline w-full sm:w-auto !py-3.5 !px-8 !border-white/20 !text-warm-ivory hover:!border-[#C5A059] hover:!text-[#C5A059] cursor-pointer"
+              href="tel:2676424616"
+              className="pb-btn pb-btn-outline !py-3 !px-8 !border-white/20 !text-warm-ivory hover:!border-[#C5A059] hover:!text-[#C5A059] cursor-pointer inline-flex items-center gap-2"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>(929) 565-0100</span>
+              <span>(267) 642-4616</span>
             </a>
           </div>
         </div>

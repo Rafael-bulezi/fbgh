@@ -80,7 +80,7 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
       </div>
 
       {/* ── 3. TOP HEADER BAR: THE FBGH STANDARD & 01 / 04 ───────────── */}
-      <div className="max-w-7xl mx-auto w-full relative z-10 flex items-center justify-between pb-3 sm:pb-5 border-b border-[#D4CABB]/60 shrink-0">
+      <div className="max-w-7xl mx-auto w-full relative z-10 flex items-center justify-between pb-3 sm:pb-5 shrink-0">
         <div className="flex items-center gap-3">
           <span className="w-[1.5px] h-4 bg-[#111111]" />
           <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-[#111111] font-medium">
@@ -350,11 +350,9 @@ export const HomeExperienceSection: React.FC<HomeExperienceSectionProps> = ({ on
 
       {/* ── 5. BOTTOM CENTER MONOGRAM ACCENT (— FB —) ───────────── */}
       <div className="max-w-7xl mx-auto w-full relative z-10 pt-2 sm:pt-3 flex items-center justify-center gap-5 shrink-0">
-        <span className="h-px w-12 sm:w-16 bg-[#D8CFC2]" />
         <span className="font-serif italic text-sm sm:text-base text-[#B89658] tracking-widest">
           FB
         </span>
-        <span className="h-px w-12 sm:w-16 bg-[#D8CFC2]" />
       </div>
     </section>
   );

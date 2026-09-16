@@ -9,7 +9,7 @@ interface AboutPageProps {
   onNavigate: (page: string) => void;
 }
 
-export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate }) => {
+export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const [storyImgRef, storyParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
   const [radarImgRef, radarParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
   return (
@@ -24,14 +24,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
         imageAlt="Executive Chauffeur Hospitality"
         curveVariant="gentle-wave"
         theme="dark"
-        primaryCta={{
-          label: 'EXPERIENCE PROTOCOL',
-          onClick: onOpenBooking,
-        }}
-        secondaryCta={{
-          label: 'EXPLORE FLEET',
-          onClick: () => onNavigate('fleet'),
-        }}
       />
 
       {/* TRANSITION: DARK TO WARM IVORY */}
@@ -62,11 +54,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             </h2>
 
             <p className="text-sm sm:text-base text-obsidian/85 font-light leading-relaxed">
-              Anyone can lease a luxury sedan. Very few can deliver genuine hospitality. We founded PB because discerning travelers—from corporate chairpersons and international diplomats to families and private aviation passengers—were tired of transactional, indifferent rides.
+              Anyone can lease a luxury sedan. Very few can deliver genuine hospitality. We founded Faith Based Global Holdings because discerning travelers—from corporate chairpersons and international diplomats to families and private aviation passengers—were tired of transactional, indifferent rides.
             </p>
 
             <p className="text-sm sm:text-base text-obsidian/85 font-light leading-relaxed">
-              In an age of cold algorithms and rideshare randomness, PB is an antidote: a bespoke agency where you know your chauffeur by reputation, your cabin is pre-calibrated to your personal climate, and your itinerary is safeguarded by 24/7 human oversight.
+              In an age of cold algorithms and rideshare randomness, FBGH is an antidote: a bespoke agency where you know your chauffeur by reputation, your cabin is pre-calibrated to your personal climate, and your itinerary is safeguarded by 24/7 human oversight.
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4 border-t border-obsidian/10">
@@ -140,7 +132,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-muted-gray max-w-md font-light leading-relaxed">
-              Fewer than 4% of applicants earn a PB badge. Our chauffeurs are lifelong career professionals selected for empathy, poise, and defensive mastery.
+              Fewer than 4% of applicants earn an FBGH badge. Our chauffeurs are lifelong career professionals selected for empathy, poise, and defensive mastery.
             </p>
           </div>
 
@@ -306,10 +298,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
 
           <div className="relative z-10 flex-shrink-0 w-full md:w-auto">
             <button
-              onClick={onOpenBooking}
+              onClick={() => onNavigate('fleet')}
               className="w-full md:w-auto px-8 py-4 bg-obsidian text-warm-ivory text-xs font-semibold tracking-[0.2em] uppercase hover:bg-champagne-gold hover:text-obsidian transition-colors shadow-xl rounded"
             >
-              REQUEST A RIDE &rarr;
+              EXPLORE FLEET &rarr;
             </button>
           </div>
         </div>

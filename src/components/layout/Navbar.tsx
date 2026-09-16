@@ -81,10 +81,10 @@ export const Navbar: React.FC<NavbarProps> = ({
       const dy = y - lastY;
       const v = Math.abs(dy) / dt;
 
-      setIsSolid(y > 50);
+      setIsSolid(y > 38);
 
       if (!mobileMenuOpen && !megaOpen) {
-        if (dy > 0 && y > 300 && (dy > 70 || (v > 1.2 && dy > 20))) {
+        if (dy > 0 && y > 225 && (dy > 50 || (v > 0.9 && dy > 15))) {
           setIsHidden(true);
         } else if (dy < -2) {
           setIsHidden(false);
@@ -589,11 +589,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         }`}
       >
         <div className="flex flex-col space-y-5 max-w-md mx-auto w-full">
-          <div className="flex items-center justify-between text-[9px] font-mono tracking-[0.35em] uppercase text-champagne-gold border-b border-white/10 pb-3">
-            <span>FBGH DIRECTORY</span>
-            <span>24/7 CONCIERGE</span>
-          </div>
-
           <div className="flex flex-col space-y-2 pt-1">
             {[
               { id: 'home', num: '01', label: 'Home' },

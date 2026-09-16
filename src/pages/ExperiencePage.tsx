@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Phone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { PinnedExperienceTransition } from '../components/common/PinnedExperienceTransition';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
@@ -89,14 +89,6 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         imageAlt="Person loading luggage into rental SUV on open road"
         curveVariant="swoop"
         theme="light"
-        primaryCta={{
-          label: 'EXPLORE FLEET',
-          onClick: () => onNavigate?.('fleet'),
-        }}
-        secondaryCta={{
-          label: 'RESERVE A VEHICLE',
-          onClick: onOpenBooking,
-        }}
       />
 
       {/* TRANSITION: HERO TO FILM */}
@@ -445,17 +437,6 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
             >
               <span>RENT A CAR</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Chauffeur secondary */}
-          <div className="pt-2">
-            <button
-              onClick={() => onOpenBooking()}
-              className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em] text-white/35 uppercase hover:text-white/70 transition-colors cursor-pointer group"
-            >
-              <Phone className="w-3 h-3" />
-              <span>Need a chauffeur instead? Request a Ride →</span>
             </button>
           </div>
         </div>

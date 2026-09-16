@@ -1,505 +1,469 @@
-// FleetPage.tsx - Premium Enhanced Version
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Users,
   Briefcase,
-  ArrowUpRight,
+  Fuel,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   X,
   Shield,
-  Clock,
-  Car,
-  Star,
-  Mail,
-  Phone
+  Phone,
+  Images
 } from 'lucide-react';
 import { FLEET_DATA, type Vehicle } from '../data/fleetData';
-import { FleetObservatory } from '../components/fleet/FleetObservatory';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
-import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface FleetPageProps {
-  onBookVehicle: (vehicle: Vehicle) => void;
-  onOpenBooking: () => void;
+  onBookVehicle?: (vehicle: Vehicle) => void;
+  onOpenBooking?: () => void;
 }
 
-const TOP_CHOICES = [
+// The main showcase vehicles — each maps to a real FLEET_DATA entry
+const SHOWCASE: {
+  vehicleId: string;
+  mpg: string;
+  exteriorPhoto: string;
+  interiorPhoto: string;
+  thumbImg: string;
+}[] = [
   {
-    category: 'EXECUTIVE',
-    name: 'Mercedes-Benz S-Class',
-    desc: 'The benchmark of serene chauffeur refinement.',
-    vehicleId: 'mercedes-s-class-s580',
-    img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    category: 'FAMILY & GROUP',
-    name: 'Chevrolet Suburban',
-    desc: 'Uncompromising space and luggage authority for delegations.',
     vehicleId: 'cadillac-escalade-esv',
-    img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=800&auto=format&fit=crop',
+    mpg: 'UP TO 21 MPG',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=600&auto=format&fit=crop',
   },
   {
-    category: 'LUXURY SUV',
-    name: 'BMW X7',
-    desc: 'Dynamic road command with whisper-quiet ride comfort.',
-    vehicleId: 'bmw-x7-m60i',
-    img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=800&auto=format&fit=crop',
+    vehicleId: 'kia-carnival-vip',
+    mpg: 'UP TO 26 MPG',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=600&auto=format&fit=crop',
   },
   {
-    category: 'EVENTS & GROUPS',
-    name: 'Mercedes-Benz Sprinter',
-    desc: 'First-class aviation jet cabin for corporate entourages.',
+    vehicleId: 'mercedes-maybach-gls600',
+    mpg: 'UP TO 20 MPG',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    vehicleId: 'range-rover-sv-long',
+    mpg: 'UP TO 22 MPG',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=600&auto=format&fit=crop',
+  },
+  {
     vehicleId: 'mercedes-sprinter-jet-edition',
-    img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=800&auto=format&fit=crop',
+    mpg: 'UP TO 19 MPG',
+    exteriorPhoto: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1600&auto=format&fit=crop',
+    interiorPhoto: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1600&auto=format&fit=crop',
+    thumbImg: 'https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=600&auto=format&fit=crop',
   },
 ];
 
-export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooking }) => {
+export const FleetPage: React.FC<FleetPageProps> = () => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [photoMode, setPhotoMode] = useState<'exterior' | 'interior'>('exterior');
   const [lightboxVehicle, setLightboxVehicle] = useState<Vehicle | null>(null);
-  const [lightboxTab, setLightboxTab] = useState<'exterior' | 'interior'>('exterior');
-  const [rentalInquiryVehicle, setRentalInquiryVehicle] = useState<Vehicle | null>(null);
 
-  const explorerRef = useRef<HTMLDivElement>(null);
-  const [decideImgRef, decideParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 20 });
+  const mainImgRef = useRef<HTMLDivElement>(null);
+
+  const showcase = SHOWCASE[activeIdx];
+  const vehicle = FLEET_DATA.find((v) => v.id === showcase.vehicleId) || FLEET_DATA[0];
+  const currentPhoto = photoMode === 'exterior' ? showcase.exteriorPhoto : showcase.interiorPhoto;
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (lightboxVehicle && e.key === 'Escape') {
-        setLightboxVehicle(null);
-      }
+    setPhotoMode('exterior');
+  }, [activeIdx]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (lightboxVehicle && e.key === 'Escape') setLightboxVehicle(null);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
   }, [lightboxVehicle]);
 
+  const prev = () => setActiveIdx((i) => (i === 0 ? SHOWCASE.length - 1 : i - 1));
+  const next = () => setActiveIdx((i) => (i === SHOWCASE.length - 1 ? 0 : i + 1));
+
+  const openModal = () => setLightboxVehicle(vehicle);
+
   return (
-    <div className="w-full bg-obsidian text-warm-ivory selection:bg-champagne-gold selection:text-obsidian">
-      
-      {/* 1. CINEMATIC FLEET INTRODUCTION — CURVED HERO (50-60vh) */}
+    <div className="w-full bg-[#FAF8F5] text-ink-black select-none overflow-x-hidden">
+
+      {/* ── 1. HERO ─────────────────────────────────────────────────────────── */}
       <CurvedHero
         eyebrow="THE PREMIER FLEET"
         titleLine1="MORE THAN"
         titleLine2="30 VEHICLES."
-        description="An exclusive collection of luxury sedans, SUVs, and executive vans—each meticulously maintained and ready for your journey."
+        description="Luxury sedans, SUVs, and executive vans—maintained and ready for your journey."
         image="/images/fleet-hero-banner.jpg"
-        imageAlt="Faith Based Global Holdings Fleet Lineup at The Residence"
+        imageAlt="Faith Based Global Holdings Fleet Lineup"
         curveVariant="sharp-diagonal"
         theme="light"
-        minHeight="h-[54vh] min-h-[460px] max-h-[620px]"
-        statChips={[
-          { label: '30+ VEHICLES' },
-          { label: 'CHAUFFEURED & SELF-DRIVE' },
-        ]}
-        primaryCta={{
-          label: 'EXPLORE OBSERVATORY',
-          onClick: () => {
-            explorerRef.current?.scrollIntoView({ behavior: 'smooth' });
-          },
-        }}
-        secondaryCta={{
-          label: 'RESERVE VEHICLE',
-          onClick: onOpenBooking,
-        }}
+        minHeight="h-[54vh] min-h-[420px] max-h-[580px]"
       />
 
-      {/* TRANSITION TO DARK OBSERVATORY */}
+      {/* ── CURVE: IVORY → DARK ─────────────────────────────────────────────── */}
       <CurvedDivider
         variant="sharp-diagonal"
         fromColor="#FAF8F5"
-        toColor="#08080A"
-        height="clamp(35px, 4vw, 65px)"
+        toColor="#0E0C0A"
+        height="clamp(28px, 3vw, 50px)"
       />
 
-      {/* 2. FLEET EXHIBITION OBSERVATORY */}
-      <section ref={explorerRef} id="fleet-explorer" className="w-full relative">
-        <FleetObservatory
-          onBookVehicle={onBookVehicle}
-          onOpenBooking={onOpenBooking}
-        />
-      </section>
+      {/* ── 2. OBSERVATORY: fits in remaining space, ~100vh total with hero ── */}
+      <section className="w-full bg-[#0E0C0A] px-5 sm:px-10 lg:px-14 pt-6 pb-8">
+        <div className="max-w-7xl mx-auto">
 
-      {/* TRANSITION: OBSERVATORY TO TOP CHOICES */}
-      <CurvedDivider
-        variant="gentle-wave"
-        fromColor="#08080A"
-        toColor="#FAF8F5"
-        height="clamp(40px, 5vw, 80px)"
-      />
+          {/* ── TWO-COLUMN LAYOUT ────────────────────────────────────────────── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
 
-      {/* 3. TOP CHOICES - CRISP WARM IVORY */}
-      <section className="bg-[#FAF8F5] text-ink-black py-20 px-6 sm:px-10 lg:px-16">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="border-b border-[#E8E2D6] pb-6">
-            <div className="flex items-center gap-3 mb-3">
-              <Star className="w-4 h-4 text-[#C5A059]" />
-              <span className="text-[10px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
-                TOP CHOICES FOR EVERY JOURNEY
-              </span>
-            </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#141416] tracking-tight">
-              The right vehicle for what matters.
-            </h2>
-          </div>
+            {/* LEFT: vehicle info */}
+            <div className="lg:col-span-4 space-y-3 text-[#F4EDE4] pt-1">
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-[1.5px] bg-[#C5A059]" />
+                <span className="text-[9px] font-mono tracking-[0.28em] text-[#C5A059] uppercase font-bold">
+                  FEATURED VEHICLE
+                </span>
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TOP_CHOICES.map((item) => {
-              const matchedVehicle = FLEET_DATA.find((v) => v.id === item.vehicleId) || FLEET_DATA[0];
-              return (
-                <div
-                  key={item.category}
-                  onClick={() => {
-                    setLightboxVehicle(matchedVehicle);
-                  }}
-                  className="group bg-white border border-[#E8E2D6] hover:border-[#C5A059]/70 p-6 rounded-xl transition-all duration-500 cursor-pointer flex flex-col justify-between space-y-4 hover:-translate-y-2 shadow-sm hover:shadow-[0_20px_50px_rgba(201,164,92,0.18)]"
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-white tracking-tight leading-none">
+                {vehicle.name}
+              </h2>
+
+              <p className="text-[10px] sm:text-[11px] font-mono tracking-[0.22em] text-[#967C52] uppercase font-semibold">
+                {vehicle.tagline}
+              </p>
+
+              <p className="text-xs text-white/65 leading-relaxed max-w-sm font-light">
+                {vehicle.description.split('.').slice(0, 2).join('.').trim()}.
+              </p>
+
+              {/* Specs */}
+              <div className="flex items-center gap-5 pt-1 text-white/80">
+                <div className="flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-[#C5A059]" />
+                  <span className="font-mono text-[10px] uppercase tracking-wider">{vehicle.passengers} PASS.</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Briefcase className="w-3.5 h-3.5 text-[#C5A059]" />
+                  <span className="font-mono text-[10px] uppercase tracking-wider">{vehicle.luggage} BAG</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Fuel className="w-3.5 h-3.5 text-[#C5A059]" />
+                  <span className="font-mono text-[10px] uppercase tracking-wider">{showcase.mpg}</span>
+                </div>
+              </div>
+
+              {/* View Details button */}
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="inline-flex items-center gap-2 bg-[#C5A059] hover:bg-[#B38D45] text-white px-5 py-2.5 rounded-lg text-[11px] font-mono tracking-widest uppercase transition-all shadow-md cursor-pointer"
                 >
-                  <div className="aspect-[16/10] w-full overflow-hidden rounded-lg relative">
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="w-full h-full object-cover luminous-media transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
+                  <span>VIEW DETAILS</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
 
-                  <div className="space-y-2 flex-1">
-                    <span className="text-[9px] font-mono tracking-[0.3em] text-[#C5A059] uppercase font-semibold">
-                      {item.category}
-                    </span>
-                    <h3 className="font-display font-bold text-xl text-[#141416] tracking-tight group-hover:text-[#C5A059] transition-colors">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs text-[#55555C] leading-relaxed font-light">
-                      {item.desc}
-                    </p>
-                  </div>
+            {/* RIGHT: photo area */}
+            <div className="lg:col-span-8 flex flex-col gap-3">
 
-                  <div className="pt-3 border-t border-[#E8E2D6] flex items-center justify-between text-[10px] font-mono tracking-[0.25em] uppercase text-[#C5A059] font-semibold">
-                    <span>EXPLORE DOSSIER</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              {/* Main photo + 3 stacked thumbnails side by side, equal height */}
+              <div className="flex gap-3" style={{ height: 'clamp(220px, 28vh, 360px)' }}>
+
+                {/* Main Photo */}
+                <div
+                  ref={mainImgRef}
+                  className="flex-1 rounded-xl overflow-hidden relative group bg-black/20 border border-white/10"
+                >
+                  <img
+                    src={currentPhoto}
+                    alt={vehicle.name}
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Gallery overlay button */}
+                  <button
+                    type="button"
+                    onClick={openModal}
+                    className="absolute top-3 right-3 bg-black/55 hover:bg-black/75 text-white backdrop-blur-sm px-3 py-1.5 rounded-full text-[10px] font-mono tracking-wider uppercase inline-flex items-center gap-1.5 transition-all border border-white/15 cursor-pointer"
+                  >
+                    <Images className="w-3 h-3 text-[#C5A059]" />
+                    <span>VIEW GALLERY</span>
+                  </button>
+
+                  {/* View mode label */}
+                  <div className="absolute bottom-3 left-3 text-white/80 font-mono text-[9px] tracking-widest uppercase bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-md border border-white/10">
+                    {photoMode === 'exterior' ? 'EXTERIOR' : 'INTERIOR CABIN'}
                   </div>
                 </div>
-              );
-            })}
+
+                {/* 3 stacked thumbnails — same height as main via flex column */}
+                <div className="w-28 sm:w-32 lg:w-36 flex flex-col gap-2 h-full">
+                  {/* Exterior thumbnail */}
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('exterior')}
+                    className={`flex-1 rounded-lg overflow-hidden border transition-all cursor-pointer ${photoMode === 'exterior' ? 'border-[#C5A059] ring-1 ring-[#C5A059]/50' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                  >
+                    <img src={showcase.exteriorPhoto} alt="Exterior" className="w-full h-full object-cover" />
+                  </button>
+
+                  {/* Interior thumbnail */}
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('interior')}
+                    className={`flex-1 rounded-lg overflow-hidden border transition-all cursor-pointer ${photoMode === 'interior' ? 'border-[#C5A059] ring-1 ring-[#C5A059]/50' : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'}`}
+                  >
+                    <img src={showcase.interiorPhoto} alt="Interior" className="w-full h-full object-cover" />
+                  </button>
+
+                  {/* Gallery thumb */}
+                  <button
+                    type="button"
+                    onClick={openModal}
+                    className="flex-1 rounded-lg overflow-hidden border border-white/10 hover:border-[#C5A059]/60 opacity-70 hover:opacity-100 transition-all cursor-pointer relative group"
+                  >
+                    <img src={vehicle.exteriorGallery?.[1] || showcase.exteriorPhoto} alt="Gallery" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-white font-mono text-[8px] tracking-widest uppercase">GALLERY</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Exterior / Interior toggle row */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('exterior')}
+                    className={`px-3.5 py-1.5 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'exterior' ? 'bg-[#F4EDE4] text-[#141416] font-bold' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                  >
+                    EXTERIOR
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('interior')}
+                    className={`px-3.5 py-1.5 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all cursor-pointer ${photoMode === 'interior' ? 'bg-[#F4EDE4] text-[#141416] font-bold' : 'bg-white/5 hover:bg-white/10 text-white/60'}`}
+                  >
+                    INTERIOR
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={openModal}
+                  className="text-[10px] font-mono tracking-wider uppercase text-[#967C52] hover:text-[#C5A059] inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <span>FULL SPECS</span>
+                  <ArrowRight className="w-2.5 h-2.5" />
+                </button>
+              </div>
+
+              {/* ── VEHICLE CAROUSEL (actual cars, not categories) ────────── */}
+              <div className="flex gap-2.5 sm:gap-3 mt-1">
+                {SHOWCASE.map((s, idx) => {
+                  const v = FLEET_DATA.find((f) => f.id === s.vehicleId) || FLEET_DATA[0];
+                  const isActive = idx === activeIdx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveIdx(idx)}
+                      className={`flex-1 relative rounded-xl overflow-hidden cursor-pointer border transition-all duration-300 group ${isActive ? 'border-[#C5A059] ring-2 ring-[#C5A059]/30 scale-[1.03]' : 'border-white/10 hover:border-white/30'}`}
+                      style={{ height: '90px' }}
+                    >
+                      <img
+                        src={s.thumbImg}
+                        alt={v.name}
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                      <div className="absolute bottom-0 inset-x-0 p-2">
+                        <p className="font-display font-bold text-[10px] sm:text-[11px] text-white tracking-tight leading-tight truncate">
+                          {v.name.split(' ').slice(0, 2).join(' ')}
+                        </p>
+                        <p className="text-[8px] sm:text-[9px] text-[#C5A059] font-mono tracking-wider uppercase opacity-80 truncate">
+                          {v.categoryLabel}
+                        </p>
+                      </div>
+                      {isActive && (
+                        <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
+                      )}
+                    </button>
+                  );
+                })}
+                {/* Prev/Next arrows */}
+                <div className="flex flex-col gap-1.5 justify-center">
+                  <button
+                    type="button"
+                    onClick={prev}
+                    className="w-7 h-[42px] rounded-md border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={next}
+                    className="w-7 h-[42px] rounded-md border border-white/15 hover:border-[#C5A059] text-white/60 hover:text-[#C5A059] flex items-center justify-center transition-all cursor-pointer"
+                    aria-label="Next"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
 
-      {/* TRANSITION: TOP CHOICES TO CAN'T DECIDE */}
+      {/* ── CURVE: DARK → IVORY ─────────────────────────────────────────────── */}
       <CurvedDivider
         variant="s-curve"
-        fromColor="#FAF8F5"
-        toColor="#08080A"
-        flip
-        height="clamp(40px, 5vw, 80px)"
+        fromColor="#0E0C0A"
+        toColor="#FAF8F5"
+        height="clamp(35px, 4.5vw, 70px)"
       />
 
-      {/* 4. CAN'T DECIDE? - ENHANCED */}
-      <section className="bg-[#08080A] py-16 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-champagne-gold/5 via-transparent to-champagne-gold/5 pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-          <div className="flex flex-col sm:flex-row items-center gap-6 max-w-2xl">
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0 border border-white/15 relative shadow-2xl">
-              <img
-                ref={decideImgRef}
-                src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=400&auto=format&fit=crop"
-                alt="Faith Based Global Holdings Chauffeur Service"
-                className="w-full h-full object-cover luminous-media will-change-transform"
-                style={{
-                  transform: `translate3d(0, ${decideParallaxY}px, 0) scale(1.08)`,
-                  transition: 'transform 0.1s ease-out',
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 to-transparent pointer-events-none" />
-            </div>
-
-            <div className="space-y-2 text-center sm:text-left">
-              <span className="text-[10px] font-mono tracking-[0.35em] text-champagne-gold uppercase font-medium">
-                CAN'T DECIDE?
-              </span>
-              <h2 className="font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl text-[#F4EDE4] tracking-tight leading-tight">
-                We'll help you find the perfect match.
-              </h2>
-              <p className="text-sm text-muted-gray leading-relaxed font-light">
-                Tell us about your trip and we'll recommend the best vehicle for your needs.
-              </p>
-            </div>
+      {/* ── 3. CAN'T PICK A CAR? ────────────────────────────────────────────── */}
+      <section className="w-full bg-[#FAF8F5] text-ink-black py-20 sm:py-28 px-6 sm:px-12 lg:px-16 text-center">
+        <div className="max-w-3xl mx-auto space-y-5">
+          <div className="inline-flex items-center justify-center gap-2">
+            <span className="w-5 h-[1.5px] bg-[#C5A059]" />
+            <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#967C52] font-bold">
+              FLEET CONCIERGE
+            </span>
+            <span className="w-5 h-[1.5px] bg-[#C5A059]" />
           </div>
 
-          <button
-            type="button"
-            onClick={onOpenBooking}
-            className="pb-btn pb-btn-primary flex-shrink-0 inline-flex items-center gap-2"
-          >
-            <span>FIND MY VEHICLE</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </button>
+          <h1 className="font-display font-black text-4xl sm:text-6xl lg:text-7xl text-[#141416] tracking-tight leading-[0.95]">
+            CAN&apos;T PICK A CAR?
+          </h1>
+
+          <p className="text-base sm:text-lg text-[#555] font-normal leading-relaxed max-w-xl mx-auto">
+            Give us a call and we will help you choose the right ride.
+          </p>
+
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="tel:2676424616"
+              className="inline-flex items-center gap-3 bg-[#C5A059] hover:bg-[#B38D45] text-white px-8 py-4 rounded-xl text-base font-mono tracking-wider font-semibold shadow-lg hover:shadow-xl transition-all cursor-pointer"
+            >
+              <Phone className="w-5 h-5" />
+              <span>(267) 642-4616</span>
+            </a>
+          </div>
+
+          <p className="text-xs font-mono text-[#8C887B] tracking-wider uppercase pt-1">
+            Alternate: +1 (445) 867-1578
+          </p>
         </div>
       </section>
 
-      {/* TRANSITION: CAN'T DECIDE TO TRUST GUARANTEES */}
-      <CurvedDivider
-        variant="circular-arc"
-        fromColor="#08080A"
-        toColor="#FAF8F5"
-        height="clamp(35px, 4vw, 65px)"
-      />
-
-      {/* 5. ENHANCED TRUST GUARANTEES — CRISP WARM IVORY */}
-      <section className="bg-[#FAF8F5] text-ink-black py-16 px-6 sm:px-10 lg:px-16">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { icon: Users, title: 'PROFESSIONAL DRIVERS', desc: 'Experienced & Courteous' },
-            { icon: Clock, title: 'ON TIME, EVERY TIME', desc: 'Reliability you can count on' },
-            { icon: Shield, title: 'EXCEPTIONAL COMFORT', desc: 'Vehicles maintained to perfection' },
-            { icon: Car, title: 'BOOK WITH CONFIDENCE', desc: 'Simple, secure & flexible' },
-          ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-start gap-4 group">
-              <div className="w-10 h-10 rounded-full bg-[#C5A059]/15 flex items-center justify-center text-[#C5A059] flex-shrink-0 border border-[#C5A059]/30 group-hover:shadow-[0_0_20px_rgba(201,164,92,0.3)] transition-all">
-                <Icon className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="text-[10px] font-mono tracking-wider uppercase text-[#141416] font-semibold">
-                  {title}
-                </div>
-                <div className="text-xs text-[#6A6A75] leading-relaxed font-light">
-                  {desc}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* TRANSITION TO FOOTER */}
+      {/* ── CURVE TO FOOTER ─────────────────────────────────────────────────── */}
       <CurvedDivider
         variant="gentle-wave"
         fromColor="#FAF8F5"
         toColor="#0E0C0A"
-        height="clamp(40px, 5vw, 80px)"
+        height="clamp(35px, 4vw, 60px)"
       />
 
-      {/* 6. ENHANCED LIGHTBOX */}
+      {/* ── VEHICLE DETAIL MODAL ─────────────────────────────────────────────── */}
       {lightboxVehicle && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-3xl flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-300"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setLightboxVehicle(null)}
         >
-          <div className="relative w-full max-w-6xl luxury-glass-dark border border-champagne-gold/40 rounded-xl shadow-[0_30px_100px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-obsidian">
-              <div className="flex items-center gap-3">
-                <span className="text-[9px] font-mono tracking-[0.35em] text-champagne-gold uppercase">
-                  VEHICLE DOSSIER
-                </span>
-                <span className="text-white/20">Â·</span>
-                <span className="text-[10px] font-mono text-muted-gray uppercase">
-                  {lightboxVehicle.categoryLabel}
-                </span>
+          <div
+            className="relative w-full max-w-3xl bg-[#111114] border border-[#C5A059]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold">VEHICLE SPECS</span>
+                <span className="text-white/20">·</span>
+                <span className="text-xs text-white/70 font-mono">{lightboxVehicle.categoryLabel}</span>
               </div>
-
               <button
+                type="button"
                 onClick={() => setLightboxVehicle(null)}
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-warm-ivory hover:text-champagne-gold hover:border-champagne-gold transition-all hover:shadow-[0_0_15px_rgba(201,164,92,0.4)]"
-                aria-label="Close Lightbox"
+                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:border-[#C5A059] transition-colors cursor-pointer"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="aspect-[16/10] w-full rounded-lg overflow-hidden bg-black border border-white/10 relative shadow-2xl">
-                    <img
-                      src={lightboxTab === 'exterior' ? lightboxVehicle.image : lightboxVehicle.interiorImage}
-                      alt={lightboxVehicle.name}
-                      className="w-full h-full object-cover luminous-media"
-                    />
-                  </div>
+            <div className="p-6 overflow-y-auto space-y-5">
+              <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-black/40 border border-white/10">
+                <img src={lightboxVehicle.image} alt={lightboxVehicle.name} className="w-full h-full object-cover" />
+              </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setLightboxTab('exterior')}
-                      className={`px-4 py-2 text-[10px] font-mono tracking-wider uppercase border rounded-sm transition-all ${
-                        lightboxTab === 'exterior'
-                          ? 'bg-gradient-to-r from-champagne-gold to-champagne-gold-light text-obsidian border-champagne-gold font-bold shadow-[0_0_20px_rgba(201,164,92,0.5)]'
-                          : 'bg-white/5 text-warm-ivory/70 border-white/10 hover:border-white/30'
-                      }`}
-                    >
-                      EXTERIOR
-                    </button>
-                    <button
-                      onClick={() => setLightboxTab('interior')}
-                      className={`px-4 py-2 text-[10px] font-mono tracking-wider uppercase border rounded-sm transition-all ${
-                        lightboxTab === 'interior'
-                          ? 'bg-gradient-to-r from-champagne-gold to-champagne-gold-light text-obsidian border-champagne-gold font-bold shadow-[0_0_20px_rgba(201,164,92,0.5)]'
-                          : 'bg-white/5 text-warm-ivory/70 border-white/10 hover:border-white/30'
-                      }`}
-                    >
-                      INTERIOR SUITE
-                    </button>
-                  </div>
+              <div className="space-y-1.5">
+                <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal tracking-tight">{lightboxVehicle.name}</h3>
+                <p className="text-xs text-[#C5A059] font-mono tracking-widest uppercase">{lightboxVehicle.tagline}</p>
+                <p className="text-xs sm:text-sm text-white/70 leading-relaxed pt-1">{lightboxVehicle.description}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 py-3 border-y border-white/10 text-xs font-mono text-white/80">
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#C5A059]" />
+                  <span>{lightboxVehicle.passengers} PASS.</span>
                 </div>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="w-4 h-4 text-[#C5A059]" />
+                  <span>{lightboxVehicle.luggage} BAG</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-[#C5A059]" />
+                  <span>SANITIZED</span>
+                </div>
+              </div>
 
-                <div className="lg:col-span-5 space-y-5">
-                  <div>
-                    <span className="text-[10px] font-mono tracking-[0.3em] text-champagne-gold uppercase">
-                      {lightboxVehicle.class}
-                    </span>
-                    <h3 className="font-display font-bold text-3xl sm:text-4xl text-warm-ivory mt-2 tracking-tight">
-                      {lightboxVehicle.name}
-                    </h3>
-                    <p className="text-sm text-muted-gray italic font-display mt-2">
-                      "{lightboxVehicle.tagline}"
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 py-4 border-y border-white/10 text-xs font-mono text-warm-ivory/90">
-                    <div className="flex items-center gap-2.5">
-                      <Users className="w-4 h-4 text-champagne-gold" />
-                      <span>{lightboxVehicle.passengers} PASSENGERS</span>
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold block">HIGHLIGHTS</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-white/70">
+                  {lightboxVehicle.features.slice(0, 6).map((feat, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
+                      <span>{feat}</span>
                     </div>
-                    <div className="flex items-center gap-2.5">
-                      <Briefcase className="w-4 h-4 text-champagne-gold" />
-                      <span>{lightboxVehicle.luggage} LUGGAGE</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Car className="w-4 h-4 text-champagne-gold" />
-                      <span>AUTOMATIC</span>
-                    </div>
-                    <div className="flex items-center gap-2.5">
-                      <Shield className="w-4 h-4 text-champagne-gold" />
-                      <span>AWD DRIVE</span>
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-warm-ivory/80 leading-relaxed font-light">
-                    {lightboxVehicle.description}
-                  </p>
-
-                  <div className="space-y-2">
-                    <span className="text-[9px] font-mono tracking-[0.25em] text-champagne-gold uppercase font-semibold">
-                      IDEAL FOR:
-                    </span>
-                    <div className="flex flex-wrap gap-2">
-                      {lightboxVehicle.idealFor.map((item) => (
-                        <span
-                          key={item}
-                          className="text-[10px] font-mono bg-white/5 border border-white/10 px-3 py-1 text-warm-ivory/80 rounded-sm"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-white/10 space-y-3">
-                    <button
-                      onClick={() => {
-                        setLightboxVehicle(null);
-                        onBookVehicle(lightboxVehicle);
-                      }}
-                      className="pb-btn pb-btn-primary w-full justify-center inline-flex items-center gap-2"
-                    >
-                      <span>REQUEST THIS VEHICLE (CHAUFFEURED)</span>
-                      <ArrowUpRight className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        const v = lightboxVehicle;
-                        setLightboxVehicle(null);
-                        setRentalInquiryVehicle(v);
-                      }}
-                      className="pb-btn pb-btn-outline w-full justify-center inline-flex items-center gap-2"
-                    >
-                      <span>RENT THIS VEHICLE (SELF-DRIVE)</span>
-                      <ArrowUpRight className="w-4 h-4" />
-                    </button>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* RENT A CAR â€” DEDICATED SELF-DRIVE LUXURY DESK MODAL */}
-      {rentalInquiryVehicle && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-obsidian/85 backdrop-blur-md animate-fadeIn"
-          onClick={() => setRentalInquiryVehicle(null)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-lg bg-[#0c0d0e] border border-champagne-gold/30 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl text-warm-ivory relative"
-          >
-            <button
-              onClick={() => setRentalInquiryVehicle(null)}
-              className="absolute top-5 right-5 text-warm-ivory/60 hover:text-warm-ivory transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="space-y-2">
-              <span className="text-[10px] font-mono tracking-[0.25em] text-champagne-gold uppercase">
-                RENT A CAR Â· SELF-DRIVE DESK
-              </span>
-              <h3 className="font-display font-bold text-2xl text-warm-ivory tracking-tight">
-                {rentalInquiryVehicle.name}
-              </h3>
-              <p className="text-xs text-warm-ivory/60 leading-relaxed font-light">
-                Private client self-drive leasing and short-term rentals are arranged exclusively through our dedicated Fleet Management Desk.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2.5 text-xs">
-              <div className="flex justify-between">
-                <span className="text-warm-ivory/50">Classification</span>
-                <span className="text-warm-ivory font-medium">{rentalInquiryVehicle.categoryLabel}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-warm-ivory/50">Minimum Driver Age</span>
-                <span className="text-warm-ivory font-medium">25 Years (Valid License)</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-warm-ivory/50">Insurance Coverage</span>
-                <span className="text-warm-ivory font-medium">Comprehensive Collision Required</span>
-              </div>
-              <div className="flex justify-between border-t border-white/5 pt-2">
-                <span className="text-warm-ivory/50">Estimated Daily Lease</span>
-                <span className="text-champagne-gold font-mono font-bold">
-                  ${rentalInquiryVehicle.hourlyRate * 8} / 24-Hour Day
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <a
-                href={`mailto:rentals@fbglobalholdings.com?subject=Self-Drive Rental Inquiry: ${encodeURIComponent(
-                  rentalInquiryVehicle.name
-                )}`}
-                className="pb-btn pb-btn-primary w-full justify-center inline-flex items-center gap-2 py-3.5"
+            <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-black/40 text-xs">
+              <button
+                type="button"
+                onClick={() => setLightboxVehicle(null)}
+                className="text-white/60 hover:text-white font-mono tracking-wider uppercase cursor-pointer"
               >
-                <Mail className="w-4 h-4" />
-                <span>INQUIRE VIA FLEET DESK EMAIL</span>
-              </a>
-
+                CLOSE
+              </button>
               <a
-                href="tel:+19175550198"
-                className="pb-btn pb-btn-outline w-full justify-center inline-flex items-center gap-2 py-3"
+                href="tel:2676424616"
+                className="inline-flex items-center gap-2 text-[#C5A059] hover:underline font-mono tracking-wider uppercase cursor-pointer"
               >
-                <Phone className="w-4 h-4" />
-                <span>CALL CONCIERGE: +1 (917) 555-0198</span>
+                <Phone className="w-3.5 h-3.5" />
+                <span>(267) 642-4616</span>
               </a>
             </div>
-
-            <p className="text-[10px] font-mono text-center text-warm-ivory/40 uppercase tracking-wider">
-              FAITH BASED GLOBAL HOLDINGS Â· PRIVATE LEASE DIVISION
-            </p>
           </div>
         </div>
       )}

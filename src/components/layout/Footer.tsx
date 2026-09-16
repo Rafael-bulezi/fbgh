@@ -1,5 +1,6 @@
-import React from 'react';
-import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
+import React, { useState } from 'react';
+import { Phone, Mail, MapPin, ArrowUp, ShieldCheck } from 'lucide-react';
+import { RentalPolicyModal } from '../common/RentalPolicyModal';
 
 interface FooterProps {
   onNavigate: (page: string) => void;
@@ -14,7 +15,8 @@ const NAV_PAGES = [
   { id: 'destinations', label: 'DESTINATIONS', route: 'destinations' },
 ];
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const [showPolicyModal, setShowPolicyModal] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -92,10 +94,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             <span className="font-display text-sm sm:text-lg md:text-2xl lg:text-3xl tracking-[0.28em] font-bold text-[#E0A852] uppercase mt-2 sm:mt-4 text-center">
               GLOBAL HOLDINGS
             </span>
+            <span className="font-mono text-xs sm:text-sm tracking-[0.35em] text-[#F4EDE4]/80 uppercase mt-2.5 text-center font-semibold">
+              PEOPLE · PURPOSE · PROSPERITY
+            </span>
           </div>
 
           {/* ── 02. NAV PAGE BUTTONS — styled like pb-btn-outline (gold border, left-to-right fill) ── */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-10 sm:mt-12 max-w-3xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 max-w-3xl mx-auto">
             {NAV_PAGES.map((page) => (
               <button
                 key={page.id}
@@ -112,70 +117,77 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
           </div>
         </div>
 
-        {/* ── 03. CENTERED CONCIERGE INFORMATION BLOCK (Phone Number Bigger & Center) ── */}
+        {/* ── 03. CENTERED CONCIERGE INFORMATION BLOCK (Real Business Card Details) ── */}
         <div className="flex flex-col items-center justify-center text-center space-y-6 pt-10 pb-12 border-t border-white/[0.08] max-w-4xl mx-auto">
           
-          {/* Eyebrow */}
+          {/* Direct Concierge Eyebrow */}
           <div className="inline-flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-[1px] bg-[#E0A852]" />
             <span className="text-[10px] sm:text-xs font-mono tracking-[0.35em] text-[#E0A852] uppercase font-bold">
-              24/7 DIRECT CONCIERGE ACCESS
+              DIRECT CONCIERGE ACCESS
             </span>
             <span className="w-1.5 h-1.5 rounded-[1px] bg-[#E0A852]" />
           </div>
 
-          {/* Huge Centered Phone Number */}
-          <a
-            href="tel:+19295650100"
-            className="font-mono text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[#F4EDE4] hover:text-[#E0A852] transition-colors duration-300 drop-shadow-[0_2px_24px_rgba(224,168,82,0.25)] flex items-center justify-center gap-3 sm:gap-4"
-          >
-            <Phone className="w-6 h-6 sm:w-10 sm:h-10 text-[#E0A852] shrink-0" />
-            <span>+1 (929) 565-0100</span>
-          </a>
-
-          {/* Email & Corridors — Bigger, Bolder & Clearly Viewable */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-sm sm:text-base md:text-[17px] font-semibold text-[#F4EDE4] font-sans">
+          {/* Business Card Phone Numbers */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
             <a
-              href="mailto:concierge@fbglobalholdings.com"
-              className="inline-flex items-center gap-2.5 hover:text-[#E0A852] transition-colors"
+              href="tel:+12676424616"
+              className="font-mono text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#F4EDE4] hover:text-[#E0A852] transition-colors duration-300 drop-shadow-[0_2px_24px_rgba(224,168,82,0.25)] flex items-center justify-center gap-2.5 sm:gap-3"
             >
-              <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#E0A852] shrink-0" />
-              <span>concierge@fbglobalholdings.com</span>
+              <Phone className="w-5 h-5 sm:w-7 sm:h-7 text-[#E0A852] shrink-0" />
+              <span>+1 (267) 642-4616</span>
             </a>
-            <div className="inline-flex items-center gap-2.5 text-[#F4EDE4]/90">
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[#E0A852] shrink-0" />
+            <span className="hidden sm:inline text-white/20">|</span>
+            <a
+              href="tel:+14458671578"
+              className="font-mono text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#F4EDE4]/90 hover:text-[#E0A852] transition-colors duration-300 flex items-center justify-center gap-2.5"
+            >
+              <span>+1 (445) 867-1578</span>
+            </a>
+          </div>
+
+          {/* Business Card Emails & Corridors */}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm sm:text-base font-semibold text-[#F4EDE4] font-sans">
+            <a
+              href="mailto:amfbgh@gmail.com"
+              className="inline-flex items-center gap-2 hover:text-[#E0A852] transition-colors"
+            >
+              <Mail className="w-4 h-4 text-[#E0A852] shrink-0" />
+              <span>amfbgh@gmail.com</span>
+            </a>
+            <span className="hidden sm:inline text-white/20">·</span>
+            <a
+              href="mailto:office1@cleas4less.com"
+              className="inline-flex items-center gap-2 hover:text-[#E0A852] transition-colors"
+            >
+              <Mail className="w-4 h-4 text-[#E0A852] shrink-0" />
+              <span>office1@cleas4less.com</span>
+            </a>
+            <span className="hidden sm:inline text-white/20">·</span>
+            <div className="inline-flex items-center gap-2 text-[#F4EDE4]/90">
+              <MapPin className="w-4 h-4 text-[#E0A852] shrink-0" />
               <span>New York · Philadelphia · Washington D.C. · Global</span>
             </div>
           </div>
 
-          {/* Request a Ride Button Matching Website (.pb-btn .pb-btn-primary) */}
-          <div className="pt-3">
-            <button
-              type="button"
-              onClick={onOpenBooking}
-              className="pb-btn pb-btn-primary !px-8 sm:!px-10 !py-3.5 sm:!py-4 !text-xs sm:!text-sm cursor-pointer shadow-[0_10px_30px_rgba(200,161,95,0.4)]"
-            >
-              <span>REQUEST A RIDE</span>
-            </button>
-          </div>
-
-          {/* Prominent Brand Note — Bigger, Bolder & Clearly Viewable */}
+          {/* Prominent Brand Note — Clean & Viewable (Removed redundant Request a Ride button) */}
           <p className="font-sans text-sm sm:text-base md:text-lg text-[#F4EDE4]/85 max-w-2xl leading-relaxed pt-2 font-normal text-center">
-            The original standard in private transportation and curated vehicle rental. 
+            The standard in private transportation and curated vehicle rental. 
             Refined until effortless. Lifts friction, secures discretion, and quietly elevates your schedule.
           </p>
 
         </div>
 
-        {/* ── 04. BOTTOM BAR WITH SCROLL-TO-TOP ────────────────────────────── */}
+        {/* ── 04. BOTTOM BAR WITH SCROLL-TO-TOP & RENTAL POLICY ────────────── */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-white/[0.08] text-[10.5px] font-sans text-white/40 tracking-wider">
           
           {/* Copyright */}
           <p className="order-2 md:order-1 font-mono">
-            © 2026 FAITH BASED GLOBAL HOLDINGS. ALL RIGHTS RESERVED.
+            © 2026 FAITH BASED GLOBAL HOLDINGS INC. ALL RIGHTS RESERVED.
           </p>
 
-          {/* Interactive Scroll to Top Button (Matching website rounded-[3px]) */}
+          {/* Interactive Scroll to Top Button */}
           <button
             type="button"
             onClick={scrollToTop}
@@ -189,8 +201,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </span>
           </button>
 
-          {/* Policies */}
+          {/* Policies & Official FBGH Rental Policy Modal Trigger */}
           <div className="order-3 flex flex-wrap items-center justify-center gap-4 sm:gap-5 font-mono">
+            <button
+              type="button"
+              onClick={() => setShowPolicyModal(true)}
+              className="hover:text-[#E0A852] text-[#E0A852] transition-colors cursor-pointer inline-flex items-center gap-1.5 font-bold tracking-wider"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#E0A852]" />
+              <span>RENTAL POLICY</span>
+            </button>
+            <span>·</span>
             <span className="hover:text-white transition-colors cursor-pointer">PRIVACY</span>
             <span>·</span>
             <span className="hover:text-white transition-colors cursor-pointer">TERMS</span>
@@ -201,6 +222,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
         </div>
 
       </div>
+
+      {/* Official FBGH Rental Car Policy Modal */}
+      <RentalPolicyModal
+        isOpen={showPolicyModal}
+        onClose={() => setShowPolicyModal(false)}
+      />
     </footer>
   );
 };

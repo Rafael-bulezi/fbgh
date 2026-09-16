@@ -1,13 +1,12 @@
 import React from 'react';
-import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 interface PreparedFleetHighlightSectionProps {
-  onOpenBooking: () => void;
+  onOpenBooking?: () => void;
   onNavigate: (page: string) => void;
 }
 
 export const PreparedFleetHighlightSection: React.FC<PreparedFleetHighlightSectionProps> = ({
-  onOpenBooking,
   onNavigate,
 }) => {
   return (
@@ -17,70 +16,53 @@ export const PreparedFleetHighlightSection: React.FC<PreparedFleetHighlightSecti
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: 30+ Vehicles Headline */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-            <div className="inline-flex items-center gap-2.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.35em] text-[#C5A059] uppercase font-bold">
-                03 // OVER 30 VEHICLES
-              </span>
-            </div>
-
             <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#141416] tracking-tight leading-[0.95]">
               30+ VEHICLES.<br />
               <span className="text-[#C5A059]">PREPARED & READY.</span>
             </h2>
 
-            <p className="text-xs sm:text-sm md:text-base text-[#4A4A4F] leading-relaxed max-w-xl font-normal">
-              We own and maintain our inventory. Executive Escalades, Mercedes S-Class, BMW X7, and customized Mercedes Sprinter VIP lounges ready for immediate deployment across New York, Philadelphia, and private airfield hubs.
+            <p className="text-sm md:text-base text-[#4A4A4F] leading-relaxed max-w-xl font-normal">
+              We own and maintain our fleet. Clean Escalades, Mercedes S-Class, BMW X7, and Mercedes Sprinter vans ready across New York, Philadelphia, and private airports.
             </p>
 
-            <div className="flex items-center gap-3 pt-2 font-mono text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
+            <div className="flex items-center gap-3 pt-1 font-mono text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
-              <span>INSPECTED &amp; DISPATCHED WITHIN 15 MINUTES</span>
+              <span>READY ON SHORT NOTICE</span>
             </div>
           </div>
 
           {/* Right Column: Floating Dark Expectation Card */}
           <div className="lg:col-span-5">
-            <div className="bg-[#0E0C0A] text-[#F4EDE4] p-6 sm:p-8 rounded-2xl border border-white/10 shadow-[0_24px_50px_-15px_rgba(0,0,0,0.4)] space-y-5">
-              <div className="border-b border-white/10 pb-3">
+            <div className="bg-[#0E0C0A] text-[#F4EDE4] p-6 sm:p-7 rounded-2xl border border-white/10 shadow-[0_24px_50px_-15px_rgba(0,0,0,0.4)] space-y-4">
+              <div className="pb-2">
                 <span className="font-mono text-[9px] tracking-[0.25em] text-[#C5A059] uppercase font-semibold block">
-                  WHAT YOU CAN EXPECT
+                  OUR PROMISE
                 </span>
-                <h3 className="font-display font-bold text-lg text-white mt-1">
+                <h3 className="font-display font-bold text-lg text-white mt-0.5">
                   The FBGH Guarantee
                 </h3>
               </div>
 
-              <ul className="space-y-3 font-sans text-xs text-warm-ivory/80 leading-relaxed">
+              <ul className="space-y-2.5 font-sans text-xs text-warm-ivory/80 leading-relaxed">
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-0.5" />
-                  <span><strong>All Fleet Categories Covered:</strong> Luxury Sedans, Extended Escalades, and 14-Pax Jet Sprinter Lounges.</span>
+                  <span><strong>Full Fleet:</strong> Luxury Sedans, Extended SUVs, and Executive Vans.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-0.5" />
-                  <span><strong>15-Minute Staged Buffer:</strong> Chauffeur staged prior to touch-down with pre-cooled, sanitized cabin.</span>
+                  <span><strong>Early Arrival:</strong> Driver staged before your flight lands, car cooled and clean.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-[#C5A059] flex-shrink-0 mt-0.5" />
-                  <span><strong>Guaranteed Upfront Pricing:</strong> Zero surge manipulation, transparent flat hourly and city-to-city rates.</span>
+                  <span><strong>Upfront Pricing:</strong> Fair flat rates with no hidden fees or surprise surges.</span>
                 </li>
               </ul>
-
-              <div className="pt-2">
-                <button
-                  onClick={onOpenBooking}
-                  className="pb-btn pb-btn-primary w-full justify-center !py-3 !text-xs cursor-pointer"
-                >
-                  <span>REQUEST A RIDE</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* 2. Fleet Categories Grid: BUILT FOR EVERY JOURNEY */}
-        <div className="space-y-8 pt-6 border-t border-[#E8E2D6]">
+        {/* 2. Fleet Categories Grid */}
+        <div className="space-y-8 pt-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-[#C5A059] font-bold">

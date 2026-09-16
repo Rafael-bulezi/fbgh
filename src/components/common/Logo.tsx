@@ -14,11 +14,11 @@ export const Logo: React.FC<LogoProps> = ({
   variant = 'light',
 }) => {
   const sizeMap = {
-    sm: { iconSize: 26, titleSize: 'text-xs', subSize: 'text-[7.5px]' },
-    md: { iconSize: 34, titleSize: 'text-sm', subSize: 'text-[8.5px]' },
-    lg: { iconSize: 44, titleSize: 'text-base', subSize: 'text-[10px]' },
-    xl: { iconSize: 64, titleSize: 'text-xl', subSize: 'text-xs' },
-    hero: { iconSize: 56, titleSize: 'text-2xl', subSize: 'text-sm' },
+    sm: { iconSize: 24, titleSize: 'text-[10px] sm:text-xs', subSize: 'text-[7px] sm:text-[7.5px]' },
+    md: { iconSize: 30, titleSize: 'text-[11px] sm:text-sm', subSize: 'text-[7.5px] sm:text-[8.5px]' },
+    lg: { iconSize: 38, titleSize: 'text-[12px] sm:text-base', subSize: 'text-[8.5px] sm:text-[10px]' },
+    xl: { iconSize: 56, titleSize: 'text-lg sm:text-xl', subSize: 'text-[10px] sm:text-xs' },
+    hero: { iconSize: 56, titleSize: 'text-xl sm:text-2xl', subSize: 'text-xs sm:text-sm' },
   };
 
   const { iconSize, titleSize, subSize } = sizeMap[size];
@@ -26,7 +26,7 @@ export const Logo: React.FC<LogoProps> = ({
   const textColor = variant === 'dark' ? '#F5EDD8' : '#111114';
 
   return (
-    <div className={`inline-flex items-center gap-2.5 sm:gap-3 select-none ${className}`}>
+    <div className={`inline-flex items-center gap-2 sm:gap-3 select-none ${className}`}>
       {/* Monogram Logo SVG */}
       <svg
         width={iconSize}
@@ -56,7 +56,7 @@ export const Logo: React.FC<LogoProps> = ({
             FAITH BASED
           </span>
           <span
-            className={`font-mono tracking-[0.3em] uppercase font-semibold text-champagne-gold ${subSize}`}
+            className={`hidden sm:inline-block font-mono tracking-[0.3em] uppercase font-semibold text-champagne-gold ${subSize}`}
           >
             GLOBAL HOLDINGS
           </span>

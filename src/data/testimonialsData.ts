@@ -1,4 +1,4 @@
-﻿export interface Testimonial {
+export interface Testimonial {
   quote: string;
   author: string;
   role: string;
@@ -8,7 +8,7 @@
 
 export const TESTIMONIALS_DATA: Testimonial[] = [
   {
-    quote: "In private wealth management, discretion and timing are non-negotiable. PB Transport has handled our managing partners and visiting international clients with absolute perfection for over three years.",
+    quote: "In private wealth management, discretion and timing are non-negotiable. FBGH has handled our managing partners and visiting international clients with absolute perfection for over three years.",
     author: "Alexander V. Sterling",
     role: "Managing Director, Global Asset Management",
     location: "New York & Zurich",
