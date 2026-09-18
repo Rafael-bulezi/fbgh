@@ -1,25 +1,83 @@
-import React from 'react';
-import { Shield, Users, Phone, Mail, CheckCircle2, Lock, Award } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Check, Lock, ShieldCheck, Sparkles, Users } from 'lucide-react';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
-import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface AboutPageProps {
   onOpenBooking: () => void;
   onNavigate: (page: string) => void;
 }
 
-export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
-  const [storyImgRef, storyParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
-  const [radarImgRef, radarParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.05, maxOffset: 25 });
+const PRINCIPLES = [
+  {
+    number: '01',
+    label: 'PRESENCE',
+    title: 'Read the room before entering it.',
+    body: 'A greeting when it helps. Quiet when it matters. Our people are trained to understand that service is not volume — it is attention.',
+    icon: Users,
+  },
+  {
+    number: '02',
+    label: 'PREPAREDNESS',
+    title: 'The journey starts before the door opens.',
+    body: 'Vehicles staged early. Cabins considered. Routes watched. The visible calm of the ride is built from invisible preparation.',
+    icon: Sparkles,
+  },
+  {
+    number: '03',
+    label: 'PROTECTION',
+    title: 'Discretion is an active practice.',
+    body: 'Your time, your conversations, and your itinerary stay yours. Every detail is handled with restraint and respect.',
+    icon: Lock,
+  },
+  {
+    number: '04',
+    label: 'PRECISION',
+    title: 'Small details carry the whole experience.',
+    body: 'A smoother curbside handoff. A better-timed arrival. A driver who knows when to move and when to wait.',
+    icon: ShieldCheck,
+  },
+];
+
+const MOMENTS = [
+  {
+    number: '01',
+    label: 'BEFORE THE ARRIVAL',
+    title: 'The quiet work behind a smooth day.',
+    body: 'Every polished arrival has a sequence behind it: the vehicle is checked, the route is read, and the human context is understood.',
+    image: '/images/about-hero-human-arrival.webp',
+    alt: 'Chauffeur welcoming a traveler beside a premium SUV',
+  },
+  {
+    number: '02',
+    label: 'AT THE CURB',
+    title: 'Hospitality without performance.',
+    body: 'The best service is never theatrical. It is simply there at the exact moment it is needed — composed, capable, and personal.',
+    image: '/images/experience-hero-rental.webp',
+    alt: 'Customer receiving help with luggage beside a premium SUV',
+  },
+  {
+    number: '03',
+    label: 'ON THE ROAD',
+    title: 'The cabin becomes a place to think.',
+    body: 'A protected pocket between places. A little more room to prepare, reset, or arrive as the day asks you to.',
+    image: '/images/rental-story-03-go.webp',
+    alt: 'Premium SUV travelling along a scenic road',
+  },
+];
+
+export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate }) => {
+  const [activePrinciple, setActivePrinciple] = useState(0);
+  const active = PRINCIPLES[activePrinciple];
+
   return (
-    <div className="w-full bg-obsidian text-warm-ivory pb-20">
-      {/* 1. HERO: HUMAN-CENTRIC LUXURY */}
+    <div className="w-full bg-[#0C0C0E] text-[#F4F1EA] overflow-hidden selection:bg-[#C5A059] selection:text-[#0C0C0E]">
+      {/* 01 — OPENING STATEMENT */}
       <CurvedHero
         eyebrow="ABOUT FAITH BASED GLOBAL HOLDINGS"
         titleLine1="MORE THAN DRIVERS."
         titleLine2="CURATORS OF ARRIVAL."
-        description="We are a high-touch private transportation agency founded on human warmth, uncompromising discretion, and the quiet precision that turns every journey into a sanctuary."
+        description="A high-touch transportation agency built around human warmth, quiet precision, and the belief that the way you arrive changes what comes next."
         image="/images/about-hero-human-arrival.webp"
         imageAlt="Chauffeur welcoming a traveler beside a premium SUV"
         curveVariant="gentle-wave"
@@ -28,7 +86,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         imagePosition="object-right"
       />
 
-      {/* TRANSITION: DARK TO WARM IVORY */}
       <CurvedDivider
         variant="gentle-wave"
         fromColor="#0C0C0E"
@@ -36,83 +93,46 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         height="clamp(45px, 6vw, 95px)"
       />
 
-      {/* 2. OUR STORY & PHILOSOPHY (WARM IVORY SECTION) */}
-      <section className="w-full bg-warm-ivory text-obsidian py-20 sm:py-28 px-6 sm:px-12 lg:px-20 relative overflow-hidden">
-        <div className="absolute right-6 sm:right-16 top-1/2 -translate-y-1/2 pointer-events-none opacity-[0.05] select-none">
-          <img src="/images/pb-logo.jpg" alt="" className="w-96 h-96 object-contain" />
-        </div>
-
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase text-champagne-gold-dark font-medium font-mono">
-              <span className="w-8 h-[1px] bg-champagne-gold-dark" />
-              <span>OUR ETHOS & PURPOSE</span>
+      {/* 02 — MANIFESTO / EDITORIAL INTRO */}
+      <section className="bg-[#FAF8F5] text-[#141416] px-6 sm:px-12 lg:px-20 py-24 sm:py-36 lg:py-48">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+            <div className="lg:col-span-3 flex items-center gap-3 lg:pt-4">
+              <span className="w-8 h-px bg-[#C5A059]" />
+              <span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE FBGH IDEA</span>
             </div>
-
-            <h2 className="font-display font-extrabold text-3xl sm:text-5xl text-obsidian tracking-tight leading-[1.05]">
-              A Service Agency Built Around{' '}
-              <span className="text-champagne-gold-dark">Human Warmth</span>,{' '}
-              Not Just Steel and Leather.
-            </h2>
-
-            <p className="text-sm sm:text-base text-obsidian/85 font-light leading-relaxed">
-              Anyone can lease a luxury sedan. Very few can deliver genuine hospitality. We founded Faith Based Global Holdings because discerning travelers—from corporate chairpersons and international diplomats to families and private aviation passengers—were tired of transactional, indifferent rides.
-            </p>
-
-            <p className="text-sm sm:text-base text-obsidian/85 font-light leading-relaxed">
-              In an age of cold algorithms and rideshare randomness, FBGH is an antidote: a bespoke agency where you know your chauffeur by reputation, your cabin is pre-calibrated to your personal climate, and your itinerary is safeguarded by 24/7 human oversight.
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-4 border-t border-obsidian/10">
-              <div>
-                <span className="font-serif text-3xl sm:text-4xl text-obsidian font-bold block">15 min</span>
-                <span className="text-[10px] font-mono tracking-wider text-obsidian/70 uppercase mt-1 block">
-                  EARLY ARRIVAL STAGING
-                </span>
-              </div>
-              <div>
-                <span className="font-serif text-3xl sm:text-4xl text-obsidian font-bold block">99.8%</span>
-                <span className="text-[10px] font-mono tracking-wider text-obsidian/70 uppercase mt-1 block">
-                  ON-TIME FLIGHT SYNC
-                </span>
-              </div>
-              <div>
-                <span className="font-serif text-3xl sm:text-4xl text-obsidian font-bold block">100%</span>
-                <span className="text-[10px] font-mono tracking-wider text-obsidian/70 uppercase mt-1 block">
-                  NDA CONFIDENTIALITY
-                </span>
+            <div className="lg:col-span-9">
+              <h2 className="font-display font-black text-5xl sm:text-7xl lg:text-[9vw] leading-[0.88] tracking-[-0.07em] max-w-6xl">
+                Arrival is not a<br />
+                <span className="text-[#C5A059]">transaction.</span>
+              </h2>
+              <div className="mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 max-w-4xl">
+                <p className="text-base sm:text-lg leading-relaxed text-[#414148]">
+                  It is the first impression of a meeting. The exhale after a flight. The quiet between two demanding parts of a day.
+                </p>
+                <p className="text-base sm:text-lg leading-relaxed text-[#414148]">
+                  FBGH exists to protect that moment — with the right person, the right vehicle, and a standard that does not need to announce itself.
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative">
-            <div className="relative aspect-[4/5] rounded-lg overflow-hidden shadow-2xl border border-obsidian/10 group">
-              <img
-                ref={storyImgRef}
-                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1200&auto=format&fit=crop"
-                alt="Executive Chauffeur Greeting Client with Care"
-                className="w-full h-full object-cover luminous-media transition-transform duration-700 group-hover:scale-105 will-change-transform"
-                style={{
-                  transform: `translate3d(0, ${storyParallaxY}px, 0) scale(1.06)`,
-                  transition: 'transform 0.1s ease-out',
-                }}
-              />
-              <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-              
-              <div className="absolute bottom-6 left-6 right-6 text-warm-ivory space-y-1">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-champagne-gold">
-                  THE CHAUFFEUR STANDARD
-                </span>
-                <h4 className="font-serif text-xl sm:text-2xl text-warm-ivory">
-                  "Respect for your time, protection of your peace."
-                </h4>
+          <div className="mt-24 sm:mt-36 pt-6 border-t border-[#D9D3C8] grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {[
+              ['15 MIN', 'EARLY ARRIVAL STAGING'],
+              ['24 / 7', 'HUMAN OVERSIGHT'],
+              ['100%', 'DISCRETION BY DESIGN'],
+              ['30+', 'VEHICLES PREPARED'],
+            ].map(([value, label]) => (
+              <div key={label} className="space-y-2">
+                <div className="font-display font-black text-3xl sm:text-4xl tracking-tight text-[#141416]">{value}</div>
+                <div className="text-[9px] sm:text-[10px] font-mono tracking-[0.18em] text-[#8B8478] uppercase leading-relaxed">{label}</div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* TRANSITION: WARM IVORY TO OBSIDIAN */}
       <CurvedDivider
         variant="s-curve"
         fromColor="#FAF8F5"
@@ -121,190 +141,153 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         height="clamp(45px, 6vw, 95px)"
       />
 
-      {/* 3. THE 5-STAGE CHAUFFEUR CHARTER */}
-      <section className="w-full py-24 sm:py-32 px-6 sm:px-12 lg:px-20 bg-obsidian relative">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8 gap-6">
-            <div className="space-y-2">
-              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-champagne-gold font-medium">
-                THE PEOPLE BEHIND THE WHEEL
-              </span>
-              <h2 className="font-serif text-3xl sm:text-5xl text-warm-ivory tracking-wide">
-                THE CHAUFFEUR CHARTER.
-              </h2>
+      {/* 03 — STICKY PRINCIPLES */}
+      <section className="bg-[#0C0C0E] px-6 sm:px-12 lg:px-20 py-24 sm:py-32 lg:py-40">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          <div className="lg:col-span-5 lg:sticky lg:top-24 self-start">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="w-8 h-px bg-[#C5A059]" />
+              <span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase">THE STANDARD BEHIND THE JOURNEY</span>
             </div>
-            <p className="text-xs sm:text-sm text-muted-gray max-w-md font-light leading-relaxed">
-              Fewer than 4% of applicants earn an FBGH badge. Our chauffeurs are lifelong career professionals selected for empathy, poise, and defensive mastery.
+            <h2 className="font-display font-black text-5xl sm:text-7xl leading-[0.9] tracking-[-0.06em] text-[#F4EDE4]">
+              What we<br /><span className="text-[#C5A059]">protect.</span>
+            </h2>
+            <p className="mt-8 max-w-sm text-sm sm:text-base text-white/55 leading-relaxed">
+              A premium service is not defined by what it adds to the ride. It is defined by what it removes: friction, uncertainty, noise.
             </p>
+            <div className="mt-12 hidden lg:flex items-center gap-4 text-[10px] font-mono tracking-[0.2em] text-white/30 uppercase">
+              <span className="text-[#C5A059]">{active.number}</span>
+              <span className="w-16 h-px bg-white/15" />
+              <span>{active.label}</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                num: '01',
-                title: 'Strict Vetting & Background',
-                icon: Shield,
-                desc: 'Comprehensive multi-tier federal, state, and criminal screening alongside clean executive motor vehicle histories updated quarterly.'
-              },
-              {
-                num: '02',
-                title: 'Full NDA Confidentiality',
-                icon: Lock,
-                desc: 'Every chauffeur executes binding non-disclosure agreements. Client conversations, phone calls, and itineraries remain in strict confidence.'
-              },
-              {
-                num: '03',
-                title: 'Emotional Intelligence',
-                icon: Users,
-                desc: 'Trained to read the room. Whether you need a warm greeting or unbroken silent cabin privacy to prepare for a merger, your mood dictates the tone.'
-              },
-              {
-                num: '04',
-                title: 'White-Glove Protocol',
-                icon: Award,
-                desc: 'Immature driving habits are forbidden. Smooth deceleration, umbrella escorts in foul weather, and seamless curbside luggage handling standard.'
-              }
-            ].map((pillar, idx) => {
-              const Icon = pillar.icon;
+          <div className="lg:col-span-7 space-y-3">
+            {PRINCIPLES.map((principle, index) => {
+              const Icon = principle.icon;
+              const isActive = index === activePrinciple;
               return (
-                <div
-                  key={idx}
-                  className="bg-soft-black border border-white/10 p-8 space-y-5 rounded-lg group hover:border-champagne-gold/60 transition-all duration-300 hover:-translate-y-1"
+                <button
+                  key={principle.number}
+                  type="button"
+                  onClick={() => setActivePrinciple(index)}
+                  className={`w-full text-left border-t border-white/12 py-7 sm:py-9 transition-all duration-500 group ${isActive ? 'bg-white/[0.045] px-5 sm:px-7' : 'px-0 hover:px-3'}`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-champagne-gold group-hover:border-champagne-gold/40 group-hover:bg-champagne-gold/10 transition-colors">
-                      <Icon className="w-5 h-5" />
+                  <div className="flex items-start gap-5 sm:gap-8">
+                    <span className={`font-mono text-sm mt-1 transition-colors ${isActive ? 'text-[#C5A059]' : 'text-white/25'}`}>{principle.number}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-4">
+                        <span className={`text-[10px] font-mono tracking-[0.25em] uppercase transition-colors ${isActive ? 'text-[#C5A059]' : 'text-white/35 group-hover:text-white/60'}`}>{principle.label}</span>
+                        <Icon className={`w-4 h-4 transition-all duration-500 ${isActive ? 'text-[#C5A059] rotate-0' : 'text-white/20 -rotate-12 group-hover:text-white/50'}`} />
+                      </div>
+                      <h3 className={`font-display font-bold text-2xl sm:text-4xl tracking-tight mt-3 transition-colors ${isActive ? 'text-[#F4EDE4]' : 'text-white/55 group-hover:text-white/80'}`}>{principle.title}</h3>
+                      <div className={`grid transition-[grid-template-rows,opacity] duration-500 ${isActive ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <p className="text-sm leading-relaxed text-white/55 max-w-xl">{principle.body}</p>
+                        </div>
+                      </div>
                     </div>
-                    <span className="font-mono text-xs text-champagne-gold font-bold">
-                      {pillar.num}
-                    </span>
                   </div>
-
-                  <h3 className="font-serif text-xl text-warm-ivory group-hover:text-champagne-gold transition-colors">
-                    {pillar.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-muted-gray font-light leading-relaxed">
-                    {pillar.desc}
-                  </p>
-                </div>
+                </button>
               );
             })}
+            <div className="border-t border-white/12 pt-8 flex items-center gap-3 text-[10px] font-mono tracking-[0.25em] text-white/30 uppercase lg:hidden">
+              <span className="text-[#C5A059]">{active.number}</span><span>{active.label}</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* TRANSITION: CHAUFFEUR CHARTER TO CONCIERGE RADAR */}
       <CurvedDivider
         variant="gentle-wave"
         fromColor="#0C0C0E"
-        toColor="#111114"
+        toColor="#151518"
         height="clamp(35px, 5vw, 70px)"
       />
 
-      {/* 4. 24/7 CONCIERGE & FLIGHT RADAR TELEMETRY ROOM */}
-      <section className="w-full bg-[#111114] py-20 sm:py-28 px-6 sm:px-12 lg:px-20 border-b border-white/10 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 relative aspect-[16/11] rounded-lg overflow-hidden border border-white/10 shadow-2xl">
-            <img
-              ref={radarImgRef}
-              src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1400&auto=format&fit=crop"
-              alt="Concierge and Dispatch Team"
-              className="w-full h-full object-cover luminous-media will-change-transform"
-              style={{
-                transform: `translate3d(0, ${radarParallaxY}px, 0) scale(1.06)`,
-                transition: 'transform 0.1s ease-out',
-              }}
-            />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            
-            <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between font-mono text-[10px] text-warm-ivory bg-black/60 backdrop-blur-md px-3 py-2 border border-white/10 rounded">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>FLIGHT RADAR ACTIVE DISPATCH</span>
-              </span>
-              <span className="text-champagne-gold">JFK // EWR // TEB // PHL</span>
+      {/* 04 — THREE MOMENTS / IMAGE STORY */}
+      <section className="bg-[#151518] px-6 sm:px-12 lg:px-20 py-24 sm:py-32 lg:py-40">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 sm:mb-24">
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-8 h-px bg-[#C5A059]" />
+                <span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase">THE EXPERIENCE OF CARE</span>
+              </div>
+              <h2 className="font-display font-black text-5xl sm:text-7xl tracking-[-0.06em] leading-[0.9] text-[#F4EDE4]">The work is<br /><span className="text-[#C5A059]">felt, not seen.</span></h2>
             </div>
+            <p className="max-w-xs text-sm text-white/45 leading-relaxed">Three moments. One standard. A considered journey from the first signal to the final curb.</p>
           </div>
 
-          <div className="lg:col-span-6 space-y-6">
-            <div className="space-y-2">
-              <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-champagne-gold">
-                UNSEEN PRECISION
-              </span>
-              <h2 className="font-serif text-3xl sm:text-4xl text-warm-ivory tracking-wide leading-tight">
-                Behind Every Smooth Ride is an Active Dispatch Room.
-              </h2>
-            </div>
-
-            <p className="text-xs sm:text-sm text-muted-gray font-light leading-relaxed">
-              When you travel with PB, you don't merely hire a car; you engage a dedicated mission control. Our dispatch concierges track tail numbers and commercial flights in real time, factoring in de-icing buffers, tarmac taxi holds, and interstate congestion before they impact your schedule.
-            </p>
-
-            <div className="space-y-3 pt-2">
-              {[
-                'Direct phone line answered by senior dispatchers within 3 rings',
-                'Live flight tail-number synchronization with automatic adjustment',
-                'Custom onboard provisions arranged in advance upon request',
-                'Private aviation FBO direct gate pass coordination'
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 text-xs text-warm-ivory/90">
-                  <CheckCircle2 className="w-4 h-4 text-champagne-gold flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6">
+            {MOMENTS.map((moment, index) => (
+              <article key={moment.number} className={`group ${index === 1 ? 'lg:translate-y-16' : ''}`}>
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#0C0C0E]">
+                  <img src={moment.image} alt={moment.alt} loading={index === 0 ? 'eager' : 'lazy'} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E]/90 via-transparent to-transparent" />
+                  <div className="absolute top-5 left-5 font-mono text-[10px] tracking-[0.25em] text-[#C5A059]">{moment.number}</div>
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <div className="text-[9px] font-mono tracking-[0.2em] text-[#C5A059] uppercase mb-2">{moment.label}</div>
+                    <h3 className="font-display font-bold text-2xl sm:text-3xl leading-tight text-[#F4EDE4]">{moment.title}</h3>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-              <a
-                href="tel:9295650100"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-champagne-gold hover:underline uppercase"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>DIRECT LINE: (929) 565-0100</span>
-              </a>
-              <a
-                href="mailto:concierge@fbglobalholdings.com"
-                className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-warm-ivory/80 hover:text-champagne-gold uppercase"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                <span>CONCIERGE@FBGLOBALHOLDINGS.COM</span>
-              </a>
-            </div>
+                <p className="text-sm text-white/45 leading-relaxed mt-5 max-w-sm">{moment.body}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* TRANSITION: RADAR TO CTA */}
       <CurvedDivider
         variant="circular-arc"
-        fromColor="#111114"
-        toColor="#0C0C0E"
-        height="clamp(35px, 5vw, 70px)"
+        fromColor="#151518"
+        toColor="#FAF8F5"
+        height="clamp(45px, 6vw, 95px)"
       />
 
-      {/* 5. CALL TO ACTION */}
-      <section className="max-w-5xl mx-auto px-6 sm:px-8 pt-20">
-        <div className="bg-warm-ivory text-obsidian p-8 sm:p-14 border border-champagne-gold/40 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-2xl rounded-xl">
-          <div className="space-y-2 relative z-10 text-center md:text-left">
-            <span className="text-[10px] tracking-[0.25em] text-champagne-gold-dark uppercase font-semibold font-mono">
-              JOIN DISCERNING TRAVELERS
-            </span>
-            <h3 className="font-serif text-3xl sm:text-4xl text-obsidian">
-              Experience the standard of arrival for yourself.
-            </h3>
-            <p className="text-xs text-obsidian/70">
-              Personalized corporate accounts, multi-stop itineraries, and airport transfers ready 24/7.
-            </p>
+      {/* 05 — WHAT WE REFUSE / POSITIONING */}
+      <section className="bg-[#FAF8F5] text-[#141416] px-6 sm:px-12 lg:px-20 py-24 sm:py-32 lg:py-40">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+          <div className="lg:col-span-4 lg:sticky lg:top-24">
+            <div className="flex items-center gap-3 mb-6"><span className="w-8 h-px bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">OUR POSITION</span></div>
+            <h2 className="font-display font-black text-5xl sm:text-7xl leading-[0.9] tracking-[-0.06em]">We are<br /><span className="text-[#C5A059]">not for<br />everyone.</span></h2>
           </div>
+          <div className="lg:col-span-8 space-y-0">
+            {[
+              'Not the fastest handoff. The most thoughtful one.',
+              'Not a fleet that is merely available. A fleet that is ready.',
+              'Not a driver who gets you there. A person who understands the moment.',
+              'Not transportation as a commodity. Arrival as a standard.',
+            ].map((line, index) => (
+              <div key={line} className="group border-t border-[#D9D3C8] py-8 sm:py-10 flex gap-6 sm:gap-10 items-start hover:bg-[#F2EEE7] transition-colors px-2 -mx-2">
+                <span className="font-mono text-xs text-[#C5A059] mt-1">0{index + 1}</span>
+                <p className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl leading-[0.98] tracking-tight max-w-3xl">{line}</p>
+              </div>
+            ))}
+            <div className="border-t border-[#D9D3C8] pt-8 mt-4 flex items-center gap-3 text-xs text-[#77736B] leading-relaxed max-w-xl"><Check className="w-4 h-4 text-[#C5A059] shrink-0" /> For people who notice the difference between being moved and being cared for.</div>
+          </div>
+        </div>
+      </section>
 
-          <div className="relative z-10 flex-shrink-0 w-full md:w-auto">
-            <button
-              onClick={() => onNavigate('fleet')}
-              className="w-full md:w-auto px-8 py-4 bg-obsidian text-warm-ivory text-xs font-semibold tracking-[0.2em] uppercase hover:bg-champagne-gold hover:text-obsidian transition-colors shadow-xl rounded"
-            >
-              EXPLORE FLEET &rarr;
-            </button>
+      <CurvedDivider
+        variant="swoop"
+        fromColor="#FAF8F5"
+        toColor="#0C0C0E"
+        height="clamp(45px, 6vw, 95px)"
+      />
+
+      {/* 06 — CLOSE WITH A CLEAR INVITATION, NOT A RANDOM IMAGE */}
+      <section className="relative bg-[#0C0C0E] px-6 sm:px-12 lg:px-20 py-28 sm:py-40 overflow-hidden">
+        <div className="absolute right-[-12vw] top-1/2 -translate-y-1/2 text-[28vw] font-display font-black leading-none tracking-[-0.1em] text-white/[0.025] select-none">FB</div>
+        <div className="max-w-5xl mx-auto relative z-10">
+          <div className="flex items-center gap-3 mb-8"><span className="w-8 h-px bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase">THE NEXT ARRIVAL</span></div>
+          <h2 className="font-display font-black text-6xl sm:text-8xl lg:text-[10vw] leading-[0.82] tracking-[-0.08em] text-[#F4EDE4] max-w-5xl">Come for the<br /><span className="text-[#C5A059]">standard.</span></h2>
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+            <p className="text-sm sm:text-base text-white/50 leading-relaxed max-w-sm">When the journey matters, start with the people who understand what arrival should feel like.</p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button onClick={() => onNavigate('fleet')} className="pb-btn pb-btn-primary"><span>MEET THE FLEET</span><ArrowRight className="w-3.5 h-3.5" /></button>
+              <button onClick={onOpenBooking} className="pb-btn pb-btn-outline"><span>START A CONVERSATION</span><ArrowRight className="w-3.5 h-3.5" /></button>
+            </div>
           </div>
         </div>
       </section>
