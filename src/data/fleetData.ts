@@ -146,40 +146,46 @@ export const FLEET_DATA: Vehicle[] = [
     featured: true
   },
   {
-    id: 'range-rover-sv-long',
-    name: 'RANGE ROVER SV AUTOBIOGRAPHY',
-    tagline: 'British Aristocratic Poise and Quiet Sanctuary',
+    id: 'jeep-grand-wagoneer-series-iii',
+    name: 'JEEP GRAND WAGONEER',
+    tagline: 'Pinnacle American Hospitality and Tri-Zone Grandeur',
     category: 'suv',
     categoryLabel: 'Luxury SUV',
     class: 'ULTRA LUXURY SUV',
-    passengers: 4,
-    luggage: 4,
-    transmission: 'Automatic',
-    drivetrain: 'Intelligent AWD',
-    image: 'https://images.unsplash.com/photo-1541348263662-e0c86629c983?q=80&w=1600&auto=format&fit=crop',
-    interiorImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop',
+    passengers: 6,
+    luggage: 6,
+    transmission: '8-Speed Automatic',
+    drivetrain: 'Quadra-Drive II 4WD',
+    image: 'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740443/Black_SUV_in_showroom_20260915230340_irhlcp.jpg',
+    interiorImage: 'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740439/SUV_interior_cabin_light_gray_20260915230249_n131sa.jpg',
     exteriorGallery: [
-      'https://images.unsplash.com/photo-1541348263662-e0c86629c983?auto=format&fit=crop&w=1600&q=85',
-      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1600&q=85',
-      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1600&q=85'
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740443/Black_SUV_in_showroom_20260915230340_irhlcp.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740445/Black_SUV_in_showroom_20260915225850_li4wpl.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740445/Black_SUV_in_showroom_20260915230343_hfzn5d.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740451/SUV_parked_in_showroom_interior_20260915230313_m3znqj.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740447/Rear_view_of_black_SUV_20260915230316_nwqzzr.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740464/Rear_view_of_black_SUV_20260915230316_veui7e.jpg'
     ],
     interiorGallery: [
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=85',
-      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1600&q=85',
-      'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&w=1600&q=85'
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740439/SUV_interior_cabin_light_gray_20260915230249_n131sa.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740446/Car_dashboard_and_steering_wheel_20260915230318_ihsrga.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740463/SUV_interior_cabin_light_gray_20260915230249_irjzrm.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740463/Car_dashboard_and_steering_wheel_20260915230318_ezpplc.jpg',
+      'https://res.cloudinary.com/dv9jpkgrs/image/upload/v1789740466/Car_interior_with_light_seats_20260915230301_r5ixzf.jpg'
     ],
-    description: 'Long wheelbase configuration with SV Signature Suite rear console, ceramic dials, power deployable club table, and active noise-cancelling headrest speakers.',
-    idealFor: ['Hamptons & Coastal Transfers', 'Discreet Executive Commutes', 'Private Estate Travel'],
-    features: ['Meridian Signature 35-Speaker Audio', 'Power Deployable Club Tables', 'Executive Rear Seating', 'Cabin Air Purification Pro'],
+    description: 'American craftsmanship with Palermo quilted leather seating, McIntosh 23-speaker Reference Entertainment, tri-pane panoramic sunroof, and generous space for 6 passengers.',
+    idealFor: ['Executive Family Escapes', 'VIP Airport Arrival & Transfers', 'Corporate Roadshows'],
+    features: ['Palermo Quilted Leather', 'McIntosh 23-Speaker Audio', 'Tri-Pane Panoramic Roof', 'Rear Entertainment System', 'Quadra-Lift Air Suspension'],
     specs: {
       wifi: true,
-      soundSystem: 'Meridian Signature Sound',
+      soundSystem: 'McIntosh Reference 23-Speaker',
       massageSeats: true,
       refreshmentCenter: true,
       workTables: true
     },
-    hourlyRate: 185,
-    mileageRate: 5.10
+    hourlyRate: 155,
+    mileageRate: 4.40,
+    featured: true
   },
   {
     id: 'mercedes-sprinter-jet-edition',
