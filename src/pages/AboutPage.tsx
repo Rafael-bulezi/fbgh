@@ -24,6 +24,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         imageAlt="Executive Chauffeur Hospitality"
         curveVariant="gentle-wave"
         theme="dark"
+        mobileImagePosition="object-[center_8%]"
+        imagePosition="object-top"
       />
 
       {/* TRANSITION: DARK TO WARM IVORY */}

@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     if (moreLeaveTimer.current) clearTimeout(moreLeaveTimer.current);
     moreLeaveTimer.current = setTimeout(() => {
       setMoreDropdownOpen(false);
-    }, 280);
+    }, 450);
   };
 
   const [ruleStyle, setRuleStyle] = useState<{ left: number; width: number; opacity: number }>({
@@ -342,7 +342,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div
                 onMouseEnter={handleMoreEnter}
                 onMouseLeave={handleMoreLeave}
-                className={`absolute top-full right-0 mt-2 w-48 bg-[#0c0d0e]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 transition-all duration-300 before:absolute before:-top-3 before:inset-x-0 before:h-3 ${
+                className={`absolute top-full right-0 mt-1 w-52 bg-[#0c0d0e]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.85)] z-50 transition-all duration-300 before:absolute before:-top-4 before:-inset-x-2 before:h-5 before:bg-transparent ${
                   moreDropdownOpen
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-2 pointer-events-none'

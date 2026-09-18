@@ -89,6 +89,8 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         imageAlt="Person loading luggage into rental SUV on open road"
         curveVariant="swoop"
         theme="light"
+        mobileImagePosition="object-[75%_center]"
+        imagePosition="object-right"
       />
 
       {/* TRANSITION: HERO TO FILM */}

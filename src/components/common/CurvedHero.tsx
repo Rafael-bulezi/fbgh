@@ -20,6 +20,7 @@ export interface CurvedHeroProps {
   image: string;
   imageAlt?: string;
   imagePosition?: string;
+  mobileImagePosition?: string;
   curveVariant?: 'gentle-wave' | 'sharp-diagonal' | 'circular-arc' | 's-curve' | 'swoop' | 'asymmetric';
   theme?: 'light' | 'dark';
   primaryCta?: HeroCta;
@@ -38,6 +39,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   image,
   imageAlt = 'Faith Based Global Holdings',
   imagePosition = 'object-center',
+  mobileImagePosition,
   curveVariant = 'gentle-wave',
   theme = 'light',
   minHeight = 'min-h-[85vh] sm:min-h-[90vh] lg:min-h-screen lg:h-screen',
@@ -84,12 +86,17 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
   };
 
   const getDesktopPositionClass = (pos: string) => {
+    if (pos.startsWith('object-') || pos.startsWith('sm:object-')) {
+      return pos.startsWith('sm:') ? pos : `sm:${pos}`;
+    }
     if (pos.includes('top')) return 'sm:object-top';
     if (pos.includes('bottom')) return 'sm:object-bottom';
     if (pos.includes('right')) return 'sm:object-right';
     if (pos.includes('left')) return 'sm:object-left';
     return 'sm:object-center';
   };
+
+  const mobilePosClass = mobileImagePosition || 'object-[center_15%]';
 
   return (
     <section
@@ -102,7 +109,7 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
           ref={imgRef}
           src={image}
           alt={imageAlt}
-          className={`w-full h-full object-cover object-[center_10%] ${getDesktopPositionClass(imagePosition)} will-change-transform scale-105 opacity-95`}
+          className={`w-full h-full object-cover ${mobilePosClass} ${getDesktopPositionClass(imagePosition)} will-change-transform scale-105 opacity-95`}
           style={{
             transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)`,
             transition: 'transform 0.1s ease-out',

@@ -30,6 +30,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         imageAlt="FBGH Luxury Chauffeur Vehicle"
         curveVariant="gentle-wave"
         theme="light"
+        mobileImagePosition="object-[center_10%]"
+        imagePosition="object-[center_20%]"
       />
 
       {/* ── TRANSITION 1 → 2: GENTLE WAVE FROM IVORY TO OBSIDIAN ── */}
