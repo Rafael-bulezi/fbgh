@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, ArrowUp, ShieldCheck } from 'lucide-react';
 import { RentalPolicyModal } from '../common/RentalPolicyModal';
+import { LegalPolicyModal } from '../common/LegalPolicyModal';
 import { Logo } from '../common/Logo';
 
 interface FooterProps {
@@ -18,6 +19,7 @@ const NAV_PAGES = [
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const [showPolicyModal, setShowPolicyModal] = useState(false);
+  const [legalPolicy, setLegalPolicy] = useState<'privacy' | 'terms' | null>(null);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -207,9 +209,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span>RENTAL POLICY</span>
             </button>
             <span>·</span>
-            <span className="hover:text-white transition-colors cursor-pointer">PRIVACY</span>
+            <button
+              type="button"
+              onClick={() => setLegalPolicy('privacy')}
+              className="text-[#E0A852] hover:text-white transition-colors cursor-pointer"
+            >
+              PRIVACY
+            </button>
             <span>·</span>
-            <span className="hover:text-white transition-colors cursor-pointer">TERMS</span>
+            <button
+              type="button"
+              onClick={() => setLegalPolicy('terms')}
+              className="text-[#E0A852] hover:text-white transition-colors cursor-pointer"
+            >
+              TERMS
+            </button>
             <span>·</span>
             <span className="hover:text-white transition-colors cursor-pointer">DISCRETION PROTOCOL</span>
           </div>
@@ -222,6 +236,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <RentalPolicyModal
         isOpen={showPolicyModal}
         onClose={() => setShowPolicyModal(false)}
+      />
+      <LegalPolicyModal
+        kind={legalPolicy}
+        onClose={() => setLegalPolicy(null)}
       />
     </footer>
   );
