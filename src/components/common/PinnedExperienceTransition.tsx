@@ -12,7 +12,7 @@ const SCENES = [
     word: 'CHOOSE',
     line: 'Find the vehicle that fits your plans.',
     sub: 'Browse 30+ vehicles across sedans, SUVs, vans and prestige models.',
-    image: 'https://images.unsplash.com/photo-1441148345475-03a2e82f9719?q=80&w=1920&auto=format&fit=crop',
+    image: '/images/rental-story-01-choose.jpg',
   },
   {
     id: 'take',
@@ -20,7 +20,7 @@ const SCENES = [
     word: 'TAKE',
     line: 'Take ownership of the journey.',
     sub: 'Your vehicle. Your keys. Prepared, clean, and ready.',
-    image: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1920&auto=format&fit=crop',
+    image: '/images/rental-story-02-take.jpg',
   },
   {
     id: 'go',
@@ -28,7 +28,7 @@ const SCENES = [
     word: 'GO',
     line: 'The road is yours.',
     sub: 'No schedules. No waiting. Just you and the miles ahead.',
-    image: 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?q=80&w=1920&auto=format&fit=crop',
+    image: '/images/rental-story-03-go.jpg',
   },
   {
     id: 'yours',
@@ -36,7 +36,7 @@ const SCENES = [
     word: 'MAKE IT YOURS',
     line: 'Your journey. Your way.',
     sub: 'Business. Weekend. Family. Occasion. Whatever the day demands.',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1920&auto=format&fit=crop',
+    image: '/images/rental-story-04-yours.jpg',
   },
 ];
 
