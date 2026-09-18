@@ -88,6 +88,8 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
         imageAlt="Metropolitan Destination Map Panorama"
         curveVariant="s-curve"
         theme="light"
+        mobileImagePosition="object-[62%_center]"
+        imagePosition="object-center"
       />
 
       {/* 2. DESTINATIONS CARDS GALLERY */}

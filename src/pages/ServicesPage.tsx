@@ -54,7 +54,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         imageAlt="Luxury chauffeur opening door for executive passenger"
         curveVariant="circular-arc"
         theme="light"
-        mobileImagePosition="object-[center_10%]"
+        mobileImagePosition="object-[68%_top]"
         imagePosition="object-[center_20%]"
       />
 

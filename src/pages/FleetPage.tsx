@@ -24,6 +24,8 @@ export const FleetPage: React.FC<FleetPageProps> = ({ onBookVehicle, onOpenBooki
         imageAlt="Faith Based Global Holdings Fleet Lineup"
         curveVariant="sharp-diagonal"
         theme="light"
+        mobileImagePosition="object-[62%_center]"
+        imagePosition="object-center"
         minHeight="h-[54vh] min-h-[420px] max-h-[580px]"
       />
 
