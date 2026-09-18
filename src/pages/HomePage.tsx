@@ -186,9 +186,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         className="w-full relative min-h-[72vh] sm:min-h-[82vh] flex items-center justify-center bg-[#0E0C0A] overflow-hidden select-none py-28 sm:py-36"
       >
         <img
-          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920&auto=format&fit=crop"
-          alt="Luxury Vehicle at Night"
-          className="absolute inset-0 w-full h-[125%] -top-[12%] object-cover object-center luminous-media opacity-80 will-change-transform"
+          src="/images/home-closing-arrive-with-intention.webp"
+          alt="Chauffeur welcoming a client at a destination entrance"
+          className="absolute inset-0 w-full h-[125%] -top-[12%] object-cover object-[72%_center] sm:object-center luminous-media opacity-80 will-change-transform"
           style={{
             transform: `translate3d(0, ${porscheParallaxY}px, 0) scale(1.08)`,
             transition: 'transform 0.1s ease-out',

@@ -20,12 +20,12 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         titleLine1="MORE THAN DRIVERS."
         titleLine2="CURATORS OF ARRIVAL."
         description="We are a high-touch private transportation agency founded on human warmth, uncompromising discretion, and the quiet precision that turns every journey into a sanctuary."
-        image="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1920&auto=format&fit=crop"
-        imageAlt="Executive Chauffeur Hospitality"
+        image="/images/about-hero-human-arrival.webp"
+        imageAlt="Chauffeur welcoming a traveler beside a premium SUV"
         curveVariant="gentle-wave"
         theme="dark"
-        mobileImagePosition="object-[center_8%]"
-        imagePosition="object-top"
+        mobileImagePosition="object-[72%_center]"
+        imagePosition="object-right"
       />
 
       {/* TRANSITION: DARK TO WARM IVORY */}

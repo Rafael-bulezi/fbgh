@@ -12,7 +12,7 @@ const SCENES = [
     word: 'CHOOSE',
     line: 'Find the vehicle that fits your plans.',
     sub: 'Browse 30+ vehicles across sedans, SUVs, vans and prestige models.',
-    image: '/images/rental-story-01-choose.jpg',
+    image: '/images/rental-story-01-choose.webp',
   },
   {
     id: 'take',
@@ -20,7 +20,7 @@ const SCENES = [
     word: 'TAKE',
     line: 'Take ownership of the journey.',
     sub: 'Your vehicle. Your keys. Prepared, clean, and ready.',
-    image: '/images/rental-story-02-take.jpg',
+    image: '/images/rental-story-02-take.webp',
   },
   {
     id: 'go',
@@ -28,7 +28,7 @@ const SCENES = [
     word: 'GO',
     line: 'The road is yours.',
     sub: 'No schedules. No waiting. Just you and the miles ahead.',
-    image: '/images/rental-story-03-go.jpg',
+    image: '/images/rental-story-03-go.webp',
   },
   {
     id: 'yours',
@@ -36,7 +36,7 @@ const SCENES = [
     word: 'MAKE IT YOURS',
     line: 'Your journey. Your way.',
     sub: 'Business. Weekend. Family. Occasion. Whatever the day demands.',
-    image: '/images/rental-story-04-yours.jpg',
+    image: '/images/rental-story-04-yours.webp',
   },
 ];
 
@@ -82,7 +82,7 @@ export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProp
               <img
                 src={s.image}
                 alt={s.word}
-                className="w-full h-full object-cover luminous-media"
+                className="w-full h-full object-cover object-[68%_center] sm:object-center luminous-media"
               />
               {/* Deep gradient: bottom-heavy so text breathes */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-[#08080A]/55 to-[#08080A]/30" />

@@ -85,11 +85,11 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
         titleLine1="MORE FREEDOM."
         titleLine2="MORE YOURS."
         description="From choosing your vehicle to getting back on the road, FBGH keeps the rental experience clear, comfortable and easy to navigate."
-        image="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1920&auto=format&fit=crop"
-        imageAlt="Person loading luggage into rental SUV on open road"
+        image="/images/experience-hero-rental.webp"
+        imageAlt="Customer loading luggage into a rental SUV with a host nearby"
         curveVariant="swoop"
         theme="light"
-        mobileImagePosition="object-[75%_center]"
+        mobileImagePosition="object-[72%_center]"
         imagePosition="object-right"
       />
 
@@ -398,9 +398,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
       <section className="relative min-h-[55vh] flex items-center justify-center overflow-hidden">
         <img
           ref={departImgRef}
-          src="https://images.unsplash.com/photo-1441148345475-03a2e82f9719?q=80&w=1920&auto=format&fit=crop"
-          alt="Vehicle departing on an open road"
-          className="absolute inset-0 w-full h-full object-cover luminous-media opacity-80 will-change-transform"
+          src="/images/experience-closing-ready-to-move.webp"
+          alt="Customer ready to continue her journey in a rental SUV"
+          className="absolute inset-0 w-full h-full object-cover object-[72%_center] sm:object-center luminous-media opacity-80 will-change-transform"
           style={{
             transform: `translate3d(0, ${departParallaxY}px, 0) scale(1.06)`,
             transition: 'transform 0.1s ease-out',
