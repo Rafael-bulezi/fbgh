@@ -361,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         : 'text-warm-ivory/80 hover:text-warm-ivory hover:bg-white/5'
                     }`}
                   >
-                    <span>DESTINATIONS</span>
+                    <span>CORRIDORS</span>
                     <ArrowRight className="w-3 h-3 text-champagne-gold" />
                   </button>
 
@@ -596,7 +596,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               { id: 'fleet', num: '02', label: 'Fleet' },
               { id: 'services', num: '03', label: 'Services' },
               { id: 'experience', num: '04', label: 'Experience' },
-              { id: 'destinations', num: '05', label: 'Destinations' },
+              { id: 'destinations', num: '05', label: 'Corridors' },
               { id: 'about', num: '06', label: 'About' },
             ].map((item) => {
               const isActive = currentPage === item.id;

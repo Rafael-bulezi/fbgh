@@ -340,3 +340,25 @@ h1, h2, h3, h4, h5, h6 {
 .animate-marquee-text:hover {
   animation-play-state: paused;
 }
+
+
+/* Reference-matched ivory Request a Ride treatment. The booking steps keep their
+   data contracts, while this scope changes their visual language from dark modal
+   chrome to the editorial FBGH paper palette. */
+.request-ride-lightbox > div:last-child { border-color: #D7CDBE; background: #FAF8F5; }
+.request-ride-lightbox [class*="text-warm-ivory"],
+.request-ride-lightbox .text-\[\#F4EDE4\] { color: #141416 !important; }
+.request-ride-lightbox [class*="text-warm-ivory/"],
+.request-ride-lightbox [class*="text-white/"] { color: #7E7468 !important; }
+.request-ride-lightbox [class*="border-white/"] { border-color: #D7CDBE !important; }
+.request-ride-lightbox [class*="bg-white/[0.02]"],
+.request-ride-lightbox [class*="bg-white/[0.03]"],
+.request-ride-lightbox [class*="bg-white/[0.04]"],
+.request-ride-lightbox [class*="bg-white/5"] { background-color: rgba(255,255,255,0.58) !important; }
+.request-ride-lightbox input,
+.request-ride-lightbox textarea,
+.request-ride-lightbox select { color: #141416 !important; background: rgba(255,255,255,0.62) !important; border-color: #CFC4B3 !important; }
+.request-ride-lightbox input::placeholder,
+.request-ride-lightbox textarea::placeholder { color: #9A8E7D !important; }
+.request-ride-lightbox .custom-scrollbar::-webkit-scrollbar-track { background: #EEE9E1; }
+.request-ride-lightbox .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; }

@@ -1,124 +1,107 @@
-import React, { useRef, useState } from 'react';
-import {
-  ArrowUpRight,
-  Clock3,
-  Compass,
-  Luggage,
-  MoveRight,
-  Phone,
-  Plane,
-  ShieldCheck,
-  Sparkles,
-} from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, Clock3, Luggage, MoveRight, Phone, ShieldCheck, Sparkles } from 'lucide-react';
 import { DESTINATIONS_DATA } from '../data/destinationsData';
-import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
-import { useSubtleParallax } from '../hooks/useSubtleParallax';
 
 interface DestinationsPageProps {
   onOpenBooking: () => void;
 }
 
-const CHAPTER_META = [
-  { label: 'CITY ARRIVAL', title: <>JFK TO<br /><span className="text-[#C5A059]">MIDTOWN.</span></>, detail: 'AIRPORT TO THE CITY. SEAMLESSLY.' },
-  { label: 'EXECUTIVE TRANSFER', title: <>HISTORIC ROOTS.<br /><span className="text-[#C5A059]">MODERN ARRIVALS.</span></>, detail: 'CULTURE. BUSINESS. HOME.' },
+const ROUTE_META = [
+  {
+    eyebrow: 'NEW YORK',
+    title: <>JFK TO<br /><span className="text-[#C5A059]">MIDTOWN.</span></>,
+    detail: 'AIRPORT TO THE CITY. SEAMLESSLY.',
+    pickup: 'JFK',
+    arrival: 'MIDTOWN',
+    distance: 'APPROX. 17 MILES',
+  },
+  {
+    eyebrow: 'PHILADELPHIA / MAIN LINE',
+    title: <>HISTORIC ROOTS.<br /><span className="text-[#C5A059]">MODERN ARRIVALS.</span></>,
+    detail: 'CULTURE. BUSINESS. HOME.',
+    pickup: 'PHL / CENTER CITY',
+    arrival: 'MAIN LINE',
+    distance: 'APPROX. 12 MILES',
+  },
 ];
 
-const SERVICE_PROOF = [
-  { icon: Plane, title: 'AIRPORT HANDOFF', body: 'From terminal to vehicle, every transition is handled.' },
-  { icon: Luggage, title: 'LUGGAGE EASE', body: 'The details move with you, without becoming your problem.' },
-  { icon: Clock3, title: 'TIMING CONFIDENCE', body: 'Real-time updates. No guesswork. No unnecessary noise.' },
-  { icon: Sparkles, title: 'PREPARED CABIN', body: 'Comfort, privacy, and attention calibrated to the journey.' },
+const STANDARD = [
+  { icon: Clock3, title: 'TIMING CONFIDENCE', body: 'Real-time updates. No guesswork.' },
+  { icon: Luggage, title: 'LUGGAGE EASE', body: 'We manage the details.' },
+  { icon: ShieldCheck, title: 'DISCRETION', body: 'Privacy respected from pickup to arrival.' },
+  { icon: Sparkles, title: 'PREPARED CABIN', body: 'Comfort, privacy, attention.' },
 ];
 
-const ChapterImage: React.FC<{ destination: (typeof DESTINATIONS_DATA)[0]; index: number; active: boolean }> = ({ destination, index, active }) => {
-  const [imgRef, parallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.06, maxOffset: 24 });
-
-  return (
-    <div className={`relative aspect-[1.18/1] overflow-hidden bg-[#E8E2D8] transition-all duration-500 sm:aspect-[1.35/1] ${active ? 'ring-1 ring-[#C5A059] ring-offset-8 ring-offset-[#F2EEE6]' : ''}`}>
-      <img
-        ref={imgRef}
-        src={destination.image}
-        alt={`${destination.name} destination corridor`}
-        loading={index === 0 ? 'eager' : 'lazy'}
-        className="h-full w-full object-cover scale-[1.06] luminous-media"
-        style={{ transform: `translate3d(0, ${parallaxY}px, 0) scale(1.06)`, transition: 'transform 0.1s ease-out' }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E]/65 via-transparent to-transparent" />
-      <div className="absolute bottom-5 left-5 flex items-center gap-2 text-[9px] font-mono tracking-[0.2em] text-white/90 uppercase">
-        <Compass className="h-3.5 w-3.5 text-[#C5A059]" />
-        {destination.coordinates}
-      </div>
-      <div className="absolute right-5 top-5 text-[9px] font-mono tracking-[0.2em] text-white/70">0{index + 1} / 02</div>
-      <div className="absolute inset-x-0 bottom-[-1px] z-10"><CurvedDivider variant="soft-curve" fromColor="transparent" toColor="#F2EEE6" height="clamp(24px, 4vw, 52px)" /></div>
-    </div>
-  );
+const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = '' }) => {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.16 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return <div ref={ref} className={`transition-[opacity,transform] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'} ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
 };
 
-const RouteFacts: React.FC<{ destination: (typeof DESTINATIONS_DATA)[0]; index: number }> = ({ destination, index }) => {
-  const route = destination.popularRoutes[0];
-  const meta = CHAPTER_META[index];
-
-  return (
-    <div className="pt-1 lg:pt-5">
-      <div className="flex items-center gap-3 text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase"><span>{meta.label}</span><span className="h-px w-8 bg-[#C5A059]" /></div>
-      <h3 className="mt-4 max-w-xl font-display text-4xl font-black leading-[0.88] tracking-[-0.06em] text-[#141416] sm:text-6xl">{meta.title}</h3>
-      <p className="mt-5 max-w-sm text-xs font-medium tracking-[0.14em] text-[#55555C] uppercase">{meta.detail}</p>
-      <div className="mt-7 grid max-w-md grid-cols-[1fr_auto_1fr] items-center gap-3 border-y border-[#D9D3C8] py-5">
-        <div><span className="block text-[9px] font-mono tracking-[0.2em] text-[#8B8478] uppercase">PICKUP</span><span className="mt-2 block text-sm font-semibold text-[#141416]">{route.from}</span></div>
-        <MoveRight className="h-4 w-4 text-[#C5A059]" />
-        <div className="text-right"><span className="block text-[9px] font-mono tracking-[0.2em] text-[#8B8478] uppercase">ARRIVAL</span><span className="mt-2 block text-sm font-semibold text-[#141416]">{route.to}</span></div>
-      </div>
-      <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-mono tracking-[0.18em] text-[#8B8478] uppercase"><span>{route.typicalDuration}</span><span>FROM {route.startingRate}</span></div>
-      <p className="mt-6 max-w-lg text-sm leading-relaxed text-[#55555C]">{destination.description}</p>
-      <div className="mt-6 flex flex-wrap gap-2">{destination.keyHubs.slice(0, 3).map((hub) => <span key={hub} className="border border-[#D9D3C8] px-3 py-2 text-[9px] font-mono tracking-[0.12em] text-[#7B746A] uppercase">{hub}</span>)}</div>
-      <button type="button" className="pb-btn pb-btn-text mt-7 text-[10px]">Read the corridor <ArrowUpRight className="h-3.5 w-3.5" /></button>
+const BubbleImage: React.FC<{ src: string; alt: string; side: 'left' | 'right'; index: number }> = ({ src, alt, side, index }) => (
+  <Reveal delay={120} className="relative">
+    <div className={`relative aspect-[1.28/0.9] overflow-hidden bg-[#E8E2D8] shadow-[0_22px_55px_rgba(56,43,28,0.10)] ${side === 'left' ? 'rounded-[52%_48%_47%_53%/44%_48%_52%_56%]' : 'rounded-[48%_52%_54%_46%/49%_43%_57%_51%]'}`}>
+      <img src={src} alt={alt} loading={index === 0 ? 'eager' : 'lazy'} className="h-full w-full object-cover transition-transform duration-[1400ms] hover:scale-105" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E]/35 via-transparent to-transparent" />
+      <div className="absolute bottom-6 left-7 text-[9px] font-mono tracking-[0.24em] text-white/90 uppercase">0{index + 1} / 02</div>
     </div>
-  );
-};
-
-const JourneyChapter: React.FC<{ destination: (typeof DESTINATIONS_DATA)[0]; index: number; active: boolean; chapterRef: (node: HTMLElement | null) => void; onSelect: () => void }> = ({ destination, index, active, chapterRef, onSelect }) => (
-  <article ref={chapterRef} className={`relative scroll-mt-32 grid grid-cols-1 gap-7 lg:grid-cols-[1fr_48px_1fr] lg:gap-8 ${active ? '' : 'opacity-60 hover:opacity-100'} transition-opacity duration-500`}>
-    <div className={index % 2 === 0 ? 'lg:order-1' : 'lg:order-3'}>
-      <button type="button" onClick={onSelect} className="block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#C5A059]"><ChapterImage destination={destination} index={index} active={active} /></button>
-    </div>
-    <div className="relative hidden lg:order-2 lg:flex lg:justify-center">
-      <span className="absolute top-0 bottom-0 w-px bg-[#C5A059]/45" />
-      <button type="button" aria-label={`Select ${destination.name}`} onClick={onSelect} className={`relative z-10 mt-8 h-5 w-5 rounded-full border bg-[#F2EEE6] transition-all ${active ? 'border-[#C5A059] shadow-[0_0_0_8px_rgba(197,160,89,0.14)]' : 'border-[#B6AA96]'}`}><span className={`absolute inset-1.5 rounded-full bg-[#C5A059] transition-opacity ${active ? 'opacity-100' : 'opacity-0'}`} /></button>
-      {index < DESTINATIONS_DATA.length - 1 && <span className="absolute -bottom-7 text-[9px] font-mono tracking-[0.18em] text-[#A49784]">0{index + 2} / 02</span>}
-    </div>
-    <div className={`${index % 2 === 0 ? 'lg:order-3 lg:pl-4' : 'lg:order-1 lg:pr-4'}`}><RouteFacts destination={destination} index={index} /></div>
-  </article>
+  </Reveal>
 );
 
-export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBooking }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const chapterRefs = useRef<(HTMLElement | null)[]>([]);
-
-  const selectChapter = (index: number, shouldScroll = true) => {
-    setActiveIndex(index);
-    if (shouldScroll) chapterRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
+const CorridorFacts: React.FC<{ index: number }> = ({ index }) => {
+  const destination = DESTINATIONS_DATA[index];
+  const route = destination.popularRoutes[0];
+  const meta = ROUTE_META[index];
   return (
-    <div className="w-full overflow-hidden bg-[#FAF8F5] text-[#141416] selection:bg-[#C5A059] selection:text-[#0C0C0E]">
-      <CurvedHero eyebrow="DESTINATIONS" titleLine1="THE ROUTE IS PART" titleLine2="OF THE SERVICE." description="We do not just get you there. We protect the distance between places — so you can focus on what matters most." image="/images/destination-hero-concept.webp" imageAlt="Chauffeur opening an executive SUV at a private terminal" curveVariant="s-curve" theme="light" mobileImagePosition="object-[68%_center]" imagePosition="object-center" slogan="NEW YORK · PHILADELPHIA" />
-
-      <section className="px-6 py-24 sm:px-12 sm:py-32 lg:px-20 lg:py-40"><div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-24"><div className="flex items-center gap-3 lg:col-span-3 lg:items-start lg:pt-4"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE FBGH DIFFERENCE</span></div><div className="lg:col-span-9"><h2 className="max-w-6xl font-display text-5xl font-black leading-[0.86] tracking-[-0.07em] sm:text-7xl lg:text-[8.5vw]">The distance is<br /><span className="text-[#C5A059]">part of the service.</span></h2><div className="mt-10 grid max-w-4xl grid-cols-1 gap-8 text-base leading-relaxed text-[#414148] sm:text-lg md:grid-cols-2 md:gap-16 lg:mt-14"><p>Every journey has a visible destination and an invisible standard. The vehicle is ready, the route is read, and the next handoff is already considered.</p><p>That is what makes distance feel different with FBGH: less uncertainty, less noise, and more room to arrive as the day asks you to.</p></div></div></div></section>
-
-      <CurvedDivider variant="gentle-wave" fromColor="#FAF8F5" toColor="#F2EEE6" height="clamp(40px, 5vw, 80px)" />
-
-      <section className="bg-[#F2EEE6] px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-32"><div className="mx-auto max-w-7xl"><div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-end sm:mb-16"><div><div className="mb-5 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE PRIVATE ITINERARY</span></div><h2 className="max-w-3xl font-display text-5xl font-black leading-[0.88] tracking-[-0.07em] sm:text-7xl">Follow the<br /><span className="text-[#C5A059]">arrival line.</span></h2></div><p className="max-w-xs text-sm leading-relaxed text-[#6F6A62]">Choose a city. The route, image, and service context move with you.</p></div>
-        <div className="sticky top-16 z-20 mb-16 overflow-x-auto border-y border-[#D9D3C8] bg-[#F2EEE6]/95 backdrop-blur-md sm:mb-20"><div className="flex min-w-max items-center gap-1 py-2">{DESTINATIONS_DATA.map((destination, index) => <button key={destination.id} type="button" aria-current={index === activeIndex ? 'step' : undefined} onClick={() => selectChapter(index)} className={`flex items-center gap-3 px-4 py-3 text-left transition-colors ${index === activeIndex ? 'text-[#141416]' : 'text-[#8B8478] hover:text-[#141416]'}`}><span className={`font-mono text-[10px] ${index === activeIndex ? 'text-[#C5A059]' : 'text-[#B5A994]'}`}>0{index + 1}</span><span className="text-[10px] font-bold tracking-[0.16em] uppercase">{destination.name}</span>{index < DESTINATIONS_DATA.length - 1 && <span className="hidden h-px w-5 bg-[#C5A059]/50 sm:block" />}</button>)}</div></div>
-        <div className="space-y-16 sm:space-y-24 lg:space-y-28">{DESTINATIONS_DATA.map((destination, index) => <JourneyChapter key={destination.id} destination={destination} index={index} active={index === activeIndex} chapterRef={(node) => { chapterRefs.current[index] = node; }} onSelect={() => selectChapter(index, false)} />)}</div>
-      </div></section>
-
-      <CurvedDivider variant="s-curve" fromColor="#F2EEE6" toColor="#0C0C0E" height="clamp(45px, 6vw, 95px)" />
-
-      <section className="bg-[#0C0C0E] px-6 py-24 text-[#F4EDE4] sm:px-12 sm:py-32 lg:px-20 lg:py-36"><div className="mx-auto max-w-7xl"><div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-end sm:mb-16"><div><div className="mb-5 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#C5A059] uppercase">THE FBGH STANDARD</span></div><h2 className="font-display text-5xl font-black leading-[0.88] tracking-[-0.07em] sm:text-7xl">What we make<br /><span className="text-[#C5A059]">effortless.</span></h2></div><p className="max-w-xs text-sm leading-relaxed text-white/45">The scenic part of a journey is easy to photograph. The standard behind it is what you feel.</p></div><div className="grid grid-cols-1 border-t border-white/15 sm:grid-cols-2 lg:grid-cols-4">{SERVICE_PROOF.map(({ icon: Icon, title, body }) => <div key={title} className="border-b border-white/15 px-1 py-8 sm:border-r sm:px-6 lg:border-b-0 lg:first:pl-0 lg:last:border-r-0"><Icon className="h-7 w-7 text-[#C5A059]" strokeWidth={1.2} /><h3 className="mt-7 text-[10px] font-mono font-bold tracking-[0.2em] text-[#F4EDE4] uppercase">{title}</h3><p className="mt-3 max-w-[15rem] text-sm leading-relaxed text-white/45">{body}</p></div>)}</div><div className="mt-12 flex items-center gap-3 text-[10px] font-mono tracking-[0.22em] text-white/35 uppercase"><ShieldCheck className="h-4 w-4 text-[#C5A059]" /> Prepared before the door opens</div></div></section>
-
-      <CurvedDivider variant="asymmetric" fromColor="#0C0C0E" toColor="#FAF8F5" height="clamp(45px, 6vw, 95px)" />
-      <section className="relative overflow-hidden bg-[#FAF8F5] px-6 py-28 sm:px-12 sm:py-36 lg:px-20"><div className="absolute right-[-5vw] top-1/2 hidden -translate-y-1/2 text-[25vw] font-display font-black leading-none tracking-[-0.12em] text-[#EDE7DC] lg:block">FB</div><div className="relative z-10 mx-auto max-w-7xl"><div className="max-w-3xl"><div className="mb-8 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">CONCIERGE</span></div><h2 className="font-display text-6xl font-black leading-[0.82] tracking-[-0.08em] sm:text-8xl lg:text-[9vw]">Your destination is<br /><span className="text-[#C5A059]">not on the list.</span></h2><p className="mt-10 max-w-xl text-base leading-relaxed text-[#55555C] sm:text-lg">Special requests. Multi-stop itineraries. Uncommon destinations. Tell us where the day begins and where it needs to end.</p><div className="mt-10 flex flex-wrap gap-4"><button type="button" onClick={onOpenBooking} className="pb-btn pb-btn-primary"><span>Plan a private journey</span><ArrowUpRight className="h-4 w-4" /></button><a href="tel:9295650100" className="pb-btn pb-btn-outline"><Phone className="h-3.5 w-3.5" /><span>Talk to a concierge</span></a></div></div></div></section>
-    </div>
+    <Reveal delay={220} className="max-w-xl">
+      <div className="flex items-center gap-3 text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase"><span>{meta.eyebrow}</span><span className="h-px w-8 bg-[#C5A059]" /></div>
+      <h2 className="mt-5 font-display text-4xl font-black leading-[0.86] tracking-[-0.065em] text-[#141416] sm:text-6xl">{meta.title}</h2>
+      <p className="mt-5 text-[10px] font-bold tracking-[0.2em] text-[#55555C] uppercase">{meta.detail}</p>
+      <div className="mt-7 grid grid-cols-[1fr_auto_1fr] items-end gap-4 border-y border-[#D7CDBE] py-5">
+        <div><span className="block text-[8px] font-mono tracking-[0.22em] text-[#9A8E7D] uppercase">{index === 0 ? 'PICKUP' : 'PICKUP'}</span><span className="mt-2 block text-sm font-semibold uppercase">{meta.pickup}</span></div>
+        <MoveRight className="mb-1 h-4 w-4 text-[#C5A059]" />
+        <div className="text-right"><span className="block text-[8px] font-mono tracking-[0.22em] text-[#9A8E7D] uppercase">ARRIVAL</span><span className="mt-2 block text-sm font-semibold uppercase">{meta.arrival}</span></div>
+      </div>
+      <div className="mt-4 flex gap-6 text-[9px] font-mono tracking-[0.2em] text-[#8B8478] uppercase"><span>{meta.distance}</span><span>{route.typicalDuration}</span></div>
+      <p className="mt-6 max-w-md text-sm leading-relaxed text-[#5E5A53]">{destination.description}</p>
+      <button type="button" className="pb-btn pb-btn-text mt-6 text-[10px]">Plan this corridor <ArrowUpRight className="h-3.5 w-3.5" /></button>
+    </Reveal>
   );
 };
+
+export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBooking }) => (
+  <main className="w-full overflow-hidden bg-[#FAF8F5] text-[#141416] selection:bg-[#C5A059] selection:text-[#0C0C0E]">
+    <section className="relative min-h-[min(780px,88vh)] overflow-hidden bg-[#FAF8F5] px-6 pb-16 pt-8 sm:px-12 lg:px-20 lg:pb-24 lg:pt-10">
+      <div className="relative z-20 mx-auto flex max-w-7xl items-center justify-between"><span className="font-display text-xl font-black tracking-[-0.08em]">FBGH <span className="ml-2 hidden text-[8px] font-mono font-normal tracking-[0.23em] text-[#9B896C] sm:inline">FAITH BASED GLOBAL HOLDINGS</span></span><span className="text-[9px] font-mono tracking-[0.25em] text-[#907C5C] uppercase">PRIVATE CORRIDORS</span></div>
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 pt-20 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:pt-24">
+        <Reveal><div className="max-w-xl"><div className="flex items-center gap-3 text-[9px] font-mono tracking-[0.3em] text-[#967C52] uppercase"><span>NYC ↔ PHILADELPHIA</span><span className="h-px w-8 bg-[#C5A059]" /></div><h1 className="mt-6 font-display text-6xl font-black leading-[0.83] tracking-[-0.08em] sm:text-8xl lg:text-[7.2vw]">THE DISTANCE<br /><span className="text-[#C5A059]">IS THE SERVICE.</span></h1><p className="mt-8 max-w-md text-base leading-relaxed text-[#55555C] sm:text-lg">A private chauffeur corridor between New York City and Philadelphia, planned around the way your day actually moves.</p><button type="button" onClick={onOpenBooking} className="pb-btn pb-btn-primary mt-8"><span>REQUEST A RIDE</span><ArrowUpRight className="h-4 w-4" /></button></div></Reveal>
+        <Reveal delay={160} className="relative"><div className="relative aspect-[1.14/0.82] overflow-hidden rounded-[48%_52%_56%_44%/44%_42%_58%_56%] shadow-[0_30px_80px_rgba(56,43,28,0.15)]"><img src="/images/destination-hero-concept.webp" alt="FBGH chauffeur opening an executive SUV" className="h-full w-full object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E]/30 via-transparent to-transparent" /></div><div className="absolute -bottom-5 left-[8%] h-16 w-px bg-[#C5A059]" /></Reveal>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0"><CurvedDivider variant="soft-curve" fromColor="transparent" toColor="#F2EEE6" height="clamp(42px, 7vw, 92px)" /></div>
+    </section>
+
+    <section className="bg-[#F2EEE6] px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-36"><div className="mx-auto max-w-7xl"><Reveal><div className="grid gap-10 lg:grid-cols-[0.42fr_1fr]"><div className="flex items-start gap-3 pt-2"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase">THE CORRIDOR</span></div><div><h2 className="max-w-5xl font-display text-5xl font-black leading-[0.86] tracking-[-0.075em] sm:text-7xl lg:text-[7vw]">FROM DOOR<br /><span className="text-[#C5A059]">TO DOOR.</span></h2><div className="mt-10 grid max-w-4xl gap-8 text-base leading-relaxed text-[#5E5A53] md:grid-cols-2"><p>From airport arrivals to private residences, FBGH protects the handoff between places in New York City and Philadelphia.</p><p>The route is read before the vehicle moves. Timing, luggage, vehicle, and next stop are considered together.</p></div></div></div></Reveal></div></section>
+
+    <section className="relative bg-[#F2EEE6] px-6 pb-24 sm:px-12 sm:pb-36 lg:px-20"><div className="mx-auto max-w-7xl"><div className="relative"><div className="absolute bottom-0 left-1/2 top-0 hidden w-px -translate-x-1/2 bg-[#C5A059]/60 lg:block"><span className="absolute left-1/2 top-[16%] h-5 w-5 -translate-x-1/2 rounded-full border border-[#C5A059] bg-[#F2EEE6] shadow-[0_0_0_7px_rgba(197,160,89,0.1)]" /><span className="absolute left-1/2 top-[61%] h-5 w-5 -translate-x-1/2 rounded-full border border-[#C5A059] bg-[#F2EEE6] shadow-[0_0_0_7px_rgba(197,160,89,0.1)]" /></div><div className="grid gap-20 lg:gap-28">
+      <div className="grid items-center gap-10 lg:grid-cols-[1fr_74px_1fr]"><BubbleImage src={DESTINATIONS_DATA[0].image} alt="Black executive SUV arriving in New York" side="left" index={0} /><div className="hidden lg:block" /><CorridorFacts index={0} /></div>
+      <div className="grid items-center gap-10 lg:grid-cols-[1fr_74px_1fr]"><CorridorFacts index={1} /><div className="hidden lg:block" /><BubbleImage src={DESTINATIONS_DATA[1].image} alt="Black executive sedan arriving in Philadelphia" side="right" index={1} /></div>
+    </div></div></div></section>
+
+    <section className="bg-[#FAF8F5] px-6 py-20 sm:px-12 sm:py-28 lg:px-20"><div className="mx-auto max-w-7xl"><Reveal><div className="mb-12 flex items-end justify-between gap-8"><div><div className="mb-5 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase">THE FBGH STANDARD</span></div><h2 className="font-display text-5xl font-black leading-[0.86] tracking-[-0.07em] sm:text-7xl">WHAT WE MAKE<br /><span className="text-[#C5A059]">EFFORTLESS.</span></h2></div><p className="hidden max-w-xs text-sm leading-relaxed text-[#6F6A62] md:block">The route may change. The standard does not.</p></div></Reveal><div className="grid grid-cols-1 border-t border-[#D7CDBE] sm:grid-cols-2 lg:grid-cols-4">{STANDARD.map(({ icon: Icon, title, body }, index) => <Reveal key={title} delay={index * 90} className="border-b border-[#D7CDBE] px-1 py-8 sm:border-r sm:px-6 lg:border-b-0 lg:first:pl-0 lg:last:border-r-0"><Icon className="h-7 w-7 text-[#C5A059]" strokeWidth={1.15} /><h3 className="mt-6 text-[10px] font-mono font-bold tracking-[0.2em] uppercase">{title}</h3><p className="mt-3 max-w-[14rem] text-sm leading-relaxed text-[#6F6A62]">{body}</p></Reveal>)}</div></div></section>
+
+    <section className="relative overflow-hidden bg-[#0C0C0E] px-6 py-24 text-[#F4EDE4] sm:px-12 sm:py-36 lg:px-20"><div className="absolute right-[-3vw] top-1/2 -translate-y-1/2 font-display text-[24vw] font-black leading-none tracking-[-0.13em] text-white/[0.035]">NYC↔PHL</div><div className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-end"><Reveal><div><div className="mb-7 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[9px] font-mono tracking-[0.28em] text-[#C5A059] uppercase">CONCIERGE</span></div><h2 className="font-display text-6xl font-black leading-[0.82] tracking-[-0.08em] sm:text-8xl">YOUR DAY<br /><span className="text-[#C5A059]">SETS THE ROUTE.</span></h2><p className="mt-9 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">One city, the other, or anywhere within the corridor. Tell us where the day begins and where it needs to end.</p><div className="mt-9 flex flex-wrap gap-4"><button type="button" onClick={onOpenBooking} className="pb-btn pb-btn-primary"><span>REQUEST A RIDE</span><ArrowUpRight className="h-4 w-4" /></button><a href="tel:9295650100" className="pb-btn pb-btn-outline border-white/25 text-white"><Phone className="h-3.5 w-3.5" /><span>CALL A CONCIERGE</span></a></div></div></Reveal><Reveal delay={180}><div className="border-t border-white/15 pt-6 text-[10px] font-mono tracking-[0.22em] text-white/40 uppercase"><div className="flex items-center justify-between border-b border-white/15 py-4"><span>NEW YORK CITY</span><span className="text-[#C5A059]">ORIGIN / ARRIVAL</span></div><div className="flex items-center justify-between border-b border-white/15 py-4"><span>PHILADELPHIA</span><span className="text-[#C5A059]">ORIGIN / ARRIVAL</span></div><div className="flex items-center justify-between py-4"><span>THE CORRIDOR</span><span className="text-[#C5A059]">ONE STANDARD</span></div></div></Reveal></div></section>
+  </main>
+);
