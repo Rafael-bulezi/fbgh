@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Calendar,
   Clock,
   Users,
   Briefcase,
@@ -53,47 +52,6 @@ export const DetailsStep: React.FC = () => {
           </div>
 
           <div className="space-y-4 pt-1">
-            {/* DATE & TIME ROW */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {/* DATE */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono tracking-[0.2em] text-champagne-gold uppercase block">
-                  TRAVEL DATE
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-3.5 text-champagne-gold pointer-events-none">
-                    <Calendar className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    value={bookingData.date}
-                    onChange={(e) => updateBookingData({ date: e.target.value })}
-                    placeholder="e.g. 24 Sep 2026"
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-warm-ivory placeholder-warm-ivory/30 focus:outline-none focus:border-champagne-gold transition-colors"
-                  />
-                </div>
-              </div>
-
-              {/* TIME */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-mono tracking-[0.2em] text-champagne-gold uppercase block">
-                  PICKUP TIME
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-3.5 text-champagne-gold pointer-events-none">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    value={bookingData.time}
-                    onChange={(e) => updateBookingData({ time: e.target.value })}
-                    placeholder="e.g. 10:30 AM"
-                    className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-warm-ivory placeholder-warm-ivory/30 focus:outline-none focus:border-champagne-gold transition-colors"
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* TRIP TYPE */}
             <div className="space-y-2">
               <label className="text-[10px] font-mono tracking-[0.2em] text-champagne-gold uppercase block">
