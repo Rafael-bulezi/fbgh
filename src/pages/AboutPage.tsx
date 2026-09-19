@@ -66,7 +66,7 @@ const MOMENTS = [
   },
 ];
 
-export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate }) => {
+export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const [activePrinciple, setActivePrinciple] = useState(0);
   const active = PRINCIPLES[activePrinciple];
 
@@ -286,7 +286,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onOpenBooking, onNavigate 
             <p className="text-sm sm:text-base text-white/50 leading-relaxed max-w-sm">When the journey matters, start with the people who understand what arrival should feel like.</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button onClick={() => onNavigate('fleet')} className="pb-btn pb-btn-primary"><span>MEET THE FLEET</span><ArrowRight className="w-3.5 h-3.5" /></button>
-              <button onClick={onOpenBooking} className="pb-btn pb-btn-outline"><span>START A CONVERSATION</span><ArrowRight className="w-3.5 h-3.5" /></button>
             </div>
           </div>
         </div>

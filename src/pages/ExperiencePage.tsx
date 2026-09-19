@@ -67,7 +67,7 @@ const STEPS = [
   { num: '04', title: 'RETURN', desc: 'Complete the journey. Simple.' },
 ];
 
-export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, onNavigate }) => {
+export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onNavigate }) => {
   const [activeCase, setActiveCase] = useState('business');
   const currentCase = USE_CASES.find((u) => u.id === activeCase) || USE_CASES[0];
 
@@ -432,13 +432,6 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenBooking, o
             >
               <span>EXPLORE THE FLEET</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-            <button
-              onClick={() => onOpenBooking()}
-              className="pb-btn pb-btn-primary"
-            >
-              <span>RENT A CAR</span>
-              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

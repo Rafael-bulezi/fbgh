@@ -135,7 +135,6 @@ const SERVICE_TIERS: ServiceCategoryItem[] = [
 ];
 
 export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProps> = ({
-  onOpenBooking,
   onNavigate
 }) => {
   const [activeId, setActiveId] = useState<string>("airport");
@@ -256,19 +255,6 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                         </div>
                       </div>
 
-                      {/* Primary Action Button using .pb-btn-primary with authentic button shimmer! */}
-                      <div className="pt-3">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onOpenBooking(tier.id);
-                          }}
-                          className="pb-btn pb-btn-primary w-full sm:w-auto"
-                        >
-                          <span>REQUEST THIS SERVICE</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
                     </div>
                   )}
                 </div>

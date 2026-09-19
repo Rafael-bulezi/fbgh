@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
 
 interface PinnedExperienceTransitionProps {
   onOpenBooking: () => void;
@@ -40,7 +39,7 @@ const SCENES = [
   },
 ];
 
-export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProps> = ({ onOpenBooking }) => {
+export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProps> = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeScene, setActiveScene] = useState<number>(0);
   const [scrollFraction, setScrollFraction] = useState<number>(0);
@@ -157,18 +156,6 @@ export const PinnedExperienceTransition: React.FC<PinnedExperienceTransitionProp
             </p>
           </div>
 
-          {/* CTA only on last scene */}
-          {activeScene === 3 && (
-            <div className="animate-fadeIn">
-              <button
-                onClick={onOpenBooking}
-                className="pb-btn pb-btn-primary"
-              >
-                <span>EXPLORE THE FLEET</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
         </div>
 
         {/* ── Bottom progress bar ── */}

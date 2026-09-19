@@ -30,9 +30,9 @@ export const RequestRideLightbox: React.FC = () => {
     <div role="dialog" aria-modal="true" aria-label="Request a Ride Concierge" className="request-ride-lightbox fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-5 lg:p-8 animate-fadeIn">
       <div onClick={closeBooking} className="fixed inset-0 bg-[#08090A]/80 backdrop-blur-md" />
 
-      <div ref={modalContentRef} onClick={(event) => event.stopPropagation()} className="relative z-10 grid h-[94vh] w-[96vw] max-w-[1380px] overflow-hidden border border-white/15 bg-[#0C0D0E] shadow-[0_30px_110px_rgba(0,0,0,0.78)] lg:h-[88vh] lg:grid-cols-[300px_minmax(0,1fr)]">
-        <aside className="relative flex h-[258px] shrink-0 flex-col overflow-hidden bg-[#F4F0E9] text-[#151517] lg:h-auto lg:shrink lg:justify-between">
-          <div className="relative z-10 p-5 lg:p-8 xl:p-10">
+      <div ref={modalContentRef} onClick={(event) => event.stopPropagation()} className="relative z-10 grid h-[calc(100dvh-1rem)] max-h-[900px] w-[96vw] max-w-[1380px] overflow-hidden border border-white/15 bg-[#0C0D0E] shadow-[0_30px_110px_rgba(0,0,0,0.78)] sm:h-[min(900px,calc(100dvh-2rem))] lg:h-[min(900px,calc(100dvh-4rem))] lg:grid-cols-[300px_minmax(0,1fr)]">
+        <aside className="relative flex h-[258px] min-h-0 shrink-0 flex-col overflow-hidden bg-[#F4F0E9] text-[#151517] lg:h-auto lg:min-h-0 lg:shrink lg:justify-between">
+          <div className="relative z-10 min-h-0 shrink-0 overflow-y-auto p-5 lg:p-8 xl:p-10">
             <div className="flex items-center gap-3"><span className="font-display text-2xl font-black tracking-[-0.08em]">FBGH</span><span className="h-px w-7 bg-[#C5A059]" /><span className="text-[8px] font-mono tracking-[0.2em] text-[#8C7B5A]">FAITH BASED GLOBAL HOLDINGS</span></div>
             <div className="mt-5 h-px w-10 bg-[#C5A059] lg:mt-12" />
             <p className="mt-4 text-[9px] font-mono font-bold tracking-[0.3em] text-[#927B53] uppercase lg:mt-8 lg:text-[10px]">PRIVATE CHAUFFEUR CONCIERGE</p>
@@ -40,7 +40,7 @@ export const RequestRideLightbox: React.FC = () => {
             <p className="mt-4 max-w-[18rem] text-xs leading-relaxed text-[#55555C] lg:mt-7 lg:max-w-[14rem] lg:text-sm">Planned around your time, your party, and the distance between New York and Philadelphia.</p>
             <div className="mt-4 flex items-center gap-2 text-[8px] font-mono tracking-[0.22em] text-[#927B53] uppercase lg:mt-7 lg:text-[9px]"><span className="h-px w-6 bg-[#C5A059]" /> NYC · PHILADELPHIA</div>
           </div>
-          <div className="relative h-[92px] min-h-0 overflow-hidden lg:h-[34%] lg:min-h-[190px]">
+          <div className="relative h-[92px] min-h-0 shrink-0 overflow-hidden lg:flex-1 lg:h-auto lg:min-h-[240px]">
             <img src="/images/destination-new-york.webp" alt="FBGH chauffeur beside an executive SUV in New York" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0C0D0E]/30 via-transparent to-transparent" />
             <div className="absolute inset-x-0 top-[-1px]"><div className="h-14 bg-[#F4F0E9] [clip-path:ellipse(70%_55%_at_50%_0%)]" /></div>
@@ -48,7 +48,7 @@ export const RequestRideLightbox: React.FC = () => {
           </div>
         </aside>
 
-        <section className="flex min-w-0 flex-col bg-[#FAF8F5] text-[#141416]">
+        <section className="flex min-h-0 min-w-0 flex-col bg-[#FAF8F5] text-[#141416]">
           <header className="shrink-0 border-b border-[#D7CDBE] px-5 py-4 sm:px-8 sm:py-5">
             <div className="flex items-center justify-between gap-5">
               <div className="lg:hidden"><p className="font-display text-lg font-black tracking-[-0.06em]">FBGH <span className="font-mono text-[8px] font-normal tracking-[0.18em] text-[#C5A059]">NYC · PHILADELPHIA</span></p></div>
