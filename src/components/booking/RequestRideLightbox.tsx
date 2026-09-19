@@ -31,16 +31,16 @@ export const RequestRideLightbox: React.FC = () => {
       <div onClick={closeBooking} className="fixed inset-0 bg-[#08090A]/80 backdrop-blur-md" />
 
       <div ref={modalContentRef} onClick={(event) => event.stopPropagation()} className="relative z-10 grid h-[94vh] w-[96vw] max-w-[1380px] overflow-hidden border border-white/15 bg-[#0C0D0E] shadow-[0_30px_110px_rgba(0,0,0,0.78)] lg:h-[88vh] lg:grid-cols-[300px_minmax(0,1fr)]">
-        <aside className="relative hidden overflow-hidden bg-[#F4F0E9] text-[#151517] lg:flex lg:flex-col lg:justify-between">
-          <div className="relative z-10 p-8 xl:p-10">
+        <aside className="relative flex h-[258px] shrink-0 flex-col overflow-hidden bg-[#F4F0E9] text-[#151517] lg:h-auto lg:shrink lg:justify-between">
+          <div className="relative z-10 p-5 lg:p-8 xl:p-10">
             <div className="flex items-center gap-3"><span className="font-display text-2xl font-black tracking-[-0.08em]">FBGH</span><span className="h-px w-7 bg-[#C5A059]" /><span className="text-[8px] font-mono tracking-[0.2em] text-[#8C7B5A]">FAITH BASED GLOBAL HOLDINGS</span></div>
-            <div className="mt-12 h-px w-10 bg-[#C5A059]" />
-            <p className="mt-8 text-[10px] font-mono font-bold tracking-[0.3em] text-[#927B53] uppercase">PRIVATE CHAUFFEUR CONCIERGE</p>
-            <h2 className="mt-5 font-display text-6xl font-black leading-[0.82] tracking-[-0.08em]">REQUEST<br /><span className="text-[#C5A059]">A RIDE.</span></h2>
-            <p className="mt-7 max-w-[14rem] text-sm leading-relaxed text-[#55555C]">Planned around your time, your party, and the distance between New York and Philadelphia.</p>
-            <div className="mt-7 flex items-center gap-2 text-[9px] font-mono tracking-[0.22em] text-[#927B53] uppercase"><span className="h-px w-6 bg-[#C5A059]" /> NYC · PHILADELPHIA</div>
+            <div className="mt-5 h-px w-10 bg-[#C5A059] lg:mt-12" />
+            <p className="mt-4 text-[9px] font-mono font-bold tracking-[0.3em] text-[#927B53] uppercase lg:mt-8 lg:text-[10px]">PRIVATE CHAUFFEUR CONCIERGE</p>
+            <h2 className="mt-3 font-display text-4xl font-black leading-[0.82] tracking-[-0.08em] lg:mt-5 lg:text-6xl">REQUEST<br /><span className="text-[#C5A059]">A RIDE.</span></h2>
+            <p className="mt-4 max-w-[18rem] text-xs leading-relaxed text-[#55555C] lg:mt-7 lg:max-w-[14rem] lg:text-sm">Planned around your time, your party, and the distance between New York and Philadelphia.</p>
+            <div className="mt-4 flex items-center gap-2 text-[8px] font-mono tracking-[0.22em] text-[#927B53] uppercase lg:mt-7 lg:text-[9px]"><span className="h-px w-6 bg-[#C5A059]" /> NYC · PHILADELPHIA</div>
           </div>
-          <div className="relative h-[34%] min-h-[190px] overflow-hidden">
+          <div className="relative h-[92px] min-h-0 overflow-hidden lg:h-[34%] lg:min-h-[190px]">
             <img src="/images/destination-new-york.webp" alt="FBGH chauffeur beside an executive SUV in New York" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0C0D0E]/30 via-transparent to-transparent" />
             <div className="absolute inset-x-0 top-[-1px]"><div className="h-14 bg-[#F4F0E9] [clip-path:ellipse(70%_55%_at_50%_0%)]" /></div>

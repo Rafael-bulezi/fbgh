@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Clock3, Luggage, MoveRight, Phone, ShieldCheck, Sparkles } from 'lucide-react';
 import { DESTINATIONS_DATA } from '../data/destinationsData';
 import { CurvedDivider } from '../components/common/CurvedDivider';
+import { CurvedHero } from '../components/common/CurvedHero';
 
 interface DestinationsPageProps {
   onOpenBooking: () => void;
@@ -51,6 +52,35 @@ const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: 
   return <div ref={ref} className={`transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${visible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'} ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
 };
 
+const ScrollFillHeading: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => {
+  const [progress, setProgress] = useState(0);
+  const ref = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = ref.current?.getBoundingClientRect();
+        if (!rect) return;
+        const next = Math.max(0, Math.min(1, (window.innerHeight * 0.82 - rect.top) / (rect.height + window.innerHeight * 0.25)));
+        setProgress(next);
+      });
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  const fill = `${Math.round(progress * 100)}%`;
+  return <h2 ref={ref} className={className} style={{ backgroundImage: `linear-gradient(90deg, #C5A059 0%, #C5A059 ${fill}, #141416 ${fill}, #141416 100%)`, backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', WebkitTextFillColor: 'transparent' }}>{children}</h2>;
+};
+
 const BubbleImage: React.FC<{ src: string; alt: string; side: 'left' | 'right'; index: number }> = ({ src, alt, side, index }) => (
   <Reveal delay={0} className="relative">
     <div className={`relative aspect-[1.28/0.9] overflow-hidden bg-[#E8E2D8] shadow-[0_22px_55px_rgba(56,43,28,0.10)] ${side === 'left' ? 'rounded-[52%_48%_47%_53%/44%_48%_52%_56%]' : 'rounded-[48%_52%_54%_46%/49%_43%_57%_51%]'}`}>
@@ -84,16 +114,10 @@ const CorridorFacts: React.FC<{ index: number }> = ({ index }) => {
 
 export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBooking }) => (
   <main className="w-full overflow-hidden bg-[#FAF8F5] text-[#141416] selection:bg-[#C5A059] selection:text-[#0C0C0E]">
-    <section className="relative min-h-[min(780px,88vh)] overflow-hidden bg-[#FAF8F5] px-6 pb-16 pt-8 sm:px-12 lg:px-20 lg:pb-24 lg:pt-10">
-      <div className="relative z-20 mx-auto flex max-w-7xl items-center justify-between"><span className="font-display text-xl font-black tracking-[-0.08em]">FBGH <span className="ml-2 hidden text-[8px] font-mono font-normal tracking-[0.23em] text-[#9B896C] sm:inline">FAITH BASED GLOBAL HOLDINGS</span></span><span className="text-[9px] font-mono tracking-[0.25em] text-[#907C5C] uppercase">PRIVATE CORRIDORS</span></div>
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 pt-20 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:pt-24">
-        <Reveal><div className="max-w-xl"><div className="flex items-center gap-3 text-[9px] font-mono tracking-[0.3em] text-[#967C52] uppercase"><span>NYC ↔ PHILADELPHIA</span><span className="h-px w-8 bg-[#C5A059]" /></div><h1 className="mt-6 font-display text-6xl font-black leading-[0.83] tracking-[-0.08em] sm:text-8xl lg:text-[7.2vw]">THE DISTANCE<br /><span className="text-[#C5A059]">IS THE SERVICE.</span></h1><p className="mt-8 max-w-md text-base leading-relaxed text-[#55555C] sm:text-lg">A private chauffeur corridor between New York City and Philadelphia, planned around the way your day actually moves.</p><button type="button" onClick={onOpenBooking} className="pb-btn pb-btn-primary mt-8"><span>REQUEST A RIDE</span><ArrowUpRight className="h-4 w-4" /></button></div></Reveal>
-        <Reveal delay={160} className="relative"><div className="relative aspect-[1.14/0.82] overflow-hidden rounded-[48%_52%_56%_44%/44%_42%_58%_56%] shadow-[0_30px_80px_rgba(56,43,28,0.15)]"><img src="/images/destination-hero-concept.webp" alt="FBGH chauffeur opening an executive SUV" className="h-full w-full object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E]/30 via-transparent to-transparent" /></div><div className="absolute -bottom-5 left-[8%] h-16 w-px bg-[#C5A059]" /></Reveal>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0"><CurvedDivider variant="soft-curve" fromColor="transparent" toColor="#F2EEE6" height="clamp(42px, 7vw, 92px)" /></div>
-    </section>
+    <CurvedHero titleLine1="THE DISTANCE" titleLine2="IS THE SERVICE." description="A private chauffeur corridor between New York City and Philadelphia, planned around the way your day actually moves." image="/images/destination-hero-concept.webp" imageAlt="FBGH chauffeur opening an executive SUV" curveVariant="circular-arc" theme="light" mobileImagePosition="object-[68%_center]" imagePosition="object-center" enableParallax />
+    <div className="relative z-10 -mt-1"><CurvedDivider variant="soft-curve" fromColor="#FAF8F5" toColor="#F2EEE6" height="clamp(42px, 7vw, 92px)" /></div>
 
-    <section className="bg-[#F2EEE6] px-6 py-16 sm:px-12 sm:py-20 lg:px-20 lg:py-24"><div className="mx-auto max-w-7xl"><Reveal><div className="grid gap-8 lg:grid-cols-[0.42fr_1fr]"><div className="flex items-start gap-3 pt-2"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase">THE CORRIDOR</span></div><div><h2 className="max-w-5xl font-display text-5xl font-black leading-[0.86] tracking-[-0.075em] sm:text-7xl lg:text-[7vw]">FROM DOOR<br /><span className="text-[#C5A059]">TO DOOR.</span></h2><div className="mt-8 grid max-w-4xl gap-7 text-base leading-relaxed text-[#5E5A53] md:grid-cols-2"><p>From airport arrivals to private residences, FBGH protects the handoff between places in New York City and Philadelphia.</p><p>The route is read before the vehicle moves. Timing, luggage, vehicle, and next stop are considered together.</p></div></div></div></Reveal></div></section>
+    <section className="bg-[#F2EEE6] px-6 py-16 sm:px-12 sm:py-20 lg:px-20 lg:py-24"><div className="mx-auto max-w-7xl"><Reveal><div className="grid gap-8 lg:grid-cols-[0.42fr_1fr]"><div className="flex items-start gap-3 pt-2"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[9px] font-mono tracking-[0.28em] text-[#967C52] uppercase">THE CORRIDOR</span></div><div><ScrollFillHeading className="max-w-5xl font-display text-5xl font-black leading-[0.86] tracking-[-0.075em] sm:text-7xl lg:text-[7vw]">FROM DOOR<br />TO DOOR.</ScrollFillHeading><div className="mt-8 grid max-w-4xl gap-7 text-base leading-relaxed text-[#5E5A53] md:grid-cols-2"><p>From airport arrivals to private residences, FBGH protects the handoff between places in New York City and Philadelphia.</p><p>The route is read before the vehicle moves. Timing, luggage, vehicle, and next stop are considered together.</p></div></div></div></Reveal></div></section>
 
     <section className="relative bg-[#F2EEE6] px-6 pb-16 sm:px-12 sm:pb-24 lg:px-20 lg:pb-28"><div className="mx-auto max-w-7xl"><div className="relative"><div className="absolute bottom-0 left-1/2 top-0 hidden w-px -translate-x-1/2 bg-[#C5A059]/60 lg:block"><span className="absolute left-1/2 top-[16%] h-5 w-5 -translate-x-1/2 rounded-full border border-[#C5A059] bg-[#F2EEE6] shadow-[0_0_0_7px_rgba(197,160,89,0.1)]" /><span className="absolute left-1/2 top-[61%] h-5 w-5 -translate-x-1/2 rounded-full border border-[#C5A059] bg-[#F2EEE6] shadow-[0_0_0_7px_rgba(197,160,89,0.1)]" /></div><div className="grid gap-14 lg:gap-20">
       <div className="grid items-center gap-10 lg:grid-cols-[1fr_74px_1fr]"><BubbleImage src={DESTINATIONS_DATA[0].image} alt="Black executive SUV arriving in New York" side="left" index={0} /><div className="hidden lg:block" /><CorridorFacts index={0} /></div>

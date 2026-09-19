@@ -361,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         : 'text-warm-ivory/80 hover:text-warm-ivory hover:bg-white/5'
                     }`}
                   >
-                    <span>CORRIDORS</span>
+                    <span>DESTINATIONS</span>
                     <ArrowRight className="w-3 h-3 text-champagne-gold" />
                   </button>
 

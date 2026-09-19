@@ -14,7 +14,7 @@ const NAV_PAGES = [
   { id: 'services',     label: 'SERVICES',     route: 'services' },
   { id: 'fleet',        label: 'FLEET',        route: 'fleet' },
   { id: 'experience',   label: 'EXPERIENCE',   route: 'experience' },
-  { id: 'destinations', label: 'CORRIDORS', route: 'destinations' },
+  { id: 'destinations', label: 'DESTINATIONS', route: 'destinations' },
 ];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
