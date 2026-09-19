@@ -629,7 +629,7 @@ export const FLEET_DATA: Vehicle[] = [
       'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1600&q=85'
     ],
     description: 'Dominant posture wrapped in deep bespoke dark chrome, viewing suite tailgate seating, refrigerated rear champagne cabinet, and 6.75L Twin-Turbo V12 serenity.',
-    idealFor: ['Ultra-High Net Worth Travel', 'Hamptons & Mountain Estates', 'Celebrity Arrivals'],
+    idealFor: ['Ultra-High Net Worth Travel', 'Philadelphia Main Line & NYC Estates', 'Celebrity Arrivals'],
     features: ['Tailgate Viewing Suite', 'Infinity Symbol Carbon Fiber Veneers', 'Starlight Headliner', 'Bespoke Audio Acoustic Studio'],
     specs: {
       wifi: true,

@@ -48,13 +48,13 @@ const SERVICES: ServiceOption[] = [
   {
     id: 'city',
     label: 'City-to-City',
-    subtitle: 'Long-range intercity executive transit',
+    subtitle: 'Executive transit between New York & Philadelphia',
     icon: MapPin,
   },
   {
     id: 'other',
     label: 'Other Custom Journey',
-    subtitle: 'Bespoke multi-destination coordination',
+    subtitle: 'Custom coordination within our service area',
     icon: Sparkles,
   },
 ];
@@ -100,7 +100,7 @@ export const JourneyStep: React.FC = () => {
               WHAT ARE YOU TRAVELING FOR?
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">
-              Select your travel classification to optimize vehicle staging and chauffeur protocols.
+              Choose the service that fits your New York or Philadelphia journey. We will stage the right vehicle and chauffeur protocol.
             </p>
           </div>
 
@@ -165,7 +165,7 @@ export const JourneyStep: React.FC = () => {
               WHERE ARE WE TAKING YOU?
             </h3>
             <p className="text-xs text-warm-ivory/50 font-light">
-              Enter pickup address, private FBO airfield, or destination corridor.
+              Enter a pickup and destination within the New York or Philadelphia service area.
             </p>
           </div>
 
@@ -187,7 +187,7 @@ export const JourneyStep: React.FC = () => {
                   type="text"
                   value={bookingData.pickup}
                   onChange={(e) => updateBookingData({ pickup: e.target.value })}
-                  placeholder="e.g. John F. Kennedy International Airport (Terminal 4) or 740 Park Ave"
+                  placeholder="e.g. JFK Terminal 4, 740 Park Avenue, or Rittenhouse Square"
                   className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-warm-ivory placeholder-warm-ivory/30 focus:outline-none focus:border-champagne-gold transition-colors"
                 />
               </div>
@@ -245,7 +245,7 @@ export const JourneyStep: React.FC = () => {
                   placeholder={
                     bookingData.serviceType === 'hourly'
                       ? 'e.g. Manhattan & Tribeca (As Directed)'
-                      : 'e.g. The Ritz-Carlton, Philadelphia, PA or Private Residence'
+                      : 'e.g. Midtown Manhattan, Center City Philadelphia, or a private residence'
                   }
                   className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-warm-ivory placeholder-warm-ivory/30 focus:outline-none focus:border-champagne-gold transition-colors"
                 />
@@ -266,7 +266,7 @@ export const JourneyStep: React.FC = () => {
 
             {/* ROUTING HELPER BADGE */}
             <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-between text-xs text-warm-ivory/60 font-light">
-              <span>Flight delays and route traffic telemetry tracked continuously in real time.</span>
+              <span>Traffic and flight timing are monitored for every NYC and Philadelphia journey.</span>
               <span className="text-champagne-gold text-[10px] font-mono tracking-widest uppercase">
                 ACTIVE RADAR
               </span>

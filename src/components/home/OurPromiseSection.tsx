@@ -79,7 +79,7 @@ export const OurPromiseSection: React.FC<OurPromiseSectionProps> = ({
       headlineWord2: 'PREPARED &',
       headlineWord3: 'READY.',
       subheading: 'Every vehicle sanitized, climate-stabilized, and precision-inspected.',
-      body: 'We own and maintain our inventory. Executive Escalades, Mercedes S-Class, BMW X7, Lincoln Navigators, and customized Mercedes Sprinter VIP lounges ready for immediate deployment across New York, Philadelphia, and private airfield hubs.',
+      body: 'We own and maintain our inventory. Executive Escalades, Mercedes S-Class, BMW X7, Lincoln Navigators, and customized Mercedes Sprinter VIP lounges ready for immediate deployment across New York City and Philadelphia.',
       highlightTag: 'INSPECTED & DISPATCHED WITHIN 15 MINUTES',
       icon: <Car className="w-6 h-6 sm:w-7 sm:h-7 text-champagne-gold" />,
     },

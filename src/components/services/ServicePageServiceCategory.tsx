@@ -121,7 +121,7 @@ const SERVICE_TIERS: ServiceCategoryItem[] = [
     image: "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?q=80&w=1600&auto=format&fit=crop",
     headline: "New York. Philadelphia. Beyond.",
     summary: "Door-to-door direct interstate travel in reclining executive comfort without airport friction.",
-    description: "Bypass regional rail hubs and crowded commercial security lines. Travel door-to-door between New York, Philadelphia, Washington D.C., Boston, and the Hamptons in a tranquil, reclining private cabin.",
+    description: "Bypass regional rail hubs and crowded commercial security lines. Travel door-to-door within New York City and Philadelphia in a tranquil, reclining private cabin.",
     rate: "$480 fixed corridor",
     features: [
       "Direct door-to-door interstate transit",
@@ -130,7 +130,7 @@ const SERVICE_TIERS: ServiceCategoryItem[] = [
       "All turnpike tolls & fees included"
     ],
     vehicle: "Cadillac Escalade ESV · Lincoln Navigator L",
-    location: "NYC ⇄ Philadelphia ⇄ D.C. ⇄ Hamptons"
+    location: "NYC ⇄ Philadelphia"
   }
 ];
 

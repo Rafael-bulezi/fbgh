@@ -22,7 +22,7 @@ export const PreparedFleetHighlightSection: React.FC<PreparedFleetHighlightSecti
             </h2>
 
             <p className="text-sm md:text-base text-[#4A4A4F] leading-relaxed max-w-xl font-normal">
-              We own and maintain our fleet. Clean Escalades, Mercedes S-Class, BMW X7, and Mercedes Sprinter vans ready across New York, Philadelphia, and private airports.
+              We own and maintain our fleet. Clean Escalades, Mercedes S-Class, BMW X7, and Mercedes Sprinter vans ready across New York City and Philadelphia.
             </p>
 
             <div className="flex items-center gap-3 pt-1 font-mono text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">

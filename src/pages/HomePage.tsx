@@ -81,7 +81,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         height="clamp(50px, 7vw, 105px)"
       />
 
-      {/* ── 5. REGIONAL & GLOBAL COVERAGE: WHEREVER THE DAY TAKES YOU ── */}
+      {/* ── 5. NEW YORK & PHILADELPHIA COVERAGE ── */}
       <section className="w-full relative py-32 px-6 sm:px-12 lg:px-20 bg-[#0D0B0A] overflow-hidden select-none">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
@@ -109,12 +109,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
           </span>
 
           <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-tight">
-            WHEREVER THE DAY<br />
-            <span className="text-[#C5A059]">TAKES YOU.</span>
+            NEW YORK & PHILADELPHIA<br />
+            <span className="text-[#C5A059]">ARRIVE DIFFERENT.</span>
           </h2>
 
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-4">
-            {['NEW YORK', 'PHILADELPHIA', 'AIRPORT HUBS', 'PRIVATE DESTINATIONS'].map((dest, i) => (
+            {['NEW YORK', 'PHILADELPHIA'].map((dest, i) => (
               <button
                 key={i}
                 onClick={() => onNavigate('destinations')}

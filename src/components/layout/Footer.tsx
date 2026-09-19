@@ -164,7 +164,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <span className="hidden sm:inline text-white/20">·</span>
             <div className="inline-flex items-center gap-2 text-[#F4EDE4]/90">
               <MapPin className="w-4 h-4 text-[#E0A852] shrink-0" />
-              <span>New York · Philadelphia · Washington D.C. · Global</span>
+              <span>New York City · Philadelphia</span>
             </div>
           </div>
 

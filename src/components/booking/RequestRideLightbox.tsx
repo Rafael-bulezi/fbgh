@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 import { useBooking } from '../../context/BookingContext';
 import { JourneyStep } from './JourneyStep';
 import { DetailsStep } from './DetailsStep';
@@ -10,12 +10,9 @@ export const RequestRideLightbox: React.FC = () => {
   const { isOpen, closeBooking, currentStep, setStep } = useBooking();
   const modalContentRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape key press
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        closeBooking();
-      }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) closeBooking();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -23,119 +20,48 @@ export const RequestRideLightbox: React.FC = () => {
 
   if (!isOpen) return null;
 
-  const STAGES = [
+  const stages = [
     { num: '01', key: 1, label: 'JOURNEY' },
     { num: '02', key: 2, label: 'DETAILS' },
-    { num: '03', key: 3, label: 'MATCH & REQUEST' },
+    { num: '03', key: 3, label: 'REQUEST' },
   ];
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Request a Ride Concierge"
-      className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-5 lg:p-6 animate-fadeIn"
-    >
-      {/* DARKENED BACKDROP WITH SUBTLE BLUR (Current page remains visible underneath) */}
-      <div
-        onClick={closeBooking}
-        className="fixed inset-0 bg-obsidian/75 backdrop-blur-[4px] transition-opacity duration-300"
-      />
+    <div role="dialog" aria-modal="true" aria-label="Request a Ride Concierge" className="fixed inset-0 z-[300] flex items-center justify-center p-3 sm:p-5 lg:p-8 animate-fadeIn">
+      <div onClick={closeBooking} className="fixed inset-0 bg-[#08090A]/80 backdrop-blur-md" />
 
-      {/* LIGHTBOX MODAL SHELL (~82vw × ~90vh on Desktop, ~95vw × ~94vh on Mobile) */}
-      <div
-        ref={modalContentRef}
-        onClick={(e) => e.stopPropagation()}
-        className="relative z-10 w-[95vw] sm:w-[90vw] lg:w-[82vw] max-w-[1500px] h-[94vh] sm:h-[92vh] lg:h-[90vh] bg-[#0c0d0e] border border-white/10 rounded-2xl shadow-[0_30px_90px_rgba(0,0,0,0.85)] flex flex-col overflow-hidden text-warm-ivory"
-      >
-        {/* LIGHTBOX HEADER */}
-        <header className="px-5 sm:px-8 py-4 sm:py-5 border-b border-white/10 flex items-center justify-between gap-4 shrink-0 bg-[#0c0d0e]/95 backdrop-blur-md">
-          {/* Top-Left: Understated Title & Subtitle */}
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-champagne-gold animate-ping" />
-            <div>
-              <h2 className="font-display font-bold text-base sm:text-lg tracking-tight text-[#F4EDE4] uppercase">
-                REQUEST YOUR RIDE
-              </h2>
-              <p className="text-[10px] font-mono tracking-widest text-champagne-gold uppercase hidden sm:block">
-                FAITH BASED GLOBAL HOLDINGS · PRIVATE CHAUFFEUR CONCIERGE
-              </p>
+      <div ref={modalContentRef} onClick={(event) => event.stopPropagation()} className="relative z-10 grid h-[94vh] w-[96vw] max-w-[1380px] overflow-hidden border border-white/15 bg-[#0C0D0E] shadow-[0_30px_110px_rgba(0,0,0,0.78)] lg:h-[88vh] lg:grid-cols-[300px_minmax(0,1fr)]">
+        <aside className="relative hidden overflow-hidden bg-[#F4F0E9] text-[#151517] lg:flex lg:flex-col lg:justify-between">
+          <div className="relative z-10 p-8 xl:p-10">
+            <div className="flex items-center gap-3"><span className="font-display text-2xl font-black tracking-[-0.08em]">FBGH</span><span className="h-px w-7 bg-[#C5A059]" /><span className="text-[8px] font-mono tracking-[0.2em] text-[#8C7B5A]">FAITH BASED GLOBAL HOLDINGS</span></div>
+            <div className="mt-12 h-px w-10 bg-[#C5A059]" />
+            <p className="mt-8 text-[10px] font-mono font-bold tracking-[0.3em] text-[#927B53] uppercase">PRIVATE CHAUFFEUR CONCIERGE</p>
+            <h2 className="mt-5 font-display text-6xl font-black leading-[0.82] tracking-[-0.08em]">REQUEST<br /><span className="text-[#C5A059]">A RIDE.</span></h2>
+            <p className="mt-7 max-w-[14rem] text-sm leading-relaxed text-[#55555C]">Planned around your time, your party, and the distance between New York and Philadelphia.</p>
+            <div className="mt-7 flex items-center gap-2 text-[9px] font-mono tracking-[0.22em] text-[#927B53] uppercase"><span className="h-px w-6 bg-[#C5A059]" /> NYC · PHILADELPHIA</div>
+          </div>
+          <div className="relative h-[34%] min-h-[190px] overflow-hidden">
+            <img src="/images/destination-new-york.webp" alt="FBGH chauffeur beside an executive SUV in New York" className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0C0D0E]/30 via-transparent to-transparent" />
+            <div className="absolute inset-x-0 top-[-1px]"><div className="h-14 bg-[#F4F0E9] [clip-path:ellipse(70%_55%_at_50%_0%)]" /></div>
+            <div className="absolute bottom-5 left-7 flex items-center gap-2 text-[9px] font-mono tracking-[0.2em] text-white/90"><span className="h-1.5 w-1.5 rounded-full bg-[#C5A059]" /> ARRIVE DIFFERENT</div>
+          </div>
+        </aside>
+
+        <section className="flex min-w-0 flex-col bg-[#0C0D0E] text-[#F4EDE4]">
+          <header className="shrink-0 border-b border-white/10 px-5 py-4 sm:px-8 sm:py-5">
+            <div className="flex items-center justify-between gap-5">
+              <div className="lg:hidden"><p className="font-display text-lg font-black tracking-[-0.06em]">FBGH <span className="font-mono text-[8px] font-normal tracking-[0.18em] text-[#C5A059]">NYC · PHILADELPHIA</span></p></div>
+              <div className="hidden items-center gap-2 text-[10px] font-mono tracking-[0.22em] text-[#C5A059] uppercase lg:flex"><span className="h-1.5 w-1.5 rounded-full bg-[#C5A059]" /> REQUEST A RIDE</div>
+              {currentStep < 4 && <div className="hidden items-center gap-5 md:flex">{stages.map((stage, index) => { const active = currentStep === stage.key; const complete = currentStep > stage.key; return <React.Fragment key={stage.key}><button type="button" onClick={() => complete && setStep(stage.key as 1 | 2 | 3)} className={`flex items-center gap-2 text-[10px] font-mono tracking-[0.18em] uppercase transition-colors ${active ? 'text-[#C5A059]' : complete ? 'text-white/65 hover:text-white' : 'text-white/25'}`}><span className={`flex h-6 w-6 items-center justify-center rounded-full border text-[9px] ${active ? 'border-[#C5A059] bg-[#C5A059] text-[#0C0D0E]' : complete ? 'border-[#C5A059]/60 text-[#C5A059]' : 'border-white/20'}`}>{stage.num}</span>{stage.label}</button>{index < stages.length - 1 && <span className="h-px w-8 bg-white/15" />}</React.Fragment>; })}</div>}
+              <div className="flex items-center gap-4"><span className="text-[10px] font-mono tracking-[0.18em] text-white/35 uppercase md:hidden">0{currentStep} / 03</span><button type="button" onClick={closeBooking} className="group flex items-center gap-2 text-[10px] font-mono tracking-[0.2em] text-white/55 transition-colors hover:text-white uppercase"><span className="hidden sm:inline">CLOSE</span><X className="h-5 w-5 transition-transform group-hover:rotate-90" /></button></div>
             </div>
-          </div>
+            <div className="mt-5 flex items-center gap-2 text-[9px] font-mono tracking-[0.2em] text-white/35 uppercase lg:hidden"><span className="h-px w-5 bg-[#C5A059]" /> NYC · PHILADELPHIA SERVICE AREA</div>
+          </header>
 
-          {/* Center: 3-Stage Progress Indicator */}
-          {currentStep < 4 && (
-            <div className="hidden md:flex items-center gap-6">
-              {STAGES.map((s, idx) => {
-                const isActive = currentStep === s.key;
-                const isCompleted = currentStep > s.key;
-
-                return (
-                  <React.Fragment key={s.key}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        // Allow clicking back to completed steps
-                        if (isCompleted) setStep(s.key as 1 | 2 | 3);
-                      }}
-                      className={`flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase transition-colors ${
-                        isActive
-                          ? 'text-champagne-gold font-bold'
-                          : isCompleted
-                          ? 'text-warm-ivory/70 hover:text-warm-ivory cursor-pointer'
-                          : 'text-warm-ivory/30 cursor-default'
-                      }`}
-                    >
-                      <span
-                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all ${
-                          isActive
-                            ? 'border-champagne-gold bg-champagne-gold text-obsidian font-bold shadow-[0_0_10px_rgba(201,164,92,0.4)]'
-                            : isCompleted
-                            ? 'border-champagne-gold/60 text-champagne-gold'
-                            : 'border-white/15 text-warm-ivory/30'
-                        }`}
-                      >
-                        {s.num}
-                      </span>
-                      <span>{s.label}</span>
-                    </button>
-                    {idx < STAGES.length - 1 && (
-                      <span className="w-6 h-[1px] bg-white/10" />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Top-Right: Mobile Step indicator & Close Button */}
-          <div className="flex items-center gap-4">
-            {currentStep < 4 && (
-              <span className="text-[10px] font-mono text-champagne-gold tracking-widest md:hidden">
-                0{currentStep} / 03
-              </span>
-            )}
-
-            <button
-              type="button"
-              onClick={closeBooking}
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/30 text-warm-ivory/70 hover:text-warm-ivory text-xs font-mono tracking-wider uppercase transition-colors cursor-pointer"
-            >
-              <span>CLOSE</span>
-              <X className="w-4 h-4 transition-transform group-hover:rotate-90" />
-            </button>
-          </div>
-        </header>
-
-        {/* LIGHTBOX BODY (Scrollable with restrained stage animation) */}
-        <div className="flex-grow overflow-y-auto px-5 sm:px-8 lg:px-10 py-4 sm:py-6 flex flex-col custom-scrollbar">
-          <div key={currentStep} className="flex-grow flex flex-col animate-slideStep">
-            {currentStep === 1 && <JourneyStep />}
-            {currentStep === 2 && <DetailsStep />}
-            {currentStep === 3 && <MatchAndRequestStep />}
-            {currentStep === 4 && <ConfirmationStep />}
-          </div>
-        </div>
+          <div className="flex-grow overflow-y-auto px-5 py-5 sm:px-8 sm:py-7 lg:px-10 lg:py-8 custom-scrollbar"><div key={currentStep} className="flex min-h-full flex-col animate-slideStep">{currentStep === 1 && <JourneyStep />}{currentStep === 2 && <DetailsStep />}{currentStep === 3 && <MatchAndRequestStep />}{currentStep === 4 && <ConfirmationStep />}</div></div>
+          <footer className="hidden shrink-0 items-center justify-between border-t border-white/10 px-8 py-3 text-[9px] font-mono tracking-[0.18em] text-white/30 uppercase sm:flex"><span>FBGH · PRIVATE CHAUFFEUR SERVICES</span><span className="flex items-center gap-2">CONTINUE TO PLAN <ArrowUpRight className="h-3.5 w-3.5 text-[#C5A059]" /></span></footer>
+        </section>
       </div>
     </div>
   );

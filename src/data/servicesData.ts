@@ -111,7 +111,7 @@ export const SERVICES_DATA: ServiceItem[] = [
     title: 'CITY-TO-CITY',
     tagline: 'First-Class Interstate Travel Without the Airport Friction',
     shortDesc: 'Travel beyond the city in complete comfort and privacy.',
-    longDesc: 'Bypass commercial airline delays, crowded rail terminals, and security checkpoints. Travel seamlessly door-to-door between New York, Philadelphia, Boston, Washington D.C., and the Hamptons in a serene mobile living room.',
+    longDesc: 'Bypass commercial airline delays, crowded rail terminals, and security checkpoints. Travel seamlessly door-to-door within New York City and Philadelphia in a serene mobile living room.',
     image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1600&auto=format&fit=crop',
     highlights: [
       'Door-to-Door Nonstop Direct Routing',

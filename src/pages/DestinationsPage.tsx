@@ -22,8 +22,6 @@ interface DestinationsPageProps {
 const CHAPTER_META = [
   { label: 'CITY ARRIVAL', title: <>JFK TO<br /><span className="text-[#C5A059]">MIDTOWN.</span></>, detail: 'AIRPORT TO THE CITY. SEAMLESSLY.' },
   { label: 'EXECUTIVE TRANSFER', title: <>HISTORIC ROOTS.<br /><span className="text-[#C5A059]">MODERN ARRIVALS.</span></>, detail: 'CULTURE. BUSINESS. HOME.' },
-  { label: 'PRIVATE AVIATION', title: <>RUNWAY TO<br /><span className="text-[#C5A059]">REFINED.</span></>, detail: 'FROM TARMAC TO THE CITY, WITHOUT THE FRICTION.' },
-  { label: 'PRIVATE ESCAPE', title: <>THE LONG WAY<br /><span className="text-[#C5A059]">HOME.</span></>, detail: 'COASTAL RETREATS, CONSIDERED.' },
 ];
 
 const SERVICE_PROOF = [
@@ -51,7 +49,8 @@ const ChapterImage: React.FC<{ destination: (typeof DESTINATIONS_DATA)[0]; index
         <Compass className="h-3.5 w-3.5 text-[#C5A059]" />
         {destination.coordinates}
       </div>
-      <div className="absolute right-5 top-5 text-[9px] font-mono tracking-[0.2em] text-white/70">0{index + 1} / 04</div>
+      <div className="absolute right-5 top-5 text-[9px] font-mono tracking-[0.2em] text-white/70">0{index + 1} / 02</div>
+      <div className="absolute inset-x-0 bottom-[-1px] z-10"><CurvedDivider variant="soft-curve" fromColor="transparent" toColor="#F2EEE6" height="clamp(24px, 4vw, 52px)" /></div>
     </div>
   );
 };
@@ -86,7 +85,7 @@ const JourneyChapter: React.FC<{ destination: (typeof DESTINATIONS_DATA)[0]; ind
     <div className="relative hidden lg:order-2 lg:flex lg:justify-center">
       <span className="absolute top-0 bottom-0 w-px bg-[#C5A059]/45" />
       <button type="button" aria-label={`Select ${destination.name}`} onClick={onSelect} className={`relative z-10 mt-8 h-5 w-5 rounded-full border bg-[#F2EEE6] transition-all ${active ? 'border-[#C5A059] shadow-[0_0_0_8px_rgba(197,160,89,0.14)]' : 'border-[#B6AA96]'}`}><span className={`absolute inset-1.5 rounded-full bg-[#C5A059] transition-opacity ${active ? 'opacity-100' : 'opacity-0'}`} /></button>
-      {index < DESTINATIONS_DATA.length - 1 && <span className="absolute -bottom-7 text-[9px] font-mono tracking-[0.18em] text-[#A49784]">0{index + 2} / 04</span>}
+      {index < DESTINATIONS_DATA.length - 1 && <span className="absolute -bottom-7 text-[9px] font-mono tracking-[0.18em] text-[#A49784]">0{index + 2} / 02</span>}
     </div>
     <div className={`${index % 2 === 0 ? 'lg:order-3 lg:pl-4' : 'lg:order-1 lg:pr-4'}`}><RouteFacts destination={destination} index={index} /></div>
   </article>
@@ -103,15 +102,15 @@ export const DestinationsPage: React.FC<DestinationsPageProps> = ({ onOpenBookin
 
   return (
     <div className="w-full overflow-hidden bg-[#FAF8F5] text-[#141416] selection:bg-[#C5A059] selection:text-[#0C0C0E]">
-      <CurvedHero eyebrow="DESTINATIONS" titleLine1="THE ROUTE IS PART" titleLine2="OF THE SERVICE." description="We do not just get you there. We protect the distance between places — so you can focus on what matters most." image="/images/destination-hero-concept.jpg" imageAlt="Chauffeur opening an executive SUV at a private terminal" curveVariant="s-curve" theme="light" mobileImagePosition="object-[68%_center]" imagePosition="object-center" slogan="NEW YORK · PHILADELPHIA · PRIVATE AVIATION · BEYOND" />
+      <CurvedHero eyebrow="DESTINATIONS" titleLine1="THE ROUTE IS PART" titleLine2="OF THE SERVICE." description="We do not just get you there. We protect the distance between places — so you can focus on what matters most." image="/images/destination-hero-concept.webp" imageAlt="Chauffeur opening an executive SUV at a private terminal" curveVariant="s-curve" theme="light" mobileImagePosition="object-[68%_center]" imagePosition="object-center" slogan="NEW YORK · PHILADELPHIA" />
 
       <section className="px-6 py-24 sm:px-12 sm:py-32 lg:px-20 lg:py-40"><div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-24"><div className="flex items-center gap-3 lg:col-span-3 lg:items-start lg:pt-4"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE FBGH DIFFERENCE</span></div><div className="lg:col-span-9"><h2 className="max-w-6xl font-display text-5xl font-black leading-[0.86] tracking-[-0.07em] sm:text-7xl lg:text-[8.5vw]">The distance is<br /><span className="text-[#C5A059]">part of the service.</span></h2><div className="mt-10 grid max-w-4xl grid-cols-1 gap-8 text-base leading-relaxed text-[#414148] sm:text-lg md:grid-cols-2 md:gap-16 lg:mt-14"><p>Every journey has a visible destination and an invisible standard. The vehicle is ready, the route is read, and the next handoff is already considered.</p><p>That is what makes distance feel different with FBGH: less uncertainty, less noise, and more room to arrive as the day asks you to.</p></div></div></div></section>
 
       <CurvedDivider variant="gentle-wave" fromColor="#FAF8F5" toColor="#F2EEE6" height="clamp(40px, 5vw, 80px)" />
 
-      <section className="bg-[#F2EEE6] px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-32"><div className="mx-auto max-w-7xl"><div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-end sm:mb-16"><div><div className="mb-5 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE PRIVATE ITINERARY</span></div><h2 className="max-w-3xl font-display text-5xl font-black leading-[0.88] tracking-[-0.07em] sm:text-7xl">Follow the<br /><span className="text-[#C5A059]">arrival line.</span></h2></div><p className="max-w-xs text-sm leading-relaxed text-[#6F6A62]">Choose a corridor. The route, image, and service context move with you.</p></div>
+      <section className="bg-[#F2EEE6] px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-32"><div className="mx-auto max-w-7xl"><div className="mb-12 flex flex-col justify-between gap-8 md:flex-row md:items-end sm:mb-16"><div><div className="mb-5 flex items-center gap-3"><span className="h-px w-8 bg-[#C5A059]" /><span className="text-[10px] font-mono tracking-[0.3em] text-[#967C52] uppercase">THE PRIVATE ITINERARY</span></div><h2 className="max-w-3xl font-display text-5xl font-black leading-[0.88] tracking-[-0.07em] sm:text-7xl">Follow the<br /><span className="text-[#C5A059]">arrival line.</span></h2></div><p className="max-w-xs text-sm leading-relaxed text-[#6F6A62]">Choose a city. The route, image, and service context move with you.</p></div>
         <div className="sticky top-16 z-20 mb-16 overflow-x-auto border-y border-[#D9D3C8] bg-[#F2EEE6]/95 backdrop-blur-md sm:mb-20"><div className="flex min-w-max items-center gap-1 py-2">{DESTINATIONS_DATA.map((destination, index) => <button key={destination.id} type="button" aria-current={index === activeIndex ? 'step' : undefined} onClick={() => selectChapter(index)} className={`flex items-center gap-3 px-4 py-3 text-left transition-colors ${index === activeIndex ? 'text-[#141416]' : 'text-[#8B8478] hover:text-[#141416]'}`}><span className={`font-mono text-[10px] ${index === activeIndex ? 'text-[#C5A059]' : 'text-[#B5A994]'}`}>0{index + 1}</span><span className="text-[10px] font-bold tracking-[0.16em] uppercase">{destination.name}</span>{index < DESTINATIONS_DATA.length - 1 && <span className="hidden h-px w-5 bg-[#C5A059]/50 sm:block" />}</button>)}</div></div>
-        <div className="space-y-20 sm:space-y-28 lg:space-y-32">{DESTINATIONS_DATA.map((destination, index) => <JourneyChapter key={destination.id} destination={destination} index={index} active={index === activeIndex} chapterRef={(node) => { chapterRefs.current[index] = node; }} onSelect={() => selectChapter(index, false)} />)}</div>
+        <div className="space-y-16 sm:space-y-24 lg:space-y-28">{DESTINATIONS_DATA.map((destination, index) => <JourneyChapter key={destination.id} destination={destination} index={index} active={index === activeIndex} chapterRef={(node) => { chapterRefs.current[index] = node; }} onSelect={() => selectChapter(index, false)} />)}</div>
       </div></section>
 
       <CurvedDivider variant="s-curve" fromColor="#F2EEE6" toColor="#0C0C0E" height="clamp(45px, 6vw, 95px)" />
