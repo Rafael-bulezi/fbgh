@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSubtleParallax } from '../../hooks/useSubtleParallax';
+import { EditorialReveal } from './EditorialReveal';
 
 export interface HeroCta {
   label: string;
@@ -158,29 +159,31 @@ export const CurvedHero: React.FC<CurvedHeroProps> = ({
       >
         <div className="max-w-md sm:max-w-lg lg:max-w-xl space-y-3 sm:space-y-5">
           {/* Headline */}
-          <h1
+          <EditorialReveal
+            as="h1"
             className={`font-display font-black text-3xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] tracking-tight leading-[0.94] sm:leading-[0.92] ${
               isLight ? 'text-[#141416]' : 'text-[#F4EDE4]'
             }`}
           >
-            {titleLine1}
-            <br />
-            <span className="text-[#C5A059]">{titleLine2}</span>
-          </h1>
+            <span className="editorial-line block">{titleLine1}</span>
+            <span className="editorial-line editorial-line-gold block text-[#C5A059]">{titleLine2}</span>
+          </EditorialReveal>
 
           {/* Description — on desktop sits cleanly under headline */}
-          <p
+          <EditorialReveal
+            as="p"
+            delay={110}
             className={`hidden sm:block text-sm md:text-base leading-relaxed font-normal max-w-lg ${
               isLight ? 'text-[#4A4A4F]' : 'text-warm-ivory/80'
             }`}
           >
             {description}
-          </p>
+          </EditorialReveal>
 
           {slogan && (
-            <p className="hidden sm:block font-mono text-[10px] tracking-[0.35em] text-[#C5A059] uppercase font-medium pt-1">
+            <EditorialReveal as="p" delay={180} className="hidden sm:block font-mono text-[10px] tracking-[0.35em] text-[#C5A059] uppercase font-medium pt-1">
               {slogan}
-            </p>
+            </EditorialReveal>
           )}
 
         </div>

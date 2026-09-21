@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { EditorialReveal } from '../common/EditorialReveal';
 
 interface PreparedFleetHighlightSectionProps {
   onOpenBooking?: () => void;
@@ -16,14 +17,14 @@ export const PreparedFleetHighlightSection: React.FC<PreparedFleetHighlightSecti
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Column: 30+ Vehicles Headline */}
           <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-            <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#141416] tracking-tight leading-[0.95]">
-              30+ VEHICLES.<br />
-              <span className="text-[#C5A059]">PREPARED & READY.</span>
-            </h2>
+            <EditorialReveal as="h2" className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#141416] tracking-tight leading-[0.95]">
+              <span className="editorial-line">30+ VEHICLES.</span>
+              <span className="editorial-line editorial-line-gold text-[#C5A059]">PREPARED & READY.</span>
+            </EditorialReveal>
 
-            <p className="text-sm md:text-base text-[#4A4A4F] leading-relaxed max-w-xl font-normal">
+            <EditorialReveal as="p" delay={120} className="text-sm md:text-base text-[#4A4A4F] leading-relaxed max-w-xl font-normal">
               We own and maintain our fleet. Clean Escalades, Mercedes S-Class, BMW X7, and Mercedes Sprinter vans ready across New York City and Philadelphia.
-            </p>
+            </EditorialReveal>
 
             <div className="flex items-center gap-3 pt-1 font-mono text-[10px] tracking-[0.2em] text-[#66666E] uppercase font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#C5A059]" />

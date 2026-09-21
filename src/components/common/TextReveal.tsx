@@ -1,4 +1,5 @@
 import React from 'react';
+import { EditorialReveal } from './EditorialReveal';
 
 interface TextRevealProps {
   children: React.ReactNode;
@@ -15,13 +16,12 @@ export const TextReveal: React.FC<TextRevealProps> = ({
   delay = 0,
 }) => {
   return (
-    <Component
-      className={`font-serif tracking-tight text-warm-ivory leading-[0.95] transition-all duration-700 ${className}`}
-      style={{
-        animation: `fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s both`,
-      }}
+    <EditorialReveal
+      as={Component}
+      delay={delay * 1000}
+      className={`font-serif tracking-tight text-warm-ivory leading-[0.95] ${className}`}
     >
-      {children}
-    </Component>
+      <span className="editorial-line block">{children}</span>
+    </EditorialReveal>
   );
 };

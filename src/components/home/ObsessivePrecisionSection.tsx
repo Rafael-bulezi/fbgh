@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShieldCheck, Clock, Award } from 'lucide-react';
+import { EditorialReveal } from '../common/EditorialReveal';
 
 interface ObsessivePrecisionSectionProps {
   onOpenBooking: () => void;
@@ -19,14 +20,14 @@ export const ObsessivePrecisionSection: React.FC<ObsessivePrecisionSectionProps>
       <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         {/* Left Column: Editorial Headline */}
         <div className="lg:col-span-6 space-y-4">
-          <h2 className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[0.95]">
-            OBSESSIVE<br />
-            <span className="text-[#C5A059]">PRECISION.</span>
-          </h2>
+          <EditorialReveal as="h2" className="font-display font-black text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[0.95]">
+            <span className="editorial-line">OBSESSIVE</span>
+            <span className="editorial-line editorial-line-gold text-[#C5A059]">PRECISION.</span>
+          </EditorialReveal>
 
-          <p className="text-sm md:text-base text-warm-ivory/80 leading-relaxed max-w-lg font-light">
+          <EditorialReveal as="p" delay={120} className="text-sm md:text-base text-warm-ivory/80 leading-relaxed max-w-lg font-light">
             Real comfort and dependable timing. Clean cars, tracked flights, and drivers who respect your privacy.
-          </p>
+          </EditorialReveal>
         </div>
 
         {/* Right Column: 3 Curated Feature Badges */}

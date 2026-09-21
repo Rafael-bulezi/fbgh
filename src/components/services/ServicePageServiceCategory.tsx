@@ -3,6 +3,7 @@ import {
   Plane, Briefcase, Clock, CalendarDays, Map,
   ArrowRight, Check, ChevronRight
 } from "lucide-react";
+import { EditorialReveal } from "../common/EditorialReveal";
 
 interface ServicePageServiceCategoryProps {
   onOpenBooking: (serviceId?: string) => void;
@@ -157,12 +158,12 @@ export const ServicePageServiceCategory: React.FC<ServicePageServiceCategoryProp
                 SERVICE DISCIPLINES
               </span>
             </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[1.04]">
-              Tailored for every occasion.
-            </h2>
-            <p className="text-xs sm:text-sm text-white/60 leading-relaxed max-w-xl font-light">
+            <EditorialReveal as="h2" className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#F4EDE4] tracking-tight leading-[1.04]">
+              <span className="editorial-line">Tailored for every occasion.</span>
+            </EditorialReveal>
+            <EditorialReveal as="p" delay={120} className="text-xs sm:text-sm text-white/60 leading-relaxed max-w-xl font-light">
               Select a mobility tier below to explore tailored vehicle assignments, protocol standards, and transparent corridor rates.
-            </p>
+            </EditorialReveal>
           </div>
 
           <button
