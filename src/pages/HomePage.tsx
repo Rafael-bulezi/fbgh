@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CurvedHero } from '../components/common/CurvedHero';
 import { CurvedDivider } from '../components/common/CurvedDivider';
+import { EditorialReveal } from '../components/common/EditorialReveal';
 import { ObsessivePrecisionSection } from '../components/home/ObsessivePrecisionSection';
 import { PreparedFleetHighlightSection } from '../components/home/PreparedFleetHighlightSection';
 import { HomeExperienceSection } from '../components/home/HomeExperienceSection';
@@ -14,6 +15,7 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking }) => {
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [skylineRef, skylineParallaxY, skylineTextParallaxY] = useSubtleParallax<HTMLImageElement>({ speed: 0.12, maxOffset: 65 });
   const [porscheRef, porscheParallaxY, porscheTextParallaxY] = useSubtleParallax<HTMLDivElement>({ speed: 0.14, maxOffset: 75 });
 
@@ -136,37 +138,69 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         height="clamp(45px, 6vw, 95px)"
       />
 
-      {/* ── 6. DISCREET TRUST: TESTIMONIALS FROM EXECUTIVE CLIENTELE ── */}
-      <section className="w-full bg-white py-24 px-6 sm:px-12 lg:px-20 select-none">
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between pb-4 gap-4">
+      {/* ── 6. CLIENT STORIES: EDITORIAL TESTIMONIALS ── */}
+      <section className="relative w-full overflow-hidden bg-[#0E0C0A] px-6 py-24 text-[#F4EDE4] sm:px-12 sm:py-32 lg:px-20 select-none">
+        <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
+          <CurvedDivider variant="gentle-wave" fromColor="#FAF8F5" toColor="#0E0C0A" position="top" height="clamp(50px, 7vw, 105px)" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-[34%] overflow-hidden opacity-35">
+          <img src="/images/destination-new-york.webp" alt="New York skyline and chauffeur vehicle" className="h-full w-full object-cover object-center grayscale" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0E0C0A] via-[#0E0C0A]/85 to-transparent" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-7xl pt-10 sm:pt-16">
+          <div className="mb-12 flex items-end justify-between gap-8 border-b border-white/10 pb-6 sm:mb-16">
             <div>
-              <span className="text-[10px] font-mono tracking-[0.35em] uppercase text-[#C5A059] font-bold">
-                DISCREET TRUST
-              </span>
-              <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-[#141416] tracking-tight mt-1">
-                TESTIMONIALS FROM EXECUTIVE CLIENTELE
-              </h2>
+              <EditorialReveal as="p" className="font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[#C5A059]">
+                <span className="editorial-line">CLIENT STORIES</span>
+              </EditorialReveal>
+              <EditorialReveal as="h2" delay={70} className="mt-3 max-w-2xl font-display text-3xl font-black uppercase leading-[0.94] tracking-tight text-[#F4EDE4] sm:text-5xl lg:text-6xl">
+                <span className="editorial-line">TRUST IS FELT</span>
+                <span className="editorial-line editorial-swipe editorial-swipe-dark">BEFORE IT IS SPOKEN.</span>
+              </EditorialReveal>
+            </div>
+            <div className="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.25em] text-white/45 sm:block">
+              <span className="text-3xl font-display font-bold text-[#F4EDE4]">0{activeTestimonial + 1}</span><span className="mx-2 text-[#C5A059]">/</span>0{TESTIMONIALS_DATA.length}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {TESTIMONIALS_DATA.map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-[#FAF8F5] border border-[#E8E2D6] p-7 sm:p-8 rounded-2xl space-y-6 flex flex-col justify-between hover:border-[#C5A059]/40 hover:shadow-lg transition-all duration-300"
-              >
-                <p className="text-xs sm:text-sm text-[#4A4A4F] italic leading-relaxed font-serif">
-                  "{item.quote}"
-                </p>
-
-                <div className="border-t border-[#E8E2D6] pt-4">
-                  <h4 className="font-display font-bold text-sm text-[#C5A059]">{item.author}</h4>
-                  <p className="text-[10.5px] text-[#71767D] font-mono tracking-wider">{item.role}</p>
-                  <p className="text-[9.5px] text-[#8C9199] font-mono tracking-widest uppercase mt-0.5">{item.location}</p>
+          <div className="grid min-h-[430px] grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-20">
+            <div className="flex flex-col justify-between">
+              <EditorialReveal key={activeTestimonial} as="div" className="max-w-4xl">
+                <span className="mb-6 block font-display text-7xl leading-none text-[#C5A059]/80 sm:text-8xl">“</span>
+                <blockquote className="font-display text-3xl font-semibold leading-[1.05] tracking-tight text-[#F4EDE4] sm:text-5xl lg:text-6xl">
+                  {TESTIMONIALS_DATA[activeTestimonial].quote}
+                </blockquote>
+                <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">
+                  <span className="text-[#F4EDE4]">{TESTIMONIALS_DATA[activeTestimonial].author}</span>
+                  <span className="h-px w-8 bg-[#C5A059]" />
+                  <span>{TESTIMONIALS_DATA[activeTestimonial].role}</span>
+                  <span className="text-[#C5A059]">{TESTIMONIALS_DATA[activeTestimonial].location}</span>
                 </div>
+              </EditorialReveal>
+              <EditorialReveal as="p" delay={180} className="mt-12 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
+                <span>Private travel is personal. Every detail is handled quietly, from the first pickup to the final arrival.</span>
+              </EditorialReveal>
+            </div>
+
+            <div className="border-l border-[#C5A059]/60 pl-6 sm:pl-8">
+              <p className="mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">SELECT A STORY</p>
+              <div className="space-y-7">
+                {TESTIMONIALS_DATA.map((item, idx) => (
+                  <button key={item.author} type="button" onClick={() => setActiveTestimonial(idx)} className={`group block w-full text-left transition-opacity duration-300 ${activeTestimonial === idx ? 'opacity-100' : 'opacity-45 hover:opacity-80'}`}>
+                    <span className={`font-mono text-[10px] tracking-[0.2em] ${activeTestimonial === idx ? 'text-[#C5A059]' : 'text-white/50'}`}>0{idx + 1}</span>
+                    <span className="mt-2 block font-display text-lg font-semibold leading-tight text-[#F4EDE4]">{item.author}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-white/55">{item.role}</span>
+                    <span className="mt-3 block h-px w-full origin-left bg-white/15 transition-transform duration-500 group-hover:scale-x-100" />
+                  </button>
+                ))}
               </div>
-            ))}
+              <div className="mt-12 hidden items-center gap-3 font-mono text-[9px] uppercase tracking-[0.2em] text-white/45 sm:flex">
+                <span className="h-px w-10 bg-[#C5A059]" />
+                <span>NEW YORK CITY</span>
+                <span className="text-[#C5A059]">↔</span>
+                <span>PHILADELPHIA</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
