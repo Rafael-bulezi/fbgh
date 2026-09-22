@@ -130,30 +130,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
         </div>
       </section>
 
-      {/* ── TRANSITION 5 → 6: ASYMMETRIC WAVE TO CRISP WHITE ── */}
-      <CurvedDivider
-        variant="asymmetric"
-        fromColor="#0D0B0A"
-        toColor="#FFFFFF"
-        height="clamp(45px, 6vw, 95px)"
-      />
-
       {/* ── 6. CLIENT STORIES: EDITORIAL TESTIMONIALS ── */}
-      <section className="relative w-full overflow-hidden bg-[#0E0C0A] px-6 py-24 text-[#F4EDE4] sm:px-12 sm:py-32 lg:px-20 select-none">
-        <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
-          <CurvedDivider variant="gentle-wave" fromColor="#FAF8F5" toColor="#0E0C0A" position="top" height="clamp(50px, 7vw, 105px)" />
-        </div>
+      <section className="relative w-full overflow-hidden border-t border-[#C5A059]/20 bg-[#0E0C0A] px-6 py-20 text-[#F4EDE4] sm:px-12 sm:py-28 lg:px-20 select-none">
         <div className="absolute inset-x-0 bottom-0 h-[34%] overflow-hidden opacity-35">
           <img src="/images/destination-new-york.webp" alt="New York skyline and chauffeur vehicle" className="h-full w-full object-cover object-center grayscale" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0E0C0A] via-[#0E0C0A]/85 to-transparent" />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl pt-10 sm:pt-16">
+        <div className="relative z-10 mx-auto max-w-7xl">
           <div className="mb-12 flex items-end justify-between gap-8 border-b border-white/10 pb-6 sm:mb-16">
             <div>
               <EditorialReveal as="p" className="font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-[#C5A059]">
                 <span className="editorial-line">CLIENT STORIES</span>
               </EditorialReveal>
-              <EditorialReveal as="h2" delay={70} className="mt-3 max-w-2xl font-display text-3xl font-black uppercase leading-[0.94] tracking-tight text-[#F4EDE4] sm:text-5xl lg:text-6xl">
+              <EditorialReveal as="h2" delay={70} className="mt-3 max-w-2xl font-display text-3xl font-black uppercase leading-[0.94] tracking-tight text-[#F4EDE4] sm:text-5xl lg:text-[3.4rem]">
                 <span className="editorial-line">TRUST IS FELT</span>
                 <span className="editorial-line editorial-swipe editorial-swipe-dark">BEFORE IT IS SPOKEN.</span>
               </EditorialReveal>
@@ -163,11 +152,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
             </div>
           </div>
 
-          <div className="grid min-h-[430px] grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-20">
+          <div className="grid min-h-[390px] grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-20">
             <div className="flex flex-col justify-between">
               <EditorialReveal key={activeTestimonial} as="div" className="max-w-4xl">
                 <span className="mb-6 block font-display text-7xl leading-none text-[#C5A059]/80 sm:text-8xl">“</span>
-                <blockquote className="font-display text-3xl font-semibold leading-[1.05] tracking-tight text-[#F4EDE4] sm:text-5xl lg:text-6xl">
+                <blockquote className="max-w-[820px] font-display text-[2rem] font-semibold leading-[1.08] tracking-tight text-[#F4EDE4] sm:text-4xl lg:text-[3.25rem]">
                   {TESTIMONIALS_DATA[activeTestimonial].quote}
                 </blockquote>
                 <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">
@@ -177,19 +166,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
                   <span className="text-[#C5A059]">{TESTIMONIALS_DATA[activeTestimonial].location}</span>
                 </div>
               </EditorialReveal>
-              <EditorialReveal as="p" delay={180} className="mt-12 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
+              <EditorialReveal as="p" delay={180} className="mt-12 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
                 <span>Private travel is personal. Every detail is handled quietly, from the first pickup to the final arrival.</span>
               </EditorialReveal>
             </div>
 
             <div className="border-l border-[#C5A059]/60 pl-6 sm:pl-8">
-              <p className="mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">SELECT A STORY</p>
+              <p className="mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-white/65">SELECT A STORY</p>
               <div className="space-y-7">
                 {TESTIMONIALS_DATA.map((item, idx) => (
                   <button key={item.author} type="button" onClick={() => setActiveTestimonial(idx)} className={`group block w-full text-left transition-opacity duration-300 ${activeTestimonial === idx ? 'opacity-100' : 'opacity-45 hover:opacity-80'}`}>
                     <span className={`font-mono text-[10px] tracking-[0.2em] ${activeTestimonial === idx ? 'text-[#C5A059]' : 'text-white/50'}`}>0{idx + 1}</span>
                     <span className="mt-2 block font-display text-lg font-semibold leading-tight text-[#F4EDE4]">{item.author}</span>
-                    <span className="mt-1 block text-xs leading-relaxed text-white/55">{item.role}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-white/70">{item.role}</span>
                     <span className="mt-3 block h-px w-full origin-left bg-white/15 transition-transform duration-500 group-hover:scale-x-100" />
                   </button>
                 ))}
@@ -204,15 +193,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenBooking })
           </div>
         </div>
       </section>
-
-      {/* ── TRANSITION 6 → 7: GENTLE WAVE FLOWING DIRECTLY INTO OBSIDIAN FOOTER ── */}
-      <CurvedDivider
-        variant="gentle-wave"
-        fromColor="#FFFFFF"
-        toColor="#0E0C0A"
-        flip
-        height="clamp(50px, 7vw, 105px)"
-      />
 
       {/* ── 7. FINAL INVOCATION: ARRIVE WITH INTENTION ── */}
       <section 
